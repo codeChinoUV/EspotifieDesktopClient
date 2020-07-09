@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
-        xmlns:ax="clr-namespace:AxMOVIEPLAYERLib;assembly=AxInterop.MOVIEPLAYERLib"
         xmlns:local="clr-namespace:EspotifeiClient"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
@@ -16,9 +15,6 @@
                 <GradientStop Color="#FF1D1D1D" Offset="0.952"/>
             </LinearGradientBrush>
         </Grid.Background>
-        <WindowsFormsHost Name="windowsFormsHost" Margin="81,119,329,79">
-            <ax:AxMoviePlayer x:Name="axMoviePlayer"/>
-        </WindowsFormsHost>
         <Grid VerticalAlignment="Bottom" Margin="145,0,401,39">
             <Button Style="{StaticResource MaterialDesignFloatingActionMiniAccentButton}" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left">
                 <materialDesign:PackIcon Kind="RotateRight" VerticalAlignment="Center" Width="30" Height="30">

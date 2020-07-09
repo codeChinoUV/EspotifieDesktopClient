@@ -1,18 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace EspotifeiClient
 {
@@ -40,8 +29,6 @@ namespace EspotifeiClient
 
         private void CancionesListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            axMoviePlayer.FileName = paths[cancionesListbox.SelectedIndex];
-            axMoviePlayer.Play();
             nombreCancionTextblock.Text = DelimitarCadena();
         }
 
@@ -57,17 +44,13 @@ namespace EspotifeiClient
 
         private void PauseButton_Click(object sender, RoutedEventArgs e)
         {
-            //axMoviePlayer.FileName = paths[cancionesListbox.SelectedIndex];
-            axMoviePlayer.Pause();
         }
 
         private void Proxima_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                axMoviePlayer.FileName = paths[cancionesListbox.SelectedIndex + 1];
-                cancionesListbox.SelectedIndex = cancionesListbox.SelectedIndex + 1;
-                axMoviePlayer.Play();
+                var x = 0;
             } catch (IndexOutOfRangeException)
             {
 
@@ -79,9 +62,7 @@ namespace EspotifeiClient
         {
             try
             {
-                axMoviePlayer.FileName = paths[cancionesListbox.SelectedIndex - 1];
-                cancionesListbox.SelectedIndex = cancionesListbox.SelectedIndex - 1;
-                axMoviePlayer.Play();
+                
             } catch (IndexOutOfRangeException)
             {
 
@@ -90,7 +71,7 @@ namespace EspotifeiClient
 
         private void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            axMoviePlayer.Play();
+            
         }
 
         public MainWindow()

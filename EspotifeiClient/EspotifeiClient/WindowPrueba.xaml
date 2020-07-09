@@ -1,0 +1,193 @@
+﻿<Window x:Class="EspotifeiClient.WindowPrueba"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:local="clr-namespace:EspotifeiClient"
+        mc:Ignorable="d"
+        Title="WindowPrueba" Height="782" Width="1386">
+    <Grid Margin="0,0,2,0">
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="Black" Offset="1"/>
+                <GradientStop Color="#FF4D4D4D"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Frame x:Name ="FRM_Spotyfei" NavigationUIVisibility="Hidden"/>
+        <Rectangle Fill="Black" HorizontalAlignment="Left" Height="690" Margin="1224,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="152"/>
+        <StackPanel Margin="1224,0,0,84"/>
+        <StackPanel Margin="0,0,1174,80">
+            <Rectangle Fill="Black" HorizontalAlignment="Left" Height="684" Margin="0,0,0,0" Stroke="Black" VerticalAlignment="Top" Width="202"/>
+        </StackPanel>
+
+        <Button x:Name="BTN_RegistrarAlbum"
+                Style="{StaticResource MaterialDesignFlatButton}"
+            Content="Registrar Album" Margin="1234,184,0,0" VerticalAlignment="Top" 
+                Background="{x:Null}" BorderBrush="{x:Null}" Click="BTN_RegistrarAlbum_Click">
+            <Button.Foreground>
+                <SolidColorBrush Color="#FF17C905" Opacity="100"/>
+            </Button.Foreground>
+        </Button>
+
+
+        <Button x:Name="BTN_ProbarApi"
+                Style="{StaticResource MaterialDesignFlatButton}"
+            Content="Probar Api" Margin="1234,328,0,0" VerticalAlignment="Top" 
+                Background="{x:Null}" BorderBrush="{x:Null}" Click="BTN_ProbarApi_Click">
+            <Button.Foreground>
+                <SolidColorBrush Color="#FF17C905" Opacity="100"/>
+            </Button.Foreground>
+        </Button>
+
+        <StackPanel Margin="0,679,0,0">
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0.512"/>
+                    <GradientStop Color="#FF363636"/>
+                    <GradientStop Color="#FF202020" Offset="0.157"/>
+                </LinearGradientBrush>
+            </StackPanel.Background>
+        </StackPanel>
+        <Slider x:Name="duracion_SLD" Foreground="#FF17C905"                
+                Thumb.DragCompleted="SliderTimeLine_DragCompleted"
+                Thumb.DragStarted="SliderTimeLine_DragStarted"
+                IsMoveToPointEnabled="True"   
+                TickFrequency="1"
+                Orientation="Horizontal"                
+                Value="0" Margin="329,699,326,54" Height="21" MouseLeftButtonUp="Duracion_SLD_MouseLeftButtonUp"/>
+
+        <Slider x:Name="volumen_SLD" Foreground="#FF17C905"
+                Value=".50"
+                Orientation="Horizontal"
+                SmallChange="1"
+                TickFrequency=".01"
+                Maximum="1"                
+                Style="{StaticResource MaterialDesignDiscreteSlider}"
+                ToolTip="Volumen" Margin="1246,673,14,0" ValueChanged="Volumen_SLD_ValueChanged" />
+
+        <Button
+                Style="{StaticResource MaterialDesignIconButton}"
+                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Height="Auto" Margin="711,716,632,4" Width="Auto" Foreground="#FFF151F1">
+            <materialDesign:PackIcon
+                Kind="SkipNext" Foreground="White" Height="20" Width="23"/>
+        </Button>
+
+        <Button
+                Style="{StaticResource MaterialDesignIconButton}"
+                Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Height="Auto" Margin="623,716,720,4" Width="Auto" Foreground="#FFF151F1" RenderTransformOrigin="0.5,0.5">
+            <Button.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <SkewTransform/>
+                    <RotateTransform Angle="180.02"/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Button.RenderTransform>
+            <materialDesign:PackIcon
+                Kind="SkipNext" Foreground="White" Height="20" Width="23"/>
+        </Button>
+
+        <Button x:Name="BTN_Recientes"
+                Style="{StaticResource MaterialDesignFlatButton}"
+            Content="Recientes" Margin="1246,254,14,0" VerticalAlignment="Top" 
+                Background="{x:Null}" BorderBrush="{x:Null}" Click="BTN_Recientes_Click">
+            <Button.Foreground>
+                <SolidColorBrush Color="#FF17C905" Opacity="100"/>
+            </Button.Foreground>
+        </Button>
+
+
+        <Button x:Name="Reproducir_BTN"
+                Style="{StaticResource MaterialDesignIconButton}"
+                Height="Auto" Margin="664,713,673,2" Width="Auto" Foreground="Black" Click="Reproducir_BTN_Click">
+            <materialDesign:PackIcon
+                Kind="Play" Foreground="White"/>
+        </Button>
+
+        <Button x:Name="Pause_BTN"
+                Style="{StaticResource MaterialDesignIconButton}"
+                Height="Auto" Margin="664,713,673,2" Width="Auto" Foreground="Black" Visibility="Hidden" Click="Pause_BTN_Click">
+            <materialDesign:PackIcon
+                Kind="Pause" Foreground="White"/>
+        </Button>
+
+        <materialDesign:PackIcon x:Name="volumen_ICON"
+                Kind="Audio" Foreground="White" Height="20" Width="22" RenderTransformOrigin="5.739,3.533" Margin="1224,706,0,0"/>
+
+
+
+        <Image x:Name="IMG_ImagenUsuario" Source="img\user.png" Margin="1140,20,184,702"/>
+        <Label x:Name="nombreUsuario_LBL" Content="Colors" HorizontalAlignment="Right" HorizontalContentAlignment="Right" Margin="0,39,236,0" VerticalAlignment="Top" Height="33" Width="266" Foreground="#DDFFFFFF" FontSize="16"/>
+        <materialDesign:PackIcon x:Name="inicio_ICON" Kind="HomeOutline" Foreground="Gray" Height="46" Width="30" Margin="28,26,0,0" />
+        <materialDesign:PackIcon x:Name="radio_ICON" Kind="RadioTower" Foreground="Gray" Height="46" Width="30" Margin="28,64,0,0" MouseLeave="Radio_ICON_MouseLeave" MouseMove="Radio_ICON_MouseMove"/>
+        <Button x:Name="inicio_BTN" Foreground="Gray" Content="Inicio" HorizontalAlignment="Left"  Style="{StaticResource MaterialDesignRaisedButton}" Margin="67,33,0,0" VerticalAlignment="Top" Width="75" Background="Black" BorderBrush="Black" Height="34"/>
+        <Button x:Name="radio_BTN" Content="Radio" Foreground="Gray" HorizontalAlignment="Left"  Style="{StaticResource MaterialDesignRaisedButton}" Margin="67,67,0,0" VerticalAlignment="Top" Width="75" Background="Black" BorderBrush="Black" Height="34" MouseMove="Radio_BTN_MouseMove" MouseLeave="Radio_BTN_MouseLeave"/>
+        <Label Content="TU BIBLIOTECA" HorizontalAlignment="Left" Margin="28,167,0,0" VerticalAlignment="Top" Height="40" Width="114" Foreground="#DD6A6969" FontSize="16" Background="{x:Null}"/>
+        <ListBox x:Name="biblioteca_LBX"  HorizontalAlignment="Left" Height="202" Margin="10,195,0,0" VerticalAlignment="Top" Width="186"                 >
+            <Button x:Name="tusMeGusta_BTN" Foreground="Gray" Content="Tus me gusta" MouseLeave="TusMeGusta_BTN_MouseLeave" MouseMove="TusMeGusta_BTN_MouseMove" Background="{x:Null}" BorderBrush="{x:Null}" Click="TusMeGusta_BTN_Click"/>
+            <Button x:Name="albumes_BTN" Foreground="Gray" BorderBrush="{x:Null}" Background="{x:Null}" Content="Álbumes" MouseLeave="Albumes_BTN_MouseLeave" MouseMove="Albumes_BTN_MouseMove" Click="Albumes_BTN_Click"/>
+            <Button x:Name="artistas_BTN" Foreground="Gray" BorderBrush="{x:Null}" Background="{x:Null}" Content="Artistas" MouseLeave="Artistas_BTN_MouseLeave" MouseMove="Artistas_BTN_MouseMove" Click="Artistas_BTN_Click"/>
+            <Button x:Name="archivosLocales_BTN" Foreground="Gray" BorderBrush="{x:Null}" Background="{x:Null}" Content="Archivos locales" MouseLeave="ArchivosLocales_BTN_MouseLeave" MouseMove="ArchivosLocales_BTN_MouseMove" Click="ArchivosLocales_BTN_Click"/>
+            <Label Content="PLAYLISTS" Foreground="Gray" RenderTransformOrigin="1.226,0.542" HorizontalAlignment="Center" Margin="14,0,0,0"/>
+        </ListBox>
+
+        <materialDesign:PackIcon x:Name="nuevaPlaylist_ICON" Kind="AddCircleOutline" Foreground="Gray" Height="46" Width="30" Margin="28,410,0,0" MouseMove="NuevaPlaylist_ICON_MouseMove" MouseLeave="NuevaPlaylist_ICON_MouseLeave"/>
+        <Label x:Name="nuevaPlaylist_LBL" Content="Nueva playlist" HorizontalAlignment="Left" Margin="61,416,0,0" VerticalAlignment="Top" Height="38" Width="115" Foreground="Gray" FontSize="16" Background="{x:Null}" MouseMove="Label_MouseMove" MouseLeave="NuevaPlaylist_LBL_MouseLeave"/>
+        <TextBox  materialDesign:HintAssist.Hint="  Buscar" HorizontalAlignment="Left" Height="27" Margin="286,30,0,0" TextWrapping="NoWrap" Text="" 
+                  VerticalAlignment="Top" Width="168" Background="#FFFBFBFB" materialDesign:TextFieldAssist.HasClearButton="True"/>
+
+        <Button
+                Style="{DynamicResource MaterialDesignToolForegroundButton}"
+                Margin="248,15,1090,702"
+                DockPanel.Dock="Right" Background="Black" Height="Auto" Foreground="#FF111111">
+            <materialDesign:PackIcon
+                  Kind="Magnify" Foreground="White" />
+        </Button>
+
+        <materialDesign:PopupBox x:Name="OpcionesCuenta_PPX"
+            DockPanel.Dock="Right"
+            PlacementMode="BottomAndAlignRightEdges" Foreground="White" Margin="1192,20,0,702" Width="32">
+            <ListBox x:Name="OpcionesCuenta_LBX">
+                <ListBoxItem x:Name="OptUno" Content="Consultar Cuenta" Selected="OptUno_Selected">
+                </ListBoxItem>
+                <ListBoxItem x:Name="OptDos" Content="Mi Perfil" Selected="OptDos_Selected">
+                </ListBoxItem>
+                <ListBoxItem x:Name="OptTres" Content="Planes Disponibles" Selected="OptTres_Selected">
+                </ListBoxItem>
+            </ListBox>
+        </materialDesign:PopupBox>
+        <Button x:Name="BTN_Minimizar"
+            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+            ToolTip="Minimizar" Background="Black" BorderBrush="Black" Margin="1299,10,43,730" Height="Auto" Width="Auto" Click="BTN_Minimizar_Click">
+            <materialDesign:PackIcon
+                Kind="WindowMinimize"
+                Height="20"
+                Width="20" />
+        </Button>
+        <Button x:Name="BTN_Cerrar"
+            Style="{StaticResource MaterialDesignFloatingActionMiniDarkButton}"
+            ToolTip="Cerrar" Background="Black" BorderBrush="Black" Margin="1338,10,0,727" Height="Auto" Width="Auto" Click="BTN_Cerrar_Click">
+            <materialDesign:PackIcon
+                Kind="WindowClose"
+                Height="20"
+                Width="20" />
+        </Button>
+        <Image x:Name="reproduciendo_IMG"  HorizontalAlignment="Left" 
+               Height="50" Margin="5,723,0,0" VerticalAlignment="Top" Width="48" Visibility="Hidden"/>
+        <Image x:Name="IMG_Portada" Margin="0,470,1174,74" Source="img/spotyfei.png"/>
+
+        <Label x:Name="reproduciendo_NombreCancion" HorizontalAlignment="Left" Margin="28,695,0,0" VerticalAlignment="Top" Height="33" Width="148" Foreground="White" FontSize="16" Background="{x:Null}" MouseMove="Label_MouseMove" MouseLeave="NuevaPlaylist_LBL_MouseLeave"/>
+        <Label x:Name="reproduciendo_ArtistaCancion" HorizontalAlignment="Left" Margin="28,731,0,0" VerticalAlignment="Top" Height="33" Width="148" Foreground="#FF999999" FontSize="14" Background="{x:Null}" MouseMove="Label_MouseMove" MouseLeave="NuevaPlaylist_LBL_MouseLeave"/>
+        <Button x:Name="colaReproduccion_BTN"
+            Style="{StaticResource MaterialDesignIconButton}"
+            Background="{DynamicResource MaterialDesignTextFieldBoxBackground}" Height="Auto" Margin="1111,716,232,4" Width="Auto" Foreground="#FFF151F1" Click="ColaReproduccion_BTN_Click" >
+            <materialDesign:PackIcon
+                Kind="QueueMusicOutline" Foreground="White" Height="20" Width="23"/>
+        </Button>
+        <Label x:Name="tiempoReproduciendo_LBL" Content="" HorizontalAlignment="Left" Margin="329,716,0,0" VerticalAlignment="Top" Height="33" Width="95" Foreground="#FFEEEEEE" FontSize="14" Background="{x:Null}"/>
+        <materialDesign:PackIcon x:Name="volumenOff_ICON"
+            Kind="VolumeOff" Foreground="Red" Height="20" Width="22" RenderTransformOrigin="5.739,3.533" Margin="1224,706,0,0" Visibility="Hidden"/>
+        <Label x:Name="tiempoLimite_LBL" Content="" HorizontalAlignment="Left" Margin="1011,713,0,0" VerticalAlignment="Top" Height="33" Width="95" Foreground="#FFEEEEEE" FontSize="14" Background="{x:Null}"/>
+    </Grid>
+</Window>

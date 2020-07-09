@@ -4,4 +4,18 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.12.3" />
+    <PackageReference Include="Grpc" Version="2.30.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.30.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Protobuf Include="Protos/ManejadorDeArchivos.proto" GrpcServices="Client" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Rest" />
+  </ItemGroup>
+
 </Project>

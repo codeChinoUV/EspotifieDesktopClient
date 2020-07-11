@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace Api.GrpcClients.Interfaces
 {
     public interface ISongsClient
     {
-        void UploadSong(String path, int idSong);
+        Task UploadSong(string path, int idSong, bool isPersonal);
     }
 }

@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using Api.GrpcClients.Clients;
+using Api.GrpcClients.Interfaces;
 
 namespace EspotifeiClient
 {
@@ -15,15 +17,13 @@ namespace EspotifeiClient
         private void ExaminarButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFile = new OpenFileDialog();
-            openFile.Multiselect = true;
+            openFile.Multiselect = false;
             if (openFile.ShowDialog()==System.Windows.Forms.DialogResult.OK)
             {
-                files = openFile.SafeFileNames;
-                paths = openFile.FileNames;
-                for (int contador = 0; contador < files.Length; contador++)
-                {
-                    cancionesListbox.Items.Add(files[contador]);
-                }
+                
+                var path = openFile.FileName;
+                ISongsClient client = new SongsClient();
+                client.UploadSong(openFile.FileName, 8, false);
             }
         }
 

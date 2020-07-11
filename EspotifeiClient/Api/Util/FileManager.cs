@@ -15,16 +15,24 @@ namespace Api.Util
         
         public static string Sha256CheckSum(string filePath)
         {
+
+            var sha256 = "";
             if (File.Exists(filePath))
             {
-                using (SHA256 sha256 = SHA256Managed.Create())
-                {
-                    using (FileStream fileStream = File.OpenRead(filePath))
-                        return Convert.ToBase64String(sha256.ComputeHash(fileStream));
-                }    
+                SHA256 mySHA256 = SHA256Managed.Create();
+
+                var fileStream = new FileStream(filePath, FileMode.Open);
+
+                fileStream.Position = 0;
+
+                byte[] hashValue = mySHA256.ComputeHash(fileStream);
+
+                sha256 = BitConverter.ToString(hashValue).Replace("-", String.Empty);
+
+                fileStream.Close();  
             }
 
-            return "";
+            return sha256;
         }
 
 

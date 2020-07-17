@@ -1,4 +1,22 @@
 
 EspotifeiClient/MoviePlayerAxLib/
 
+EspotifeiClient/.idea/
+
+EspotifeiClient/.vs/
+
+EspotifeiClient/Api/bin/
+
+EspotifeiClient/Api/obj/
+
+EspotifeiClient/EspotifeiClient/bin/
+
+EspotifeiClient/EspotifeiClient/obj/
+
+EspotifeiClient/Model/bin/
+
+EspotifeiClient/Model/obj/
+
+EspotifeiClient/packages/
+
 EspotifeiClient/.vs/EspotifeiClient/v15/Server/sqlite3/db.lock

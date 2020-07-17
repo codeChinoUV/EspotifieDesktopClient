@@ -59,9 +59,6 @@ namespace Api.GrpcClients.Clients
             
         }
         
-        
-        
-        
         private FormatoAudio ConvertExtensionToFormatoAudio(string extension)
         {
             var formatAudio = FormatoAudio.Mp3;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
-using System.Security.Cryptography;
+using System.Text;
+using SHA3.Net;
 
 namespace Api.Util
 {
@@ -8,33 +9,17 @@ namespace Api.Util
     {
         public static byte[] SubArray(byte[] data, int index, int length)
         {
-            byte[] result = new byte[length];
+            var result = new byte[length];
             Array.Copy(data, index, result, 0, length);
             return result;
         }
-        
-        public static string Sha256CheckSum(string filePath)
+
+        public static byte[] ByteArrayFromImageFile(string path)
         {
-
-            var sha256 = "";
-            if (File.Exists(filePath))
-            {
-                SHA256 mySHA256 = SHA256Managed.Create();
-
-                var fileStream = new FileStream(filePath, FileMode.Open);
-
-                fileStream.Position = 0;
-
-                byte[] hashValue = mySHA256.ComputeHash(fileStream);
-
-                sha256 = BitConverter.ToString(hashValue).Replace("-", String.Empty);
-
-                fileStream.Close();  
-            }
-
-            return sha256;
+            var fileStream = new FileStream(path, FileMode.Open);
+            var image = new byte[Convert.ToInt32(fileStream.Length.ToString())];
+            fileStream.Read(image, 0, image.Length);
+            return image;
         }
-
-
     }
 }

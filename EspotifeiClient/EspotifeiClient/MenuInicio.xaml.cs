@@ -43,7 +43,7 @@ namespace EspotifeiClient
 
         private void BuscarListview_Selected(object sender, RoutedEventArgs e)
         {
-            new IniciarSesion().Show();
+            new IniciarSesion();
             this.Close();
         }
 

@@ -21,11 +21,7 @@ namespace Api.GrpcClients.Clients
         public delegate void OnRecivedSong(byte[] bytesSong, string extension);
 
         public event OnRecivedSong OnInitialRecivedSong;
-
-        public delegate void OnRecivedTerminated();
-
-        public event OnRecivedTerminated OnRecivedTotalSong;
-
+        
         public int idGetSong { get; set; }
         
         public bool isPersonalGetSong { get; set; }
@@ -86,9 +82,9 @@ namespace Api.GrpcClients.Clients
             try
             {
                 request.IdCancion = idGetSong;
-                request.CalidadCancionARecuperar = Calidad.Alta;
+                request.CalidadCancionARecuperar = Calidad.Baja;
                 request.TokenAutenticacion =
-                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoxLCJleHAiOjE1OTUyMjIzNzN9.yypwZ-RRAdcHDDLYTFyoHBn3QUAvX_UhnuXQtTFubMY";
+                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoxLCJleHAiOjE1OTUyMjkxOTd9.ynuG-YfgIm1UpLwfLG1at4lxeUREJckFd9cal3tid2g";
                 var call = isPersonalGetSong ? client.ObtenerCancionPersonal(request) : client.ObtenerCancion(request);
                 using (call)
                 {
@@ -108,14 +104,12 @@ namespace Api.GrpcClients.Clients
                             OnSongChunkRived?.Invoke(response.Data.ToByteArray());
                         }
                     }
-                    OnRecivedTotalSong?.Invoke();
                 }
             }
             catch (Exception ex)
             {
                 var exe = ex;
             }
-            var error1 = error;
             var totalSize = memoryStream.ToArray().Length;
             
             Console.WriteLine(totalSize);

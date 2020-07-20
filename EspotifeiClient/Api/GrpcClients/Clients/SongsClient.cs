@@ -10,9 +10,9 @@ using ManejadorDeArchivos;
 
 namespace Api.GrpcClients.Clients
 {
-    public class SongsClient : ISongsClient
+    public class SongsClient
     {
-        private const int ChunkSize = 16 * 1000;
+        private const int ChunkSize = 64 * 1000;
 
         public delegate void OnChuckRecived(byte[] bytesSong);
 
@@ -21,9 +21,15 @@ namespace Api.GrpcClients.Clients
         public delegate void OnRecivedSong(byte[] bytesSong, string extension);
 
         public event OnRecivedSong OnInitialRecivedSong;
+
+        public delegate void OnRecivedTerminated();
+
+        public event OnRecivedTerminated OnRecivedTotalSong;
+
+        public int idGetSong { get; set; }
         
-        
-        
+        public bool isPersonalGetSong { get; set; }
+
         public async Task UploadSong(string path, int idSong, bool isPersonal)
         {
             Channel channel = new Channel("ec2-54-160-126-163.compute-1.amazonaws.com:5001", ChannelCredentials.Insecure);
@@ -37,7 +43,7 @@ namespace Api.GrpcClients.Clients
                 resquestUploadSong.InformacionCancion = new InformacionCancion();
                 resquestUploadSong.InformacionCancion.IdCancion = idSong;
                 resquestUploadSong.InformacionCancion.FormatoCancion = formatAudio;
-                resquestUploadSong.TokenAutenticacion = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoxLCJleHAiOjE1OTQ5NDUwMzZ9.0937M0vPg--VAsG-GFFljhuXze36usss_KpxIWGeaXM";
+                resquestUploadSong.TokenAutenticacion = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoxLCJleHAiOjE1OTUyMTg0ODV9.f7cPSV-HfAk9N3xOLZZeG7twlsAhRX38qpYLc5K5rbw";
                 var songBytes = File.ReadAllBytes(path);
                 AsyncClientStreamingCall<SolicitudSubirCancion, RespuestaSolicitudSubirArchivo> call = null; 
                 call = isPersonal ? client.SubirCancionPersonal() : client.SubirCancion();
@@ -67,7 +73,7 @@ namespace Api.GrpcClients.Clients
             }
         }
 
-        public async void GetSong(int idSong, bool isPersonal)
+        public async void GetSong()
         {
             Channel channel = new Channel("ec2-54-160-126-163.compute-1.amazonaws.com:5001", ChannelCredentials.Insecure);
             var client = new Canciones.CancionesClient(channel);
@@ -79,32 +85,30 @@ namespace Api.GrpcClients.Clients
             Error error = Error.Ninguno;
             try
             {
-                request.IdCancion = idSong;
+                request.IdCancion = idGetSong;
                 request.CalidadCancionARecuperar = Calidad.Alta;
                 request.TokenAutenticacion =
-                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoxLCJleHAiOjE1OTUwMTU5MDh9.LIx2dtLnM7kfeGaj1TOt0taVps9JDlXT497ye-0enkI";
-                var call = isPersonal ? client.ObtenerCancionPersonal(request) : client.ObtenerCancion(request);
+                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoxLCJleHAiOjE1OTUyMjIzNzN9.yypwZ-RRAdcHDDLYTFyoHBn3QUAvX_UhnuXQtTFubMY";
+                var call = isPersonalGetSong ? client.ObtenerCancionPersonal(request) : client.ObtenerCancion(request);
                 using (call)
                 {
                     while (await call.ResponseStream.MoveNext())
                     {
                         RespuestaObtenerCancion response = call.ResponseStream.Current;
                         memoryStream.Write(response.Data.ToByteArray(), 0, response.Data.Length);
-                        //OnSongChunkRived?.Invoke(response.Data.ToByteArray());
                         position += response.Data.Length;
                         formatAudio = response.FormatoCancion;
                         error = response.Error;
-                        if (position == ChunkSize * 4)
+                        if (position == ChunkSize)
                         {
-                            OnInitialRecivedSong?.Invoke(memoryStream.ToArray(), 
-                                ConvertFormatAudioToExtension(formatAudio));
+                            OnInitialRecivedSong?.Invoke(response.Data.ToByteArray(), ConvertFormatAudioToExtension(formatAudio));
                         }
-
-                        if (position > ChunkSize * 4)
+                        else if(position > ChunkSize)
                         {
                             OnSongChunkRived?.Invoke(response.Data.ToByteArray());
                         }
                     }
+                    OnRecivedTotalSong?.Invoke();
                 }
             }
             catch (Exception ex)
@@ -151,6 +155,8 @@ namespace Api.GrpcClients.Clients
             return formatAudio;
         }
         
+        
+
     }
     
     

@@ -40,7 +40,11 @@
 
             </StackPanel>
         </Grid>
-        <Button x:Name="registrarUsuarioButton" Width="117" Margin="0,20" VerticalAlignment="Bottom" HorizontalAlignment="Center" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="30" FontSize="16"/>
+        <StackPanel Orientation="Horizontal" Margin="0,20" VerticalAlignment="Bottom" HorizontalAlignment="Center">
+            <Button x:Name="registrarUsuarioButton" Width="117" Margin="30,0" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF" Height="30" FontSize="16"/>
+            <Button x:Name="cancelarButton" Width="117" Margin="30,0" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="30" FontSize="16"/>
+        </StackPanel>
+        
 
     </Grid>
 </Page>

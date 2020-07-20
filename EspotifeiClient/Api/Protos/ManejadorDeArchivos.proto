@@ -43,7 +43,6 @@ enum FormatoImagen {
 
 message InformacionCancion {
   int32 idCancion = 1;
-  string sha256 = 2;
   FormatoAudio formatoCancion = 3;
 }
 
@@ -59,7 +58,6 @@ message RespuestaSolicitudSubirArchivo {
 
 message InformacionPortada {
   int32 idElementoDePortada = 1;
-  string sha256 = 2;
   FormatoImagen formatoImagen = 3;
 }
 

@@ -22,8 +22,10 @@ namespace EspotifeiClient
             {
                 
                 var path = openFile.FileName;
-                ISongsClient client = new SongsClient();
-                client.UploadSong(openFile.FileName, 8, false);
+                SongsClient client = new SongsClient();
+                Player.Player.getPlayer().Play(1);
+                //client.UploadSong(openFile.FileName, 8, false);
+                //client.UploadSong(openFile.FileName, 1, false);
             }
         }
 

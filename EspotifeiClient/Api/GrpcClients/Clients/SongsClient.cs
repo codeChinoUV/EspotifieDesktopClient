@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Threading.Tasks;
 using Api.GrpcClients.Interfaces;
@@ -10,25 +10,36 @@ using ManejadorDeArchivos;
 
 namespace Api.GrpcClients.Clients
 {
-    public class SongsClient : ISongsClient
+    public class SongsClient
     {
-        private const int ChunkSize = 16 * 1000;
+        private const int ChunkSize = 64 * 1000;
+
+        public delegate void OnChuckRecived(byte[] bytesSong);
+
+        public event OnChuckRecived OnSongChunkRived;
         
+        public delegate void OnRecivedSong(byte[] bytesSong, string extension);
+
+        public event OnRecivedSong OnInitialRecivedSong;
+        
+        public int idGetSong { get; set; }
+        
+        public bool isPersonalGetSong { get; set; }
+
         public async Task UploadSong(string path, int idSong, bool isPersonal)
         {
-            Channel channel = new Channel("192.168.0.4:5001", ChannelCredentials.Insecure);
+            Channel channel = new Channel("ec2-54-160-126-163.compute-1.amazonaws.com:5001", ChannelCredentials.Insecure);
             var client = new Canciones.CancionesClient(channel);
             
             var extension = Path.GetExtension(path).Replace(".","");
-            var formatAudio = ConvertExtensionToFormatoAudio(extension);
+            var formatAudio = ConvertExtensionToFormatAudio(extension);
             if (File.Exists(path))
             {
                 var resquestUploadSong = new SolicitudSubirCancion();
                 resquestUploadSong.InformacionCancion = new InformacionCancion();
                 resquestUploadSong.InformacionCancion.IdCancion = idSong;
                 resquestUploadSong.InformacionCancion.FormatoCancion = formatAudio;
-                resquestUploadSong.TokenAutenticacion = "eyJ0eXAiOiJKV1QiLhCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoyLCJleHAiOjE1OTQ0MzA5MjB9.L1RXIEGWir63NS7P4KSbCSTnX8VRtM6_uZz8FN1k7D0";
-                resquestUploadSong.InformacionCancion.Sha256 = FileManager.Sha256CheckSum(path);
+                resquestUploadSong.TokenAutenticacion = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoxLCJleHAiOjE1OTUyMTg0ODV9.f7cPSV-HfAk9N3xOLZZeG7twlsAhRX38qpYLc5K5rbw";
                 var songBytes = File.ReadAllBytes(path);
                 AsyncClientStreamingCall<SolicitudSubirCancion, RespuestaSolicitudSubirArchivo> call = null; 
                 call = isPersonal ? client.SubirCancionPersonal() : client.SubirCancion();
@@ -56,10 +67,55 @@ namespace Api.GrpcClients.Clients
                     var error = response;
                 }    
             }
-            
         }
-        
-        private FormatoAudio ConvertExtensionToFormatoAudio(string extension)
+
+        public async void GetSong()
+        {
+            Channel channel = new Channel("ec2-54-160-126-163.compute-1.amazonaws.com:5001", ChannelCredentials.Insecure);
+            var client = new Canciones.CancionesClient(channel);
+            
+            var request = new SolicitudObtenerCancion();
+            MemoryStream memoryStream = new MemoryStream();
+            int position = 0;
+            FormatoAudio formatAudio = FormatoAudio.Mp3;
+            Error error = Error.Ninguno;
+            try
+            {
+                request.IdCancion = idGetSong;
+                request.CalidadCancionARecuperar = Calidad.Baja;
+                request.TokenAutenticacion =
+                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoxLCJleHAiOjE1OTUyMjkxOTd9.ynuG-YfgIm1UpLwfLG1at4lxeUREJckFd9cal3tid2g";
+                var call = isPersonalGetSong ? client.ObtenerCancionPersonal(request) : client.ObtenerCancion(request);
+                using (call)
+                {
+                    while (await call.ResponseStream.MoveNext())
+                    {
+                        RespuestaObtenerCancion response = call.ResponseStream.Current;
+                        memoryStream.Write(response.Data.ToByteArray(), 0, response.Data.Length);
+                        position += response.Data.Length;
+                        formatAudio = response.FormatoCancion;
+                        error = response.Error;
+                        if (position == ChunkSize)
+                        {
+                            OnInitialRecivedSong?.Invoke(response.Data.ToByteArray(), ConvertFormatAudioToExtension(formatAudio));
+                        }
+                        else if(position > ChunkSize)
+                        {
+                            OnSongChunkRived?.Invoke(response.Data.ToByteArray());
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var exe = ex;
+            }
+            var totalSize = memoryStream.ToArray().Length;
+            
+            Console.WriteLine(totalSize);
+        }
+
+        private FormatoAudio ConvertExtensionToFormatAudio(string extension)
         {
             var formatAudio = FormatoAudio.Mp3;
             if (extension == "mp3")
@@ -75,7 +131,26 @@ namespace Api.GrpcClients.Clients
 
             return formatAudio;
         }
+
+        private string ConvertFormatAudioToExtension(FormatoAudio audioFormat)
+        {
+            var formatAudio = "mp3";
+            if (audioFormat == FormatoAudio.Mp3)
+            {
+                formatAudio = "mp3";
+            }else if (audioFormat == FormatoAudio.M4A)
+            {
+                formatAudio = "m4a";
+            }else if (audioFormat == FormatoAudio.M4A)
+            {
+                formatAudio = "flac";
+            }
+
+            return formatAudio;
+        }
         
+        
+
     }
     
     

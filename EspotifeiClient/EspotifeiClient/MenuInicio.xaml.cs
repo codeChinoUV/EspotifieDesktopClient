@@ -52,5 +52,10 @@ namespace EspotifeiClient
             new RegistrarPlaylist().Show();
             this.Close();
         }
+
+        private void AbrirMenuButton_Click_1(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

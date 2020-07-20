@@ -17,7 +17,7 @@ namespace EspotifeiClient
     /// <summary>
     /// Lógica de interacción para RegistrarUsuario.xaml
     /// </summary>
-    public partial class RegistrarUsuario : Window
+    public partial class RegistrarUsuario : Page
     {
         public RegistrarUsuario()
         {

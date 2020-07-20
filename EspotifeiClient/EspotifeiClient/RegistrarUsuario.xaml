@@ -1,4 +1,4 @@
-﻿<Window x:Class="EspotifeiClient.RegistrarUsuario"
+﻿<Page x:Class="EspotifeiClient.RegistrarUsuario"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,13 +6,11 @@
         xmlns:local="clr-namespace:EspotifeiClient"
         mc:Ignorable="d"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        Title="Registrar usuario" Height="539" Width="411.5"
-        ResizeMode="NoResize" 
-        WindowStartupLocation="CenterScreen" 
+        Title="Registrar usuario"
         FontFamily="Segoe UI Emoji">
-    <Grid Margin="0,0,0,-29">
+    <Grid>
 
-        <Rectangle Height="514" VerticalAlignment="Top">
+        <Rectangle VerticalAlignment="Stretch">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="#FF2281D1"/>
@@ -22,23 +20,27 @@
             </Rectangle.Fill>
         </Rectangle>
 
-        <Rectangle Height="429" VerticalAlignment="Bottom" Margin="35,0,29,62" RadiusY="10" RadiusX="10" Fill="White">
+        <Rectangle VerticalAlignment="Center" Margin="10" Width="380" Height="500" RadiusY="10" RadiusX="10" Fill="White" >
             <Rectangle.Effect>
                 <DropShadowEffect BlurRadius="15" Direction="0" RenderingBias="Quality" ShadowDepth="1" Color="#FFBBBBBB"/>
             </Rectangle.Effect>
         </Rectangle>
-        <Grid VerticalAlignment="Bottom" Margin="35,0,29,128" Height="363">
-            <Label Content="REGISTRO DE USUARIO" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="44,0,33,0" Foreground="Gray" FontSize="18" Width="203"/>
-            <StackPanel VerticalAlignment="Center" Margin="10,32,10,-63" Height="394">
+        <Grid VerticalAlignment="Center" Margin="10" Width="380" Height="520">
+
+            <StackPanel VerticalAlignment="Center" Margin="20" Height="500">
+                <Label Content="REGISTRO DE USUARIO" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,10" Foreground="Gray" FontSize="18" Width="203"/>
+                <Button x:Name="agregarImagenImage" Background="{x:Null}" Width="100" Height="100" BorderBrush="#FF2281D1"  >
+                    <Image Source="Resources/Añadir.png"></Image>
+                </Button>
                 <TextBox x:Name="nombreTextbox" Margin="0,10" materialDesign:HintAssist.Hint="NOMBRE" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
                 <TextBox x:Name="correoTextbox" Margin="0,10" materialDesign:HintAssist.Hint="CORREO ELECTRÓNICO" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
                 <TextBox x:Name="usuarioTextbox" Margin="0,10" materialDesign:HintAssist.Hint="USUARIO" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
                 <PasswordBox x:Name="contraseniaPasswordbox" Margin="0,10" materialDesign:HintAssist.Hint="CONTRASEÑA" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
                 <ComboBox x:Name="tipoUsuarioCombobox" Margin="0,10" materialDesign:HintAssist.Hint="TIPO DE USUARIO" Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontFamily="Champagne &amp; Limousines" FontSize="16"/>
-                <TextBox x:Name="imagenTextbox" Margin="0,10,99,10" materialDesign:HintAssist.Hint="PORTADA" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16"/>
+
             </StackPanel>
         </Grid>
-        <Button x:Name="registrarUsuarioButton" Width="117" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="151,0,138,38" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="24"/>
-        <Button x:Name="examinarButton" Width="82" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="278,0,46,90" Content="EXAMINAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="19" FontSize="10"/>
+        <Button x:Name="registrarUsuarioButton" Width="117" Margin="0,20" VerticalAlignment="Bottom" HorizontalAlignment="Center" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="30" FontSize="16"/>
+
     </Grid>
-</Window>
+</Page>

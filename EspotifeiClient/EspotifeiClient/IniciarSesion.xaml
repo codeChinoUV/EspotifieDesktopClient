@@ -32,7 +32,7 @@
                 <PasswordBox x:Name="contraseniaPasswordbox" Margin="0,35" materialDesign:HintAssist.Hint="CONTRASEÑA" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
             </StackPanel>
         </Grid>
-        <Button x:Name="ingresarButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,65" Content="INGRESAR" Background="#FF16A210" BorderBrush="#FF16A210"/>
+        <Button x:Name="ingresarButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,65" Content="INGRESAR" Background="#FF16A210" BorderBrush="#FF16A210" Click="OnClickIngresarButton"/>
         <TextBlock Text="¿NO TIENES CUENTA? REGÍSTRATE" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="30" Foreground="Gray" Cursor="Hand"/>
         <Image HorizontalAlignment="Center" Height="125" Margin="0,15,0,0" VerticalAlignment="Top" Width="125" Source="Resources/EspotifeiMusic.png"/>
     </Grid>

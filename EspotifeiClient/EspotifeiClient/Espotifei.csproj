@@ -65,6 +65,10 @@
       <HintPath>..\packages\NAudio.1.7.3\lib\net35\NAudio.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="SHA3.Net, Version=1.2.3.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\packages\SHA3.Net.1.2.3\lib\net46\SHA3.Net.dll</HintPath>
       <Private>True</Private>
@@ -78,6 +82,10 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Memory, Version=4.0.1.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51">
       <HintPath>..\packages\System.Memory.4.5.3\lib\netstandard2.0\System.Memory.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.7\lib\net45\System.Net.Http.Formatting.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Numerics" />
@@ -109,6 +117,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BarraNavegacion.xaml.cs">
+      <DependentUpon>BarraNavegacion.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Player\Player.cs" />
     <Compile Include="RegistrarAlbum.xaml.cs">
       <DependentUpon>RegistrarAlbum.xaml</DependentUpon>
@@ -125,9 +136,10 @@
     <Compile Include="RegistrarUsuario.xaml.cs">
       <DependentUpon>RegistrarUsuario.xaml</DependentUpon>
     </Compile>
-    <Compile Include="WindowPrueba.xaml.cs">
-      <DependentUpon>WindowPrueba.xaml</DependentUpon>
-    </Compile>
+    <Page Include="BarraNavegacion.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="IniciarSesion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -168,10 +180,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="RegistrarUsuario.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="WindowPrueba.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -225,6 +233,10 @@
     <ProjectReference Include="..\Api\Api.csproj">
       <Project>{79694b93-9ddc-4c0f-97a8-7c922c40bdb7}</Project>
       <Name>Api</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Model\Model.csproj">
+      <Project>{ca9b68a1-7601-49f3-9d26-da3f032e6363}</Project>
+      <Name>Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

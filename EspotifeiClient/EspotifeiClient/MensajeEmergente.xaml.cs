@@ -5,7 +5,7 @@ namespace EspotifeiClient
     /// <summary>
     /// Lógica de interacción para MensajeEmergenteVentana.xaml
     /// </summary>
-    public partial class MensajeEmergente : Window
+    public partial class MensajeEmergente
     {
         public MensajeEmergente()
         {

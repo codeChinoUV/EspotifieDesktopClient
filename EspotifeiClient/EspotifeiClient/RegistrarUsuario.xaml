@@ -9,13 +9,6 @@
         Title="Registrar usuario"
         xmlns:enum="clr-namespace:Model.Enum;assembly=Model"
         FontFamily="Segoe UI Emoji">
-    <Page.Resources>
-        <ObjectDataProvider x:Key="TiposUsuario" MethodName="GetValues" ObjectType="{x:Type enum:TipoUsuario}" >
-            <ObjectDataProvider.MethodParameters>
-                <x:Type TypeName="enum:TipoUsuario" />
-            </ObjectDataProvider.MethodParameters>
-        </ObjectDataProvider>
-    </Page.Resources>
     <Grid>
         <Rectangle VerticalAlignment="Stretch">
             <Rectangle.Fill>
@@ -36,14 +29,14 @@
 
             <StackPanel VerticalAlignment="Center" Margin="20" Height="500">
                 <Label Content="REGISTRO DE USUARIO" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,0,0,10" Foreground="Gray" FontSize="18" Width="203"/>
-                <Button x:Name="agregarImagenImage" Background="{x:Null}" Width="100" Height="100" BorderBrush="#FF2281D1"  >
-                    <Image Source="Resources/Añadir.png"></Image>
+                <Button x:Name="agregarImagenButton" Background="{x:Null}" Width="100" Height="100" Click="OnClickAgregarImagenButton" Padding="0" BorderBrush="White">
+                    <Image x:Name="imagenPerfil" Source="Resources/Añadir.png"></Image>
                 </Button>
-                <TextBox x:Name="nombreTextbox" Margin="0,10" materialDesign:HintAssist.Hint="NOMBRE" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
-                <TextBox x:Name="correoTextbox" Margin="0,10" materialDesign:HintAssist.Hint="CORREO ELECTRÓNICO" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
-                <TextBox x:Name="usuarioTextbox" Margin="0,10" materialDesign:HintAssist.Hint="USUARIO" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
-                <PasswordBox x:Name="contraseniaPasswordbox" Margin="0,10" materialDesign:HintAssist.Hint="CONTRASEÑA" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
-                <ComboBox x:Name="tipoUsuarioCombobox" Margin="0,10" ItemsSource="{Binding Source={StaticResource TiposUsuario}}" materialDesign:HintAssist.Hint="TIPO DE USUARIO" Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontFamily="Champagne &amp; Limousines" FontSize="16"/>
+                <TextBox x:Name="nombreTextbox" Margin="0,10" materialDesign:HintAssist.Hint="NOMBRE" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="40"/>
+                <TextBox x:Name="correoTextbox" Margin="0,10" materialDesign:HintAssist.Hint="CORREO ELECTRÓNICO" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="60"/>
+                <TextBox x:Name="usuarioTextbox" Margin="0,10" materialDesign:HintAssist.Hint="USUARIO" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="20"/>
+                <PasswordBox x:Name="contraseniaPasswordbox" Margin="0,10" materialDesign:HintAssist.Hint="CONTRASEÑA" Style="{StaticResource MaterialDesignFloatingHintPasswordBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="20"/>
+                <ComboBox x:Name="tipoUsuarioCombobox" Margin="0,10" materialDesign:HintAssist.Hint="TIPO DE USUARIO" Style="{StaticResource MaterialDesignFloatingHintComboBox}" FontFamily="Champagne &amp; Limousines" FontSize="16"/>
 
             </StackPanel>
         </Grid>

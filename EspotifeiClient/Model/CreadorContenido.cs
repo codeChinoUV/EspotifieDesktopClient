@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Model
 {
-    class CreadorContenido
+    public class CreadorContenido
     {
         public string nombre { get; set; }
 

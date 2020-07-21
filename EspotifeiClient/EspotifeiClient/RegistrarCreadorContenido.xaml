@@ -57,13 +57,13 @@
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
-                    <CheckBox Grid.Column="1" Content="Grupo" HorizontalAlignment="Center" />
+                    <CheckBox x:Name="grupoCheckbox" Grid.Column="1" Content="Grupo" HorizontalAlignment="Center" />
                 </Grid>
             </StackPanel>
         </Grid>
         <StackPanel Orientation="Horizontal" Margin="0,20" VerticalAlignment="Bottom" HorizontalAlignment="Center">
             <Button x:Name="cancelarButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="30,0" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF"/>
-            <Button x:Name="registrarCreadorButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="30,0" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210"/>
+            <Button x:Name="registrarCreadorButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="30,0" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" Click="OnClickRegistrarCreadorButton"/>
         </StackPanel>
         
     </Grid>

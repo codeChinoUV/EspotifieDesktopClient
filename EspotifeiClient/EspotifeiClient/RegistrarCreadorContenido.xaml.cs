@@ -1,16 +1,10 @@
-﻿using System;
+﻿using Model;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using Api.Rest.ApiClient;
+using System.Net.Http;
 
 namespace EspotifeiClient
 {
@@ -24,5 +18,44 @@ namespace EspotifeiClient
             InitializeComponent();
         }
 
+        private CreadorContenido CrearCreadorContenido()
+        {
+            List<String> generosCreador = new List<String>();
+            generosCreador.Add("Pop");
+            bool grupo = false;
+
+            if ((bool)grupoCheckbox.IsChecked)
+            {
+                grupo = true;
+            }
+
+            var creadorContenido = new CreadorContenido
+            {
+                nombre = nombreCreadorTextbox.Text,
+                biografia = biografiaTextbox.Text,
+                generos = generosCreador,
+                es_grupo = grupo,
+            };
+            return creadorContenido;
+        }
+
+        private async void OnClickRegistrarCreadorButton(object sender, RoutedEventArgs e)
+        {
+            cancelarButton.IsEnabled = false;
+            registrarCreadorButton.IsEnabled = false;
+            var creador = CrearCreadorContenido();
+            try
+            {
+                await CreadorContenidoClient.RegisterCreadorContenido(creador);
+            } catch (HttpRequestException)
+            {
+                new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
+            } catch (Exception exception)
+            {
+                new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
+            }
+            cancelarButton.IsEnabled = true;
+            registrarCreadorButton.IsEnabled = true;
+        }
     }
 }

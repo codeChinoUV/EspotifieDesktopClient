@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Windows;
-using System.Windows.Controls;
-using Api.Rest.ApiClient;
+using Api.Rest.Login;
 using Model;
 
 
@@ -11,7 +10,7 @@ namespace EspotifeiClient
     /// <summary>
     /// Lógica de interacción para IniciarSesion.xaml
     /// </summary>
-    public partial class IniciarSesion : Page
+    public partial class IniciarSesion
     {
         public IniciarSesion()
         {

@@ -2,8 +2,9 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Api.GrpcClients;
+using Api.Rest.Login;
 
-namespace Api.Rest.ApiClient
+namespace Api.Rest
 {
     public class ApiClient
     {

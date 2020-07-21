@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Net.Http;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
-using Api.Rest.ApiClient;
+using Api.Rest;
+using Api.Rest.Login;
 using EspotifeiClient.Util;
 using Grpc.Core;
 using Microsoft.Win32;
@@ -16,7 +16,7 @@ namespace EspotifeiClient
     /// <summary>
     /// Lógica de interacción para RegistrarUsuario.xaml
     /// </summary>
-    public partial class RegistrarUsuario : Page
+    public partial class RegistrarUsuario
     {
         private string _rutaImagen;
         

@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Model;
 
-namespace Api.Rest.ApiClient
+namespace Api.Rest
 {
     public class UsuarioClient
     {

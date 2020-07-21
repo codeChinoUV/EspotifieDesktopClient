@@ -139,6 +139,7 @@
     <Compile Include="RegistrarUsuario.xaml.cs">
       <DependentUpon>RegistrarUsuario.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Util\ValidacionDeCadenas.cs" />
     <Page Include="BarraNavegacion.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

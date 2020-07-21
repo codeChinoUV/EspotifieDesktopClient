@@ -30,8 +30,8 @@
                 <Button x:Name="agregarImagenImage" Background="{x:Null}" Width="100" Height="100" BorderBrush="#FF2281D1"  >
                     <Image Source="Resources/Añadir.png"></Image>
                 </Button>
-                <TextBox x:Name="nombreCreadorTextbox" Margin="0,10" materialDesign:HintAssist.Hint="NOMBRE" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
-                <TextBox x:Name="biografiaTextbox" Margin="0,10" materialDesign:HintAssist.Hint="BIOGRAFÍA" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25" Height="75"/>
+                <TextBox x:Name="nombreCreadorTextbox" Margin="0,10" materialDesign:HintAssist.Hint="NOMBRE" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="70"/>
+                <TextBox x:Name="biografiaTextbox" Margin="0,10" materialDesign:HintAssist.Hint="BIOGRAFÍA" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="500" Height="75"/>
                 <Grid Height="180">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="0.80*" />

@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Api.GrpcClients;
 using Model;
 
 namespace Api.Rest.ApiClient
@@ -67,6 +68,7 @@ namespace Api.Rest.ApiClient
                 _autenticationToken = splitResult[1];
                 _autenticationToken = _autenticationToken.Replace("\"", "");
                 _autenticationToken = _autenticationToken.Replace("}", "");
+                _autenticationToken = _autenticationToken.Replace("\n", "");
             }
             _apiClient.DefaultRequestHeaders.Clear();
         }
@@ -83,7 +85,7 @@ namespace Api.Rest.ApiClient
                 _apiClient = new HttpClient();
                 _apiClient.DefaultRequestHeaders.Accept.Clear();
                 _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                _apiClient.BaseAddress = new Uri("http://ec2-54-160-126-163.compute-1.amazonaws.com:5000/");
+                _apiClient.BaseAddress = new Uri(Configuration.URIRestServer);
             }
             return _loginService;
         }

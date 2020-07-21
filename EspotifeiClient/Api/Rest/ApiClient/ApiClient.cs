@@ -1,6 +1,7 @@
 using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Api.GrpcClients;
 
 namespace Api.Rest.ApiClient
 {
@@ -22,7 +23,7 @@ namespace Api.Rest.ApiClient
                 _httpClient = new HttpClient();
                 _httpClient.DefaultRequestHeaders.Accept.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                _httpClient.BaseAddress = new Uri("http://ec2-54-160-126-163.compute-1.amazonaws.com:5000/");
+                _httpClient.BaseAddress = new Uri(Configuration.URIRestServer);
                 _httpClient.DefaultRequestHeaders.Add("x-access-token", ApiServiceLogin.GetServiceLogin().GetAccessToken());
             }
 

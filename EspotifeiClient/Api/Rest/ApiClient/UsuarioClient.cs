@@ -9,9 +9,15 @@ namespace Api.Rest.ApiClient
 {
     public class UsuarioClient
     {
+        /// <summary>
+        /// Solicita al APIREST registrar un nuevo usuario
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>El nuevo usuario registrado</returns>
+        /// <exception cref="Exception">Una excepcion que indica si ocurrio un error</exception>
         public static async Task<Usuario> RegisterUsuario(Usuario user)
         {
-            Usuario userRegister = null;
+            Usuario userRegister;
             var path = "/v1/usuario";
             using (HttpResponseMessage response = await ApiClient.GetApiClient().PostAsJsonAsync(path, user))
             {
@@ -23,7 +29,6 @@ namespace Api.Rest.ApiClient
                 else if(response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     List<ErrorGeneral> errores;
-                    var stringError = "Valida que los los campos sean correctos";
                     errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
                     var error = ProcessBadRequesCode(errores[0].error);
                     throw new Exception(error);
@@ -37,6 +42,11 @@ namespace Api.Rest.ApiClient
             }
         }
 
+        /// <summary>
+        /// Procesa los codigos de error para convertirlos a cadenas de informacion para el usuario
+        /// </summary>
+        /// <param name="badRequestCode">El codigo de error a procesar</param>
+        /// <returns>Una cadena que contiene informacion para el usuario a partir de los codigos de error</returns>
         private static string ProcessBadRequesCode(string badRequestCode)
         {
             var response = "Validale que los campos sean correctos";

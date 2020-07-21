@@ -83,7 +83,7 @@ namespace Api.Rest.ApiClient
                 _apiClient = new HttpClient();
                 _apiClient.DefaultRequestHeaders.Accept.Clear();
                 _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                _apiClient.BaseAddress = new Uri("http://ec2-54-160-126-163.compute-1.amazonaws.com:5000");
+                _apiClient.BaseAddress = new Uri("http://ec2-54-160-126-163.compute-1.amazonaws.com:5000/");
             }
             return _loginService;
         }

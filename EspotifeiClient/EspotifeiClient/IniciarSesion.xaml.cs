@@ -36,12 +36,11 @@ namespace EspotifeiClient
                 }
                 catch (HttpRequestException)
                 {
-                    MessageBox.Show("Ocurrio un error al conectar al servidor", "", MessageBoxButton.OK,
-                        MessageBoxImage.Error);
+                    new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
                 }
                 catch (Exception exception)
                 {
-                    MessageBox.Show(exception.Message, "", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                    new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
                 }
                 ingresarButton.IsEnabled = true;
             }

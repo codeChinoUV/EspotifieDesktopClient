@@ -1,7 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>7.3</LangVersion>
     </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Google.Protobuf" Version="3.12.3" />
+        <PackageReference Include="Grpc" Version="2.30.0" />
+        <PackageReference Include="Grpc.Tools" Version="2.30.0" />
+        <PackageReference Include="SHA3.Net" Version="1.2.3" />
+    </ItemGroup>
+
 
 </Project>

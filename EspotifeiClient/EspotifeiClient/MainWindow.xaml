@@ -15,8 +15,7 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="0.80*" />
         </Grid.ColumnDefinitions>
-        <Frame Grid.Column="0" x:Name="MenuFrame"/>
-        <Frame Grid.Column="1" x:Name="PantallaFrame" Source="/EspotifeiClient;component/RegistrarUsuario.xaml" />
+        <Frame Grid.Column="1" x:Name="PantallaFrame" Source="/EspotifeiClient;component/IniciarSesion.xaml" />
     </Grid>
         
 </Window>

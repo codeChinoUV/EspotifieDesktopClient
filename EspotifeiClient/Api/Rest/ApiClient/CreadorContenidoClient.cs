@@ -9,6 +9,11 @@ namespace Api.Rest.ApiClient
 {
     public class CreadorContenidoClient
     {
+        /// <summary>
+        /// Método del servidor que realiza la petición HTTP para registrar al CreadorContenido
+        /// </summary>
+        /// <param name="contentCreator">Variable de tipo de CreadorContenido que contiene su información</param>
+        /// <returns>Una variable de tipo CreadorContenido o una excepción si la respuesta de la solicitud es incorrecta</returns>
         public static async Task<CreadorContenido> RegisterCreadorContenido(CreadorContenido contentCreator)
         {
             CreadorContenido contentCreatorRegister = null;
@@ -22,7 +27,6 @@ namespace Api.Rest.ApiClient
                 } else if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     List<ErrorGeneral> errores;
-                    var stringError = "Valida que los los campos sean correctos";
                     errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
                     var error = ProcessBadRequesCode(errores[0].error);
                     throw new Exception(error);
@@ -35,19 +39,23 @@ namespace Api.Rest.ApiClient
             }
         }
 
+        /// <summary>
+        /// Método que procesa las diferentes solicitudes incorrectas y las devuelve en un mensaje de error
+        /// </summary>
+        /// <param name="badRequestCode">Variable que contiene el nombre del error de la solicitud</param>
+        /// <returns>Variable de tipo string que contiene el mensaje correspondiente al error recibido</returns>
         private static string ProcessBadRequesCode(string badRequestCode)
         {
             var response = "Validale que los campos sean correctos";
-            if (badRequestCode == "nombre_usuario_en_uso")
+            if (badRequestCode == "usuario_tiene_un_creador_de_contenido_registrado")
             {
-                response = "El nombre de usuario ya se encuentra en uso, por favor eliga otro";
+                response = "El usuario ya tiene registrado un creador de contenido, no puede tener registrado otro";
             }
 
-            if (badRequestCode == "email_en_uso")
+            if (badRequestCode == "operacion_no_permitida")
             {
-                response = "El correo ya se ha registrado en otra cuenta, intente con otro correo";
+                response = "El usuario no tiene permitido realizar la operación solicitada";
             }
-
             return response;
         }
     }

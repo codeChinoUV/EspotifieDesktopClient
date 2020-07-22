@@ -8,9 +8,6 @@ using System.Net.Http;
 
 namespace EspotifeiClient
 {
-    /// <summary>
-    /// Lógica de interacción para RegistrarCreadorContenido.xaml
-    /// </summary>
     public partial class RegistrarCreadorContenido : Page
     {
         public RegistrarCreadorContenido()
@@ -18,10 +15,12 @@ namespace EspotifeiClient
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Método que crea un CreadorContenido a partir de su información
+        /// </summary>
+        /// <returns>Variable de tipo CreadorContenido</returns>
         private CreadorContenido CrearCreadorContenido()
         {
-            List<String> generosCreador = new List<String>();
-            generosCreador.Add("Pop");
             bool grupo = false;
 
             if ((bool)grupoCheckbox.IsChecked)
@@ -39,6 +38,11 @@ namespace EspotifeiClient
             return creadorContenido;
         }
 
+        /// <summary>
+        /// Método que contiene el evento para registrar un CreadorContenido al pulsar clic sobre el botón Registrar
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void OnClickRegistrarCreadorButton(object sender, RoutedEventArgs e)
         {
             cancelarButton.IsEnabled = false;
@@ -56,6 +60,23 @@ namespace EspotifeiClient
             }
             cancelarButton.IsEnabled = true;
             registrarCreadorButton.IsEnabled = true;
+        }
+
+        /// <summary>
+        /// Método que consulta los géneros registrados en el servidor
+        /// </summary>
+        private async void ConsultarGeneros()
+        {
+            try
+            {
+                var listaGeneros = await GeneroClient.GetGenero();
+                generosDG.ItemsSource = listaGeneros;
+            } catch (HttpRequestException)
+            {
+                new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
+            }
+
+         
         }
     }
 }

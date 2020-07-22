@@ -28,8 +28,8 @@
         <Grid VerticalAlignment="Center" Height="500" Width="380">
             <StackPanel VerticalAlignment="Center" Margin="10,0" Height="500">
                 <Label Content="REGISTRO DE CREADOR" HorizontalAlignment="Center" VerticalAlignment="Top" Foreground="Gray" FontSize="18" Width="203"/>
-                <Button x:Name="agregarImagenImage" Background="{x:Null}" Width="100" Height="100" BorderBrush="#FF2281D1"  >
-                    <Image Source="Resources/Añadir.png"></Image>
+                <Button x:Name="agregarImagenImage" Background="{x:Null}" Width="100" Height="100" BorderBrush="#FF2281D1"  Click="OnClickAgregarImagenImage">
+                    <Image x:Name="portadaCreadorImage" Source="Resources/Añadir.png"></Image>
                 </Button>
                 <TextBox x:Name="nombreCreadorTextbox" Margin="0,10" materialDesign:HintAssist.Hint="NOMBRE" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="70"/>
                 <TextBox x:Name="biografiaTextbox" Margin="0,10" materialDesign:HintAssist.Hint="BIOGRAFÍA" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="500" Height="75"/>

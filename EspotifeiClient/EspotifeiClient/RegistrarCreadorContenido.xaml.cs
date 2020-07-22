@@ -1,10 +1,8 @@
 ﻿using Model;
 using System;
-using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
-using Api.Rest.ApiClient;
 using System.Net.Http;
+using Api.Rest;
 
 namespace EspotifeiClient
 {
@@ -26,7 +24,9 @@ namespace EspotifeiClient
         {
             bool grupo = false;
 
-            if ((bool)grupoCheckbox.IsChecked)
+            /*
+             NO SUBIR CODIGO CON ERRORES, SI ALGO NO FUNCIONA SE COMENTA Y SE PONE UN TODO 
+             if ((bool)grupoCheckbox.IsChecked)
             {
                 grupo = true;
             }
@@ -37,8 +37,8 @@ namespace EspotifeiClient
                 biografia = biografiaTextbox.Text,
                 generos = generosCreador,
                 es_grupo = grupo,
-            };
-            return creadorContenido;
+            };*/
+            return null;
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace EspotifeiClient
         {
             try
             {
-                var listaGeneros = await GeneroClient.GetGenero();
+                var listaGeneros = await GeneroClient.GetGeneros();
                 generosDG.ItemsSource = listaGeneros;
             } catch (HttpRequestException)
             {

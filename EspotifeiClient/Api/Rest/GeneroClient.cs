@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Model;
 
-namespace Api.Rest.ApiClient
+namespace Api.Rest
 {
     public class GeneroClient
     {
@@ -13,16 +13,16 @@ namespace Api.Rest.ApiClient
         /// Método del servidor que realiza la petición HTTP para consultar la lista de géneros existentes
         /// </summary>
         /// <returns></returns>
-        public static async Task<List<Genero>> GetGenero()
+        public static async Task<List<Genero>> GetGeneros()
         {
-            List<Genero> listaGeneros = new List<Genero>();
+            List<Genero> generos = new List<Genero>();
             var path = "/v1/generos";
             using (HttpResponseMessage response = await ApiClient.GetApiClient().GetAsync(path))
             {
                 if (response.IsSuccessStatusCode)
                 {
-                    listaGeneros = await response.Content.ReadAsAsync<List<Genero>>();
-                    return listaGeneros;
+                    generos = await response.Content.ReadAsAsync<List<Genero>>();
+                    return generos;
                 } else
                 {
                     ErrorGeneral error;

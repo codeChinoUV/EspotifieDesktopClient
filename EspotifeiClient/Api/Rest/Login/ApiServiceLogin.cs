@@ -4,16 +4,17 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using Api.GrpcClients;
 using Model;
 
-namespace Api.Rest.ApiClient
+namespace Api.Rest.Login
 {
     public class ApiServiceLogin
     {
         private static ApiServiceLogin _loginService;
         private static HttpClient _apiClient;
         private string _autenticationToken = "";
-        private Login _userLogin;
+        private Model.Login _userLogin;
 
         private ApiServiceLogin()
         {
@@ -42,7 +43,7 @@ namespace Api.Rest.ApiClient
         /// <param name="login">El objeto que contiene las credenciales del Usuario</param>
         /// <returns>Task</returns>
         /// <exception cref="Exception">Una Excepcion generada al Logearse</exception>
-        public async Task Login(Login login)
+        public async Task Login(Model.Login login)
         {
             _userLogin = login;
             ErrorGeneral errorGeneral;
@@ -67,6 +68,7 @@ namespace Api.Rest.ApiClient
                 _autenticationToken = splitResult[1];
                 _autenticationToken = _autenticationToken.Replace("\"", "");
                 _autenticationToken = _autenticationToken.Replace("}", "");
+                _autenticationToken = _autenticationToken.Replace("\n", "");
             }
             _apiClient.DefaultRequestHeaders.Clear();
         }
@@ -83,7 +85,7 @@ namespace Api.Rest.ApiClient
                 _apiClient = new HttpClient();
                 _apiClient.DefaultRequestHeaders.Accept.Clear();
                 _apiClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                _apiClient.BaseAddress = new Uri("http://ec2-54-160-126-163.compute-1.amazonaws.com:5000/");
+                _apiClient.BaseAddress = new Uri(Configuration.URIRestServer);
             }
             return _loginService;
         }

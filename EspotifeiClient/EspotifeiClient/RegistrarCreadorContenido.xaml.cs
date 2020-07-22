@@ -8,7 +8,10 @@ using System.Net.Http;
 
 namespace EspotifeiClient
 {
-    public partial class RegistrarCreadorContenido : Page
+    /// <summary>
+    /// Lógica de interacción para RegistrarCreadorContenido.xaml
+    /// </summary>
+    public partial class RegistrarCreadorContenido
     {
         public RegistrarCreadorContenido()
         {

@@ -18,7 +18,7 @@ namespace EspotifeiClient
     /// </summary>
     public partial class RegistrarUsuario
     {
-        private string _rutaImagen;
+        private string _rutaImagen = "";
         
         public RegistrarUsuario()
         {
@@ -193,11 +193,11 @@ namespace EspotifeiClient
                 {
                     if (usuario.tipo_usuario == TipoUsuario.CreadorDeContenido)
                     {
-                        
+                        PageManager.ChangePage<RegistrarCreadorContenido>();
                     }
                     else
                     {
-                        
+                        PageManager.ChangePage<MenuInicio>();
                     }
                 }
                 cancelarButton.IsEnabled = true;

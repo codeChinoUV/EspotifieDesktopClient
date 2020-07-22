@@ -1,10 +1,11 @@
-﻿<Page x:Class="EspotifeiClient.RegistrarCreadorContenido"
+﻿<manejadorDePaginas:UIPage x:Class="EspotifeiClient.RegistrarCreadorContenido"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:EspotifeiClient"
+        xmlns:manejadorDePaginas="clr-namespace:EspotifeiClient.Util.ManejadorDePaginas"
         mc:Ignorable="d"
         Title="Registrar creador de contenido"
         FontFamily="Segoe UI Emoji">
@@ -67,4 +68,4 @@
         </StackPanel>
         
     </Grid>
-</Page>
+</manejadorDePaginas:UIPage>

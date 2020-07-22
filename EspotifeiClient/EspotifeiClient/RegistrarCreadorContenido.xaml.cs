@@ -17,7 +17,7 @@ namespace EspotifeiClient
     /// <summary>
     /// Lógica de interacción para RegistrarCreadorContenido.xaml
     /// </summary>
-    public partial class RegistrarCreadorContenido : Page
+    public partial class RegistrarCreadorContenido
     {
         public RegistrarCreadorContenido()
         {

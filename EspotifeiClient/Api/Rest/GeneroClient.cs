@@ -12,7 +12,7 @@ namespace Api.Rest
         /// <summary>
         /// Método del servidor que realiza la petición HTTP para consultar la lista de géneros existentes
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Lista de géneros musicales</returns>
         public static async Task<List<Genero>> GetGeneros()
         {
             List<Genero> generos = new List<Genero>();

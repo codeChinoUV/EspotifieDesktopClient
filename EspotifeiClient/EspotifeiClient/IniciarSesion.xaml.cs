@@ -33,7 +33,7 @@ namespace EspotifeiClient
                 try
                 {
                     await ApiServiceLogin.GetServiceLogin().Login(login);
-                    PageManager.ChangePage<MenuInicio>();
+                    NavigationService.Navigate(new MenuInicio());
                 }
                 catch (HttpRequestException)
                 {

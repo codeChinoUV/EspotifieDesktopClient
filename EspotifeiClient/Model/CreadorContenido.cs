@@ -9,7 +9,7 @@ namespace Model
 
         public string biografia { get; set; }
 
-        public List<String> generos { get; set; }
+        public List<Genero> generos { get; set; }
 
         public bool es_grupo { get; set; }
 

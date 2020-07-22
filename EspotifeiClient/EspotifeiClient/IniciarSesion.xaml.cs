@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net.Http;
 using System.Windows;
+using System.Windows.Input;
 using Api.Rest.Login;
 using Model;
 
@@ -32,6 +33,7 @@ namespace EspotifeiClient
                 try
                 {
                     await ApiServiceLogin.GetServiceLogin().Login(login);
+                    PageManager.ChangePage<MenuInicio>();
                 }
                 catch (HttpRequestException)
                 {
@@ -48,8 +50,11 @@ namespace EspotifeiClient
                 MessageBox.Show("Debe de ingresar los campos de usuario y contraseña", "", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
             
-            
-            
+        }
+
+        private void OnClickRegistrar(object sender, MouseButtonEventArgs e)
+        {
+            PageManager.ChangePage<RegistrarUsuario>();
         }
     }
 }

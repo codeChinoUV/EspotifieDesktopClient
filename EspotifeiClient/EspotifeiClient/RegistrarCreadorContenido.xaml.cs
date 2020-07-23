@@ -7,6 +7,10 @@ using EspotifeiClient.Util;
 using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using Api.GrpcClients.Clients;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace EspotifeiClient
 {
@@ -19,6 +23,25 @@ namespace EspotifeiClient
         public RegistrarCreadorContenido()
         {
             InitializeComponent();
+            DataContext = this;
+            ConsultarGeneros();
+        }
+
+        List<String> listaGenerosMusicales = new List<String> { };
+        List<Genero> listaGenero = new List<Genero> { };
+
+        public ObservableCollection<GenerosTabla> GenerosObservableCollection
+        {
+            get;
+        } =
+           new ObservableCollection<GenerosTabla>();
+
+        public struct GenerosTabla
+        {
+            public string Generos
+            {
+                get; set;
+            }
         }
 
         /// <summary>
@@ -27,13 +50,13 @@ namespace EspotifeiClient
         /// <returns>Variable de tipo CreadorContenido</returns>
         private CreadorContenido CrearCreadorContenido()
         { 
-            /*var creadorContenido = new CreadorContenido
+            var creadorContenido = new CreadorContenido
             {
                 nombre = nombreCreadorTextbox.Text,
                 biografia = biografiaTextbox.Text,
-                generos = generosCreador,
+                generos = listaGenero,
                 es_grupo = ValidarCheckBoxGrupo(),
-            };*/
+            };
             return null;
         }
 
@@ -76,8 +99,18 @@ namespace EspotifeiClient
         {
             try
             {
+                //var listaGeneros = await GeneroClient.GetGeneros();
+                //generosDG.ItemsSource = listaGeneros;
                 var listaGeneros = await GeneroClient.GetGeneros();
-                generosDG.ItemsSource = listaGeneros;
+                foreach (Genero generoMusical in listaGeneros)
+                {
+                    GenerosObservableCollection.Add(new GenerosTabla
+                    {
+                        Generos = generoMusical.genero
+                        
+                    });
+                }
+
             } catch (HttpRequestException)
             {
                 new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
@@ -166,6 +199,52 @@ namespace EspotifeiClient
                     new MensajeEmergente().MostrarMensajeError("Tipo de imagen invalida");
                 }
             }
+        }
+
+        private void MarcarUnoGenero_Unchecked(object sender, RoutedEventArgs e)
+        {
+            object a = e.Source;
+            CheckBox chk = (CheckBox) sender;
+
+            DataGridRow row = FindAncestor<DataGridRow>(chk);
+            if (row != null)
+            {
+                Genero genero = new Genero();
+                GenerosTabla generosTabla = (GenerosTabla) row.Item;
+                genero.genero = generosTabla.Generos;
+                listaGenerosMusicales.Remove(generosTabla.Generos);
+                listaGenero.Remove(genero);
+            }
+        }
+
+        private void MarcarUnoGenero_Click(object sender, RoutedEventArgs e)
+        {
+            object a = e.Source;
+            CheckBox chk = (CheckBox) sender;
+
+            DataGridRow row = FindAncestor<DataGridRow>(chk);
+            if (row != null)
+            {
+                Genero genero = new Genero();
+                GenerosTabla generosTabla = (GenerosTabla) row.Item;
+                genero.genero = generosTabla.Generos;
+                listaGenerosMusicales.Add(generosTabla.Generos);
+                listaGenero.Add(genero);
+            }
+        }
+
+        public static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
+        {
+            current = VisualTreeHelper.GetParent(current);
+            while (current != null)
+            {
+                if (current is T)
+                {
+                    return (T) current;
+                }
+                current = VisualTreeHelper.GetParent(current);
+            };
+            return null;
         }
     }
 }

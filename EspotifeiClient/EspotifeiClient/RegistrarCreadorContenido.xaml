@@ -39,20 +39,20 @@
                         <ColumnDefinition Width="0.20*" />
                     </Grid.ColumnDefinitions>
                     <DataGrid x:Name="generosDG"  FontSize="10"
-                        ItemsSource="{Binding ActividadesObservableCollection}"
+                        ItemsSource="{Binding GenerosObservableCollection}"
                         CanUserSortColumns="True"
                         CanUserAddRows="False"
                         CanUserReorderColumns="False"
                         AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Genero}" Header="Genero" />
+                            <DataGridTextColumn Binding="{Binding Generos}" Header="Generos" />
                             <DataGridTemplateColumn>
                                 <DataGridTemplateColumn.Header>
                                     <Label x:Name="marcarTodoCheckboxGenero" Content="Selecciona los géneros"/>
                                 </DataGridTemplateColumn.Header>
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <CheckBox x:Name="marcarUnoGenero" Margin="45 2 0 0"/>
+                                        <CheckBox x:Name="marcarUnoGenero" Margin="45 2 0 0" Unchecked="MarcarUnoGenero_Unchecked" Checked="MarcarUnoGenero_Click"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>

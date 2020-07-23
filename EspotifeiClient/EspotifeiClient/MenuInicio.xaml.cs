@@ -18,7 +18,7 @@ namespace EspotifeiClient
             MostrarReproductor();
         }
 
-        private static void MostrarMenu()
+        public static void MostrarMenu()
         {
             if (_mainWindow != null)
             {
@@ -26,7 +26,7 @@ namespace EspotifeiClient
             }
         }
 
-        private static void OcultarMenu()
+        public static void OcultarMenu()
         {
             if (_mainWindow != null)
             {
@@ -34,7 +34,7 @@ namespace EspotifeiClient
             }
         }
 
-        private static void MostrarReproductor()
+        public static void MostrarReproductor()
         {
             if (_mainWindow != null)
             {
@@ -42,7 +42,7 @@ namespace EspotifeiClient
             }
         }
 
-        private static void OcultarReproductor()
+        public static void OcultarReproductor()
         {
             if (_mainWindow != null)
             {

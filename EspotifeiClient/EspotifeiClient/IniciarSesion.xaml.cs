@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
-using Api.Rest.Login;
+using Api.Rest.ApiLogin;
 using Model;
 
 
@@ -33,7 +33,7 @@ namespace EspotifeiClient
                 try
                 {
                     await ApiServiceLogin.GetServiceLogin().Login(login);
-                    NavigationService.Navigate(new MenuInicio());
+                    NavigationService?.Navigate(new MenuInicio());
                 }
                 catch (HttpRequestException)
                 {
@@ -54,7 +54,7 @@ namespace EspotifeiClient
 
         private void OnClickRegistrar(object sender, MouseButtonEventArgs e)
         {
-            PageManager.ChangePage<RegistrarUsuario>();
+            NavigationService?.Navigate(new RegistrarUsuario());
         }
     }
 }

@@ -65,11 +65,11 @@
 
                     <Image Height="80" VerticalAlignment="Bottom"/>
                 </Grid>
-                <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem x:Name="ItemHome" Height="60">
+                <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
+                    <ListViewItem x:Name="ItemArtist" Height="60" Selected="OnSelectedItemArtist">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="ViewDashboard" Height="25" Width="25" Margin="10" Foreground="White"/>
-                            <TextBlock Text="Home" VerticalAlignment="Center" Margin="20 10" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="Artist" Height="25" Width="25" Margin="10" Foreground="White"/>
+                            <TextBlock Text="Artistas" VerticalAlignment="Center" Margin="20 10" Foreground="White"/>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem x:Name="ItemCreate" Height="60">

@@ -1,5 +1,6 @@
 ﻿
 using System.Windows;
+using System.Windows.Navigation;
 
 namespace EspotifeiClient
 {
@@ -42,9 +43,9 @@ namespace EspotifeiClient
             new RegistrarPlaylist().Show();
         }
 
-        private void AbrirMenuButton_Click_1(object sender, RoutedEventArgs e)
+        private void OnSelectedItemArtist(object sender, RoutedEventArgs e)
         {
-
+            PantallaFrame.Navigate(new Artistas());
         }
     }
 }

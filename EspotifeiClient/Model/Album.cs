@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Windows.Media.Imaging;
 
 namespace Model
@@ -15,12 +16,14 @@ namespace Model
 
         public float duracion_total { get; set; }
 
+        public List<Cancion> canciones { get; set; }
+        
         public string duracion
         {
             get
             {
                 var time = TimeSpan.FromSeconds(duracion_total);
-                return time.ToString("hh':'mm':'ss");
+                return time.ToString("mm':'ss");
             }
         }
 

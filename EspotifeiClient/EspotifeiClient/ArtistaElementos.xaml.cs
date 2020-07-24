@@ -4,10 +4,13 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
 using Api.Rest;
 using EspotifeiClient.Util;
+using Grpc.Core;
+using ManejadorDeArchivos;
 using Model;
 
 namespace EspotifeiClient
@@ -17,7 +20,7 @@ namespace EspotifeiClient
     /// </summary>
     public partial class ArtistaElementos
     {
-
+        private CreadorContenido _creadorContenido;
         private List<Album> _albums;
 
         public ArtistaElementos()
@@ -37,19 +40,36 @@ namespace EspotifeiClient
         /// <param name="creadorContenido">El creador de contenido a mostrar</param>
         private async void InicializarCreadorDeContenido(CreadorContenido creadorContenido)
         {
+            _creadorContenido = creadorContenido;
             PortadaImagen.Source = creadorContenido.PortadaImagen;
             NombreTextBlock.Text = creadorContenido.nombre;
             Biografia.Text = creadorContenido.biografia;
             await RecuperarAlbums(creadorContenido.id);
             await ObtenerCancionesDeAlbumes(creadorContenido.id);
             await ColocarImagenesAlbumes();
-            if (_albums != null)
+            await ColocarIamgenCreadorDeContenido();
+        }
+
+        /// <summary>
+        /// Recupera la imagen del creador de contenido en calidad media y la colca en la portada del creador de
+        /// contenido
+        /// </summary>
+        private async Task ColocarIamgenCreadorDeContenido()
+        {
+            var clientePortadas = new CoversClient();
+            try
             {
-                AlbumsListView.ItemsSource = _albums;
+                var portada = await clientePortadas.GetContentCreatorCover(_creadorContenido.id, Calidad.Media);
+                if (portada != null)
+                {
+                    _creadorContenido.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(portada);
+                    PortadaImagen.Source = null;
+                    PortadaImagen.Source = _creadorContenido.PortadaImagen;
+                }
             }
-            else
+            catch (RpcException)
             {
-                AlbumsListView.ItemsSource = new List<Album>();
+                PortadaImagen.Source = _creadorContenido.PortadaImagen;
             }
         }
 
@@ -63,6 +83,14 @@ namespace EspotifeiClient
             try
             {
                 _albums = await AlbumClient.GetAlbumsFromContentCreator(idCreadorContenido);
+                if (_albums != null)
+                {
+                    AlbumsListView.ItemsSource = _albums;
+                }
+                else
+                {
+                    AlbumsListView.ItemsSource = new List<Album>();
+                }
             }
             catch (HttpRequestException)
             {
@@ -100,6 +128,8 @@ namespace EspotifeiClient
                     try
                     {
                         album.canciones = await CancionClient.GetSongsFromAlbum(idCreadorDeContenido, album.id);
+                        AlbumsListView.ItemsSource = null;
+                        AlbumsListView.ItemsSource = _albums;
                     }
                     catch (HttpRequestException)
                     {
@@ -142,7 +172,7 @@ namespace EspotifeiClient
                 {
                     try
                     {
-                        var bitmap = await clientePortadas.GetAlbumCover(album.id);
+                        var bitmap = await clientePortadas.GetAlbumCover(album.id, Calidad.Baja);
                         if (bitmap != null)
                         {
                             album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
@@ -151,6 +181,8 @@ namespace EspotifeiClient
                         {
                             album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
                         }
+                        AlbumsListView.ItemsSource = null;
+                        AlbumsListView.ItemsSource = _albums;
                     }
                     catch (Exception)
                     {
@@ -180,7 +212,11 @@ namespace EspotifeiClient
         {
             //TODO Mandar a reproducir la cancion y borrar la cola
             var idCancion = (int) ((Button) sender).Tag;
-            var cancion = idCancion;
+        }
+
+        private void emptyEventHandler(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
         }
     }
 }

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 using Api.GrpcClients;
 using Model;
 
-namespace Api.Rest.Login
+namespace Api.Rest.ApiLogin
 {
     public class ApiServiceLogin
     {
         private static ApiServiceLogin _loginService;
         private static HttpClient _apiClient;
         private string _autenticationToken = "";
-        private Model.Login _userLogin;
+        private Login _userLogin;
 
         private ApiServiceLogin()
         {
@@ -43,7 +43,7 @@ namespace Api.Rest.Login
         /// <param name="login">El objeto que contiene las credenciales del Usuario</param>
         /// <returns>Task</returns>
         /// <exception cref="Exception">Una Excepcion generada al Logearse</exception>
-        public async Task Login(Model.Login login)
+        public async Task Login(Login login)
         {
             _userLogin = login;
             ErrorGeneral errorGeneral;

@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
 using Api.Rest;
-using Api.Rest.Login;
+using Api.Rest.ApiLogin;
 using EspotifeiClient.Util;
 using Grpc.Core;
 using Microsoft.Win32;

@@ -40,6 +40,30 @@ namespace Api.Rest
         }
 
         /// <summary>
+        /// Recupera los creadores de contenido por busqueda
+        /// </summary>
+        /// <param name="search">La cadena a buscar</param>
+        /// <returns>Una lista de Creadores de contenido</returns>
+        /// <exception cref="Exception">Alguna excepcion que ocurrio en la solicitud</exception>
+        public static async Task<List<CreadorContenido>> SearchCreadorContenido(string search)
+        {
+            var path = $"/v1/creadores-de-contenido/buscar/{search}";
+            using (HttpResponseMessage response = await ApiClient.GetApiClient().GetAsync(path))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var creadores = await response.Content.ReadAsAsync<List<CreadorContenido>>();
+                    return creadores;
+                } else
+                {
+                    ErrorGeneral error;
+                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                    throw new Exception(error.mensaje);
+                }
+            }
+        }
+
+        /// <summary>
         /// Método que procesa las diferentes solicitudes incorrectas y las devuelve en un mensaje de error
         /// </summary>
         /// <param name="badRequestCode">Variable que contiene el nombre del error de la solicitud</param>

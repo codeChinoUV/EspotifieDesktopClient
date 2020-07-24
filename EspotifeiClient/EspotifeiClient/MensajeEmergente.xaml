@@ -8,7 +8,7 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Title="MensajeEmergenteVentana" Height="150" Width="400">
+        Title="MensajeEmergenteVentana" Height="175" Width="400">
     <Window.Resources>
         <BitmapImage UriSource="Resources/Error.png" x:Key="ErrorImagen" />
         <BitmapImage UriSource="Resources/Advertencia.png" x:Key="AlertaImagen" />
@@ -30,7 +30,7 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Rectangle Grid.Row="1" Grid.RowSpan="2" Width="395" Height="115" VerticalAlignment="Center"  RadiusY="10" RadiusX="10" Fill="White">
+        <Rectangle Grid.Row="1" Grid.RowSpan="2" Width="395" Height="140" VerticalAlignment="Center"  RadiusY="10" RadiusX="10" Fill="White">
             <Rectangle.Effect>
                 <DropShadowEffect BlurRadius="15" Direction="0" RenderingBias="Quality" ShadowDepth="1" Color="#FFBBBBBB"/>
             </Rectangle.Effect>

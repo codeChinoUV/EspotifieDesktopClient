@@ -8,41 +8,52 @@ namespace EspotifeiClient
     /// </summary>
     public partial class MenuInicio
     {
+
+        private static MainWindow _mainWindow;
+        
         public MenuInicio()
         {
             InitializeComponent();
+            MostrarMenu();
+            MostrarReproductor();
         }
 
-        private void AbrirMenuButton_Click(object sender, RoutedEventArgs e)
+        public static void MostrarMenu()
         {
-            abrirMenuButton.Visibility = Visibility.Collapsed;
-            cerrarMenuButton.Visibility = Visibility.Visible;
+            if (_mainWindow != null)
+            {
+                _mainWindow.GridMenu.Visibility = Visibility.Visible;
+            }
         }
 
-        private void CerrarMenuButton_Click(object sender, RoutedEventArgs e)
+        public static void OcultarMenu()
         {
-            abrirMenuButton.Visibility = Visibility.Visible;
-            cerrarMenuButton.Visibility = Visibility.Collapsed;
+            if (_mainWindow != null)
+            {
+                _mainWindow.GridMenu.Visibility = Visibility.Collapsed;
+            }
         }
 
-        private void CerrarButton_Click(object sender, RoutedEventArgs e)
+        public static void MostrarReproductor()
         {
-            Application.Current.Shutdown();
+            if (_mainWindow != null)
+            {
+                _mainWindow.Reproductor.Visibility = Visibility.Visible;
+            }
         }
 
-        private void BuscarListview_Selected(object sender, RoutedEventArgs e)
+        public static void OcultarReproductor()
         {
-            new IniciarSesion();
+            if (_mainWindow != null)
+            {
+                _mainWindow.Reproductor.Visibility = Visibility.Collapsed;
+            }
         }
-
-        private void ListaReproduccionListview_Selected(object sender, RoutedEventArgs e)
+        
+        public static void SetMainWindow(MainWindow mainWindow)
         {
-            new RegistrarPlaylist().Show();
+            _mainWindow = mainWindow;
         }
-
-        private void AbrirMenuButton_Click_1(object sender, RoutedEventArgs e)
-        {
-
-        }
+        
     }
 }

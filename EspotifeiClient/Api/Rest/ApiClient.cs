@@ -2,7 +2,7 @@ using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using Api.GrpcClients;
-using Api.Rest.Login;
+using Api.Rest.ApiLogin;
 
 namespace Api.Rest
 {
@@ -25,9 +25,9 @@ namespace Api.Rest
                 _httpClient.DefaultRequestHeaders.Accept.Clear();
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 _httpClient.BaseAddress = new Uri(Configuration.URIRestServer);
-                _httpClient.DefaultRequestHeaders.Add("x-access-token", ApiServiceLogin.GetServiceLogin().GetAccessToken());
             }
-
+            _httpClient.DefaultRequestHeaders.Clear();
+            _httpClient.DefaultRequestHeaders.Add("x-access-token", ApiServiceLogin.GetServiceLogin().GetAccessToken());
             return _httpClient;
         }
     }

@@ -26,6 +26,7 @@ namespace Api.Rest
                 _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 _httpClient.BaseAddress = new Uri(Configuration.URIRestServer);
             }
+            _httpClient.DefaultRequestHeaders.Clear();
             _httpClient.DefaultRequestHeaders.Add("x-access-token", ApiServiceLogin.GetServiceLogin().GetAccessToken());
             return _httpClient;
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
@@ -38,10 +39,13 @@ namespace EspotifeiClient
                 {
                     _creadoresContenidos = await CreadorContenidoClient.SearchCreadorContenido(cadenaBusqueda);
                     CreadoresDeContenidoListView.ItemsSource = _creadoresContenidos;
+                    SinConexionGrid.Visibility = Visibility.Hidden;
+                    CreadoresDeContenidoListView.Visibility = Visibility.Visible;
                     ColocarImagenesArtistas();
                 }catch (HttpRequestException)
                 {
-                    //Colocar en modo sin conexion
+                    CreadoresDeContenidoListView.Visibility = Visibility.Hidden;
+                    SinConexionGrid.Visibility = Visibility.Visible;
                 }
                 catch (Exception ex)
                 {
@@ -74,18 +78,22 @@ namespace EspotifeiClient
                     {
                         creador.PortadaImagen = (BitmapImage) FindResource("ArtistaDesconocidoImagen");
                     }
+                    CreadoresDeContenidoListView.ItemsSource = null;
+                    CreadoresDeContenidoListView.ItemsSource = _creadoresContenidos;
                 }
                 catch (Exception)
                 {
                     creador.PortadaImagen = (BitmapImage) FindResource("ArtistaDesconocidoImagen");
                 }
             }
-
-            CreadoresDeContenidoListView.ItemsSource = null;
-            CreadoresDeContenidoListView.ItemsSource = _creadoresContenidos;
             CreadoresDeContenidoListView.IsEnabled = true;
         }
         
+        /// <summary>
+        /// Cambia a la vista de a ArtistaElemento
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnSelectedItem(object sender, MouseButtonEventArgs e)
         {
             var creadorDeContenido = (CreadorContenido) CreadoresDeContenidoListView.SelectedItem;

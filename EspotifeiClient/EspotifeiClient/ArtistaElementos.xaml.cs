@@ -83,6 +83,8 @@ namespace EspotifeiClient
             try
             {
                 _albums = await AlbumClient.GetAlbumsFromContentCreator(idCreadorContenido);
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                AlbumsListView.Visibility = Visibility.Visible;
                 if (_albums != null)
                 {
                     AlbumsListView.ItemsSource = _albums;
@@ -94,7 +96,8 @@ namespace EspotifeiClient
             }
             catch (HttpRequestException)
             {
-                //Poner en modo sin conexion
+                SinConexionGrid.Visibility = Visibility.Visible;
+                AlbumsListView.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
             {
@@ -123,6 +126,8 @@ namespace EspotifeiClient
             if (_albums != null)
             {
                 var ocurrioExcepcion = false;
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                AlbumsListView.Visibility = Visibility.Visible;
                 foreach (var album in _albums)
                 {
                     try
@@ -133,7 +138,9 @@ namespace EspotifeiClient
                     }
                     catch (HttpRequestException)
                     {
-                        //Poner en modo sin conexion
+                        SinConexionGrid.Visibility = Visibility.Visible;
+                        AlbumsListView.Visibility = Visibility.Hidden;
+                        break;
                     }
                     catch (Exception ex)
                     {
@@ -213,10 +220,6 @@ namespace EspotifeiClient
             //TODO Mandar a reproducir la cancion y borrar la cola
             var idCancion = (int) ((Button) sender).Tag;
         }
-
-        private void emptyEventHandler(object sender, MouseButtonEventArgs e)
-        {
-            e.Handled = true;
-        }
+        
     }
 }

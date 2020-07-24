@@ -10,6 +10,7 @@
     <Page.Resources>
         <Image Source="Resources/Play.png" x:Key="PlayImage" x:Shared="False" />
         <BitmapImage UriSource="Resources/AlbumDesconocido.png" x:Key="AlbumDesconocido" x:Shared="False" />
+        <BitmapImage UriSource="Resources/SinConexion.png" x:Key="SinConexion" x:Shared="False" />
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -43,8 +44,13 @@
                 <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow"  Height="50" Width="50" />
             </Button>
         </Grid>
-        
-        <ScrollViewer Grid.Row="1" MouseDown="emptyEventHandler" MouseDoubleClick="emptyEventHandler" >
+        <Grid Grid.Row="1" Visibility="Hidden" x:Name="SinConexionGrid">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image Source="{StaticResource SinConexion}" Width="100" Height="100" />
+                <TextBlock Text="Sin conexión" Foreground="#49b1fe" FontSize="20" FontWeight="Black" />
+            </StackPanel>
+        </Grid>
+        <ScrollViewer Grid.Row="1" >
             <ItemsControl x:Name="AlbumsListView" ItemsSource="{Binding Album}" >
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>

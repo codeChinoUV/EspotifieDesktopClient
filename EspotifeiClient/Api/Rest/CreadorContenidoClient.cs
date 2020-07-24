@@ -23,6 +23,18 @@ namespace Api.Rest
                 if (response.IsSuccessStatusCode)
                 {
                     contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
+                    path = "/v1/creador-de-contenido/generos";
+                    foreach (var genero in contentCreator.generos)
+                    {
+                        using (HttpResponseMessage responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(path, genero))
+                        {
+                            if (!responseAddGenero.IsSuccessStatusCode)
+                            {
+                                throw new Exception("No se pudieron guardar todos los generos, " +
+                                                    "puede modificarlos mas adelante");
+                            }
+                        }  
+                    }
                     return contentCreatorRegister;
                 } else if (response.StatusCode == HttpStatusCode.BadRequest)
                 {

@@ -193,11 +193,11 @@ namespace EspotifeiClient
                 {
                     if (usuario.tipo_usuario == TipoUsuario.CreadorDeContenido)
                     {
-                        PageManager.ChangePage<RegistrarCreadorContenido>();
+                        NavigationService?.Navigate(new RegistrarCreadorContenido());
                     }
                     else
                     {
-                        PageManager.ChangePage<MenuInicio>();
+                        NavigationService?.Navigate(new MenuInicio());
                     }
                 }
                 cancelarButton.IsEnabled = true;

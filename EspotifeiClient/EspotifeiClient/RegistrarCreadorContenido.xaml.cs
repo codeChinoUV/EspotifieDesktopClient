@@ -8,9 +8,7 @@ using System.Windows.Media.Imaging;
 using Microsoft.Win32;
 using Api.GrpcClients.Clients;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Windows.Controls;
-using System.Windows.Media;
 using Grpc.Core;
 
 namespace EspotifeiClient
@@ -194,7 +192,11 @@ namespace EspotifeiClient
             }
         }
 
-
+        /// <summary>
+        /// Método que permite agregar géneros a una lista al momento de seleccionar un checkbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AgregarGenero(object sender, RoutedEventArgs e)
         {
             var idGenero = (int) ((CheckBox) sender).Tag;
@@ -205,7 +207,11 @@ namespace EspotifeiClient
             listaGenero.Add(generoAgregar);
         }
 
-
+        /// <summary>
+        /// Método que permite quitar géneros de una lista al deseleccionar un checkbox
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void QuitarGenero(object sender, RoutedEventArgs e)
         {
             var idGenero = (int) ((CheckBox) sender).Tag;

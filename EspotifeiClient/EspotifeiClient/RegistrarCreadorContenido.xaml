@@ -38,26 +38,53 @@
                         <ColumnDefinition Width="0.80*" />
                         <ColumnDefinition Width="0.20*" />
                     </Grid.ColumnDefinitions>
-                    <DataGrid x:Name="generosDG"  FontSize="10"
-                        ItemsSource="{Binding GenerosObservableCollection}"
-                        CanUserSortColumns="True"
-                        CanUserAddRows="False"
-                        CanUserReorderColumns="False"
-                        AutoGenerateColumns="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Generos}" Header="Generos" />
-                            <DataGridTemplateColumn>
-                                <DataGridTemplateColumn.Header>
-                                    <Label x:Name="marcarTodoCheckboxGenero" Content="Selecciona los géneros"/>
-                                </DataGridTemplateColumn.Header>
-                                <DataGridTemplateColumn.CellTemplate>
+                    <Grid Grid.Column="0" >
+                            <Grid.RowDefinitions >
+                                <RowDefinition Height="0.20*" />
+                                <RowDefinition Height="0.80*" />
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.70*" />
+                                    <ColumnDefinition Width="0.30*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="Genero" FontSize="15" Margin="10,0" VerticalAlignment="Center"/>
+                                <TextBlock Grid.Column="1" Text="Seleccion" FontSize="15" Margin="10,0" VerticalAlignment="Center" />
+                                <Border Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,0,0,2" />
+                            </Grid>
+                        <ScrollViewer Grid.Row="1">
+                            <ItemsControl x:Name="GenerosTabla" ItemsSource="{Binding Genero}" >
+                                <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <CheckBox x:Name="marcarUnoGenero" Margin="45 2 0 0" Unchecked="MarcarUnoGenero_Unchecked" Checked="MarcarUnoGenero_Click"/>
+                                        <Grid HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="0.70*" />
+                                                <ColumnDefinition Width="0.30*" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Grid.Column="0"  Text="{Binding genero}" FontSize="12" />
+                                            <CheckBox Grid.Column="1" Tag="{Binding id}" Checked="AgregarGenero" Unchecked="QuitarGenero" />
+                                            <Grid.Style>
+                                                <Style TargetType="{x:Type Grid}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="AliceBlue"></Setter>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Grid.Style>
+                                        </Grid>
                                     </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </Grid>
+                    
+                    
                     <CheckBox x:Name="grupoCheckbox" Grid.Column="1" Content="Grupo" HorizontalAlignment="Center" />
                 </Grid>
             </StackPanel>

@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Grpc.Core;
 
 namespace EspotifeiClient
 {
@@ -20,30 +21,15 @@ namespace EspotifeiClient
     public partial class RegistrarCreadorContenido
     {
         private string _rutaImagen = "";
+        List<Genero> listaGenero = new List<Genero>();
+        
         public RegistrarCreadorContenido()
         {
             InitializeComponent();
             DataContext = this;
             ConsultarGeneros();
         }
-
-        List<String> listaGenerosMusicales = new List<String> { };
-        List<Genero> listaGenero = new List<Genero> { };
-
-        public ObservableCollection<GenerosTabla> GenerosObservableCollection
-        {
-            get;
-        } =
-           new ObservableCollection<GenerosTabla>();
-
-        public struct GenerosTabla
-        {
-            public string Generos
-            {
-                get; set;
-            }
-        }
-
+        
         /// <summary>
         /// Método que crea un CreadorContenido a partir de su información
         /// </summary>
@@ -57,7 +43,7 @@ namespace EspotifeiClient
                 generos = listaGenero,
                 es_grupo = ValidarCheckBoxGrupo(),
             };
-            return null;
+            return creadorContenido;
         }
 
         /// <summary>
@@ -72,20 +58,33 @@ namespace EspotifeiClient
                 cancelarButton.IsEnabled = false;
                 registrarCreadorButton.IsEnabled = false;
                 var creador = CrearCreadorContenido();
+                var registrado = false;
                 try
                 {
-                    await CreadorContenidoClient.RegisterCreadorContenido(creador);
+                    var creadorContenido = await CreadorContenidoClient.RegisterCreadorContenido(creador);
+                    registrado = true;
                     if (_rutaImagen != "")
                     {
                         var clientePortadas = new CoversClient();
-                        clientePortadas.UploadUserCover(_rutaImagen);
+                        clientePortadas.UploadContentCreatorCover(_rutaImagen, creadorContenido.id);
                     }
                 } catch (HttpRequestException)
                 {
                     new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
-                } catch (Exception exception)
+                }
+                catch (RpcException)
+                {
+                    new MensajeEmergente().MostrarMensajeError("No se pudo guardar la imagen de portada, puede subirla " +
+                                                               "mas adelante");
+                }
+                catch (Exception exception)
                 {
                     new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
+                }
+
+                if (registrado)
+                {
+                    NavigationService?.Navigate(new MenuInicio());
                 }
                 cancelarButton.IsEnabled = true;
                 registrarCreadorButton.IsEnabled = true;
@@ -99,21 +98,17 @@ namespace EspotifeiClient
         {
             try
             {
-                //var listaGeneros = await GeneroClient.GetGeneros();
-                //generosDG.ItemsSource = listaGeneros;
                 var listaGeneros = await GeneroClient.GetGeneros();
-                foreach (Genero generoMusical in listaGeneros)
-                {
-                    GenerosObservableCollection.Add(new GenerosTabla
-                    {
-                        Generos = generoMusical.genero
-                        
-                    });
-                }
+                GenerosTabla.ItemsSource = listaGeneros;
 
-            } catch (HttpRequestException)
+            }
+            catch (HttpRequestException)
             {
                 new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
+            }
+            catch (Exception ex)
+            {
+                new MensajeEmergente().MostrarMensajeError(ex.Message);
             }
         }
 
@@ -141,10 +136,11 @@ namespace EspotifeiClient
         /// <returns>Verdadero si el TextBox tiene una longitud valida</returns>
         private bool ValidarTextBoxBiografia()
         {
+            bool esValido;
             var tamañoMinimo = 5;
             var tamañoMaximo = 500;
             var biografia = biografiaTextbox.Text;
-            var esValido = ValidacionDeCadenas.ValidarTamañoDeCadena(biografia, tamañoMinimo, tamañoMaximo);
+            esValido = ValidacionDeCadenas.ValidarTamañoDeCadena(biografia, tamañoMinimo, tamañoMaximo);
             if (!esValido)
             {
                 new MensajeEmergente().MostrarMensajeAdvertencia(
@@ -161,12 +157,9 @@ namespace EspotifeiClient
         {
             var grupo = false;
 
-            if ((bool) grupoCheckbox.IsChecked)
+            if (grupoCheckbox.IsChecked != null)
             {
-                grupo = true;
-            } else
-            {
-                return grupo;
+               grupo = (bool)grupoCheckbox.IsChecked;
             }
             return grupo;
         }
@@ -201,50 +194,26 @@ namespace EspotifeiClient
             }
         }
 
-        private void MarcarUnoGenero_Unchecked(object sender, RoutedEventArgs e)
+
+        private void AgregarGenero(object sender, RoutedEventArgs e)
         {
-            object a = e.Source;
-            CheckBox chk = (CheckBox) sender;
-
-            DataGridRow row = FindAncestor<DataGridRow>(chk);
-            if (row != null)
+            var idGenero = (int) ((CheckBox) sender).Tag;
+            var generoAgregar = new Genero
             {
-                Genero genero = new Genero();
-                GenerosTabla generosTabla = (GenerosTabla) row.Item;
-                genero.genero = generosTabla.Generos;
-                listaGenerosMusicales.Remove(generosTabla.Generos);
-                listaGenero.Remove(genero);
-            }
-        }
-
-        private void MarcarUnoGenero_Click(object sender, RoutedEventArgs e)
-        {
-            object a = e.Source;
-            CheckBox chk = (CheckBox) sender;
-
-            DataGridRow row = FindAncestor<DataGridRow>(chk);
-            if (row != null)
-            {
-                Genero genero = new Genero();
-                GenerosTabla generosTabla = (GenerosTabla) row.Item;
-                genero.genero = generosTabla.Generos;
-                listaGenerosMusicales.Add(generosTabla.Generos);
-                listaGenero.Add(genero);
-            }
-        }
-
-        public static T FindAncestor<T>(DependencyObject current) where T : DependencyObject
-        {
-            current = VisualTreeHelper.GetParent(current);
-            while (current != null)
-            {
-                if (current is T)
-                {
-                    return (T) current;
-                }
-                current = VisualTreeHelper.GetParent(current);
+                id = idGenero
             };
-            return null;
+            listaGenero.Add(generoAgregar);
+        }
+
+
+        private void QuitarGenero(object sender, RoutedEventArgs e)
+        {
+            var idGenero = (int) ((CheckBox) sender).Tag;
+            var generoAQuitar = listaGenero.Find(g => g.id == idGenero);
+            if (generoAQuitar != null)
+            {
+                listaGenero.Remove(generoAQuitar);
+            }
         }
     }
 }

@@ -148,20 +148,20 @@ namespace Api.GrpcClients.Clients
             throw new Exception("No se encontro el archivo en la ruta especifica");
         }
 
-        private SolicitudObtenerPortada CreateSolicitudObtenerPortada(int idElement, string token)
+        private SolicitudObtenerPortada CreateSolicitudObtenerPortada(int idElement, string token, Calidad calidad)
         {
             var request = new SolicitudObtenerPortada();
             request.IdElementoDePortada = idElement;
-            request.CalidadPortadaARecuperar = Calidad.Alta;
+            request.CalidadPortadaARecuperar = calidad;
             request.TokenAutenticacion = token;
             return request;
         }
 
-        public async Task<MemoryStream> GetAlbumCover(int idAlbum)
+        public async Task<MemoryStream> GetAlbumCover(int idAlbum, Calidad calidad)
         {
             Channel channel = new Channel(Configuration.URIGrpcServer, ChannelCredentials.Insecure);
             var client = new Portadas.PortadasClient(channel);
-            var request = CreateSolicitudObtenerPortada(idAlbum,ApiServiceLogin.GetServiceLogin().GetAccessToken());
+            var request = CreateSolicitudObtenerPortada(idAlbum,ApiServiceLogin.GetServiceLogin().GetAccessToken(), calidad);
             var call = client.ObtenerPortadaAlbum(request);
             MemoryStream cover = null;
             for (int i = 1; i <= TryNumbres; i++)
@@ -184,11 +184,11 @@ namespace Api.GrpcClients.Clients
             return cover;
         }
 
-        public async Task<MemoryStream> GetContentCreatorCover(int idContentCreator)
+        public async Task<MemoryStream> GetContentCreatorCover(int idContentCreator, Calidad calidad)
         {
             Channel channel = new Channel(Configuration.URIGrpcServer, ChannelCredentials.Insecure);
             var client = new Portadas.PortadasClient(channel);
-            var request = CreateSolicitudObtenerPortada(idContentCreator,ApiServiceLogin.GetServiceLogin().GetAccessToken());
+            var request = CreateSolicitudObtenerPortada(idContentCreator,ApiServiceLogin.GetServiceLogin().GetAccessToken(), calidad);
             var call = client.ObtenerPortadaCreadorDeContenido(request);
             MemoryStream cover = null;
             for (int i = 1; i <= TryNumbres; i++)
@@ -211,12 +211,12 @@ namespace Api.GrpcClients.Clients
             return cover;
         }
 
-        public async Task<MemoryStream> GetUserCover(int idUser)
+        public async Task<MemoryStream> GetUserCover(int idUser, Calidad calidad)
         {
             Channel channel = new Channel(Configuration.URIGrpcServer, ChannelCredentials.Insecure);
             var client = new Portadas.PortadasClient(channel);
             var request = CreateSolicitudObtenerPortada(idUser,
-                ApiServiceLogin.GetServiceLogin().GetAccessToken());
+                ApiServiceLogin.GetServiceLogin().GetAccessToken(), calidad);
             var call = client.ObtenerPortadaUsuario(request);
             MemoryStream cover = null;
             for (int i = 1; i <= TryNumbres; i++)

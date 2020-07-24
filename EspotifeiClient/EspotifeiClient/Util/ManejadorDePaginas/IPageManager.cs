@@ -1,6 +1,4 @@
-﻿using System.Windows.Controls;
-
-namespace EspotifeiClient.Util.ManejadorDePaginas
+﻿namespace EspotifeiClient.Util.ManejadorDePaginas
 {
     /// <summary>
     ///     Interfaz que proporciona la habilidad de cambiar de pantalla en una ventana.
@@ -14,6 +12,5 @@ namespace EspotifeiClient.Util.ManejadorDePaginas
         /// <typeparam name="T">Tipo de página, que implemente IPageListener</typeparam>
         /// <returns>La instancia de la página</returns>
         T ChangePage<T>() where T : UIPage, IPageListener, new();
-        
     }
 }

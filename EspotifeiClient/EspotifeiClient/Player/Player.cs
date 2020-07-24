@@ -8,10 +8,10 @@ namespace EspotifeiClient.Player
     public class Player
     {
         private static readonly Player _player = new Player();
-        private WaveOut _waveOutEvent;
-        private SongsClient _songsClient;
-        private MemoryStream _songBuffer;
         private byte[] _mp3StreamBuffer;
+        private MemoryStream _songBuffer;
+        private readonly SongsClient _songsClient;
+        private WaveOut _waveOutEvent;
 
         private Player()
         {
@@ -33,11 +33,11 @@ namespace EspotifeiClient.Player
             var recivedSongThread = new Thread(_songsClient.GetSong);
             recivedSongThread.Start();
         }
-        
+
 
         private void ReceiveInitialSongChunk(byte[] songBytes, string extension)
         {
-            WaveFormat format = GetWaveFormat(new MemoryStream(songBytes));
+            var format = GetWaveFormat(new MemoryStream(songBytes));
             _songBuffer = new MemoryStream();
             _songBuffer.Write(songBytes, 0, songBytes.Length);
             _songBuffer.Position = 0;
@@ -49,13 +49,13 @@ namespace EspotifeiClient.Player
             _waveOutEvent.Init(blockAlignedStream);
             _waveOutEvent.Play();
         }
-        
+
         private WaveFormat GetWaveFormat(MemoryStream initialBytesSong)
         {
             WaveStream tempStream = new Mp3FileReader(initialBytesSong);
             return tempStream.WaveFormat;
         }
-        
+
         private void RecivedSongChunk(byte[] streamBytes)
         {
             var stream = new MemoryStream(streamBytes);
@@ -68,6 +68,5 @@ namespace EspotifeiClient.Player
                 _songBuffer.Position = pos;
             }
         }
-        
     }
 }

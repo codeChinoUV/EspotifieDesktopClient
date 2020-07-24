@@ -6,7 +6,7 @@ namespace EspotifeiClient.Util
     public class ImagenUtil
     {
         /// <summary>
-        /// Crea un BitmapImage a partir de un MemoryStream
+        ///     Crea un BitmapImage a partir de un MemoryStream
         /// </summary>
         /// <param name="imagen">El MemroyStream que contiene la imagen</param>
         /// <returns>Un BitmapImage</returns>
@@ -23,6 +23,7 @@ namespace EspotifeiClient.Util
                 bitmapImage.StreamSource = imagen;
                 bitmapImage.EndInit();
             }
+
             bitmapImage.Freeze();
             return bitmapImage;
         }

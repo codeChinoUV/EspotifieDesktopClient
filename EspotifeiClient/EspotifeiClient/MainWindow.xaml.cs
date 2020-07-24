@@ -1,11 +1,9 @@
-﻿
-using System.Windows;
-using System.Windows.Navigation;
+﻿using System.Windows;
 
 namespace EspotifeiClient
 {
     /// <summary>
-    /// Lógica de interacción para MainWindow.xaml
+    ///     Lógica de interacción para MainWindow.xaml
     /// </summary>
     public partial class MainWindow
     {

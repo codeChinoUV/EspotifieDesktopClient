@@ -10,51 +10,59 @@
     <Grid>
         <Grid.Background>
             <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                <GradientStop Color="Black"/>
-                <GradientStop Color="#FF025EFF" Offset="0.952"/>
+                <GradientStop Color="Black" />
+                <GradientStop Color="#FF025EFF" Offset="0.952" />
             </LinearGradientBrush>
         </Grid.Background>
-        <Rectangle Fill="White" HorizontalAlignment="Left" Height="361" Margin="34,36,0,0" RadiusY="10" RadiusX="10" VerticalAlignment="Top" Width="724"/>
-        <Label Content="REGISTRO DE CANCIONES" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="302,36,268,0" Foreground="Gray" FontSize="18" Width="222"/>
-        <TextBox x:Name="nombreCancionTextbox" Margin="58,108,426,289" materialDesign:HintAssist.Hint="NOMBRE" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
+        <Rectangle Fill="White" HorizontalAlignment="Left" Height="361" Margin="34,36,0,0" RadiusY="10" RadiusX="10"
+                   VerticalAlignment="Top" Width="724" />
+        <Label Content="REGISTRO DE CANCIONES" HorizontalAlignment="Center" VerticalAlignment="Top"
+               Margin="302,36,268,0" Foreground="Gray" FontSize="18" Width="222" />
+        <TextBox x:Name="nombreCancionTextbox" Margin="58,108,426,289" materialDesign:HintAssist.Hint="NOMBRE"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines"
+                 FontSize="16" MaxLength="25" />
         <DataGrid x:Name="creadoresContenidoDG" Margin="94,192,468,96" FontSize="10"
-            ItemsSource="{Binding ActividadesObservableCollection}"
-            CanUserSortColumns="True"
-            CanUserAddRows="False"
-            CanUserReorderColumns="False"
-            AutoGenerateColumns="False">
+                  ItemsSource="{Binding ActividadesObservableCollection}"
+                  CanUserSortColumns="True"
+                  CanUserAddRows="False"
+                  CanUserReorderColumns="False"
+                  AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Creador}" Header="Creador" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.Header>
-                        <Label x:Name="marcarTodoCheckbox" Content="Selecciona los creadores"/>
+                        <Label x:Name="marcarTodoCheckbox" Content="Selecciona los creadores" />
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox x:Name="marcarUno" Margin="45 2 0 0"/>
+                            <CheckBox x:Name="marcarUno" Margin="45 2 0 0" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <Button x:Name="registrarCancionButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="440,0,202,38" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210"/>
-        <Button x:Name="cancelarButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="236,0,406,38" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF"/>
-        <TextBox x:Name="cancionTextbox" Margin="427,108,57,289" materialDesign:HintAssist.Hint="ARCHIVO CANCIÓN" Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25"/>
+        <Button x:Name="registrarCancionButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                Margin="440,0,202,38" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" />
+        <Button x:Name="cancelarButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                Margin="236,0,406,38" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF" />
+        <TextBox x:Name="cancionTextbox" Margin="427,108,57,289" materialDesign:HintAssist.Hint="ARCHIVO CANCIÓN"
+                 Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines"
+                 FontSize="16" MaxLength="25" />
         <DataGrid x:Name="generosDG" Margin="466,192,96,96" FontSize="10"
-            ItemsSource="{Binding ActividadesObservableCollection}"
-            CanUserSortColumns="True"
-            CanUserAddRows="False"
-            CanUserReorderColumns="False"
-            AutoGenerateColumns="False">
+                  ItemsSource="{Binding ActividadesObservableCollection}"
+                  CanUserSortColumns="True"
+                  CanUserAddRows="False"
+                  CanUserReorderColumns="False"
+                  AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding Genero}" Header="Genero" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.Header>
-                        <Label x:Name="marcarTodoCheckboxGenero" Content="Selecciona los géneros"/>
+                        <Label x:Name="marcarTodoCheckboxGenero" Content="Selecciona los géneros" />
                     </DataGridTemplateColumn.Header>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <CheckBox x:Name="marcarUnoGenero" Margin="45 2 0 0"/>
+                            <CheckBox x:Name="marcarUnoGenero" Margin="45 2 0 0" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

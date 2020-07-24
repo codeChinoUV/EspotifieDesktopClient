@@ -17,7 +17,7 @@ namespace Model
         public float duracion_total { get; set; }
 
         public List<Cancion> canciones { get; set; }
-        
+
         public string duracion
         {
             get
@@ -26,8 +26,5 @@ namespace Model
                 return time.ToString("mm':'ss");
             }
         }
-
-
     }
-    
 }

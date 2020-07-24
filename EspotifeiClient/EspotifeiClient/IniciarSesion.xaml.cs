@@ -5,11 +5,10 @@ using System.Windows.Input;
 using Api.Rest.ApiLogin;
 using Model;
 
-
 namespace EspotifeiClient
 {
     /// <summary>
-    /// Lógica de interacción para IniciarSesion.xaml
+    ///     Lógica de interacción para IniciarSesion.xaml
     /// </summary>
     public partial class IniciarSesion
     {
@@ -17,15 +16,14 @@ namespace EspotifeiClient
         {
             InitializeComponent();
         }
-        
+
 
         private async void OnClickIngresarButton(object sender, RoutedEventArgs e)
         {
-            
             if (contraseniaPasswordbox.Password != "" && usuarioTextbox.Text != "")
             {
                 ingresarButton.IsEnabled = false;
-                Login login = new Login
+                var login = new Login
                 {
                     User = usuarioTextbox.Text,
                     Password = contraseniaPasswordbox.Password
@@ -43,13 +41,14 @@ namespace EspotifeiClient
                 {
                     new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
                 }
+
                 ingresarButton.IsEnabled = true;
             }
             else
             {
-                MessageBox.Show("Debe de ingresar los campos de usuario y contraseña", "", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+                MessageBox.Show("Debe de ingresar los campos de usuario y contraseña", "", MessageBoxButton.OK,
+                    MessageBoxImage.Exclamation);
             }
-            
         }
 
         private void OnClickRegistrar(object sender, MouseButtonEventArgs e)

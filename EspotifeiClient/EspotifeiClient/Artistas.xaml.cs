@@ -13,11 +13,10 @@ using Model;
 namespace EspotifeiClient
 {
     /// <summary>
-    /// Lógica de interacción para Artistas.xaml
+    ///     Lógica de interacción para Artistas.xaml
     /// </summary>
     public partial class Artistas
     {
-
         private List<CreadorContenido> _creadoresContenidos;
 
         public Artistas()
@@ -26,7 +25,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Recupera la busqueda de los creadores de contenido que coincidan con el buscarTextBox
+        ///     Recupera la busqueda de los creadores de contenido que coincidan con el buscarTextBox
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="keyEventArgs">El evento invocado</param>
@@ -34,7 +33,6 @@ namespace EspotifeiClient
         {
             var cadenaBusqueda = buscarTextBox.Text;
             if (cadenaBusqueda != "")
-            {
                 try
                 {
                     _creadoresContenidos = await CreadorContenidoClient.SearchCreadorContenido(cadenaBusqueda);
@@ -42,7 +40,8 @@ namespace EspotifeiClient
                     SinConexionGrid.Visibility = Visibility.Hidden;
                     CreadoresDeContenidoListView.Visibility = Visibility.Visible;
                     ColocarImagenesArtistas();
-                }catch (HttpRequestException)
+                }
+                catch (HttpRequestException)
                 {
                     CreadoresDeContenidoListView.Visibility = Visibility.Hidden;
                     SinConexionGrid.Visibility = Visibility.Visible;
@@ -51,33 +50,25 @@ namespace EspotifeiClient
                 {
                     new MensajeEmergente().MostrarMensajeError(ex.Message);
                 }
-            }
             else
-            {
                 _creadoresContenidos = new List<CreadorContenido>();
-            }
         }
-        
+
         /// <summary>
-        /// Recupera las imagenes de los artistas
+        ///     Recupera las imagenes de los artistas
         /// </summary>
         private async void ColocarImagenesArtistas()
         {
             CreadoresDeContenidoListView.IsEnabled = false;
             var clientePortadas = new CoversClient();
             foreach (var creador in _creadoresContenidos)
-            {
                 try
                 {
                     var bitmap = await clientePortadas.GetContentCreatorCover(creador.id, Calidad.Baja);
                     if (bitmap != null)
-                    {
                         creador.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
-                    }
                     else
-                    {
                         creador.PortadaImagen = (BitmapImage) FindResource("ArtistaDesconocidoImagen");
-                    }
                     CreadoresDeContenidoListView.ItemsSource = null;
                     CreadoresDeContenidoListView.ItemsSource = _creadoresContenidos;
                 }
@@ -85,22 +76,19 @@ namespace EspotifeiClient
                 {
                     creador.PortadaImagen = (BitmapImage) FindResource("ArtistaDesconocidoImagen");
                 }
-            }
+
             CreadoresDeContenidoListView.IsEnabled = true;
         }
-        
+
         /// <summary>
-        /// Cambia a la vista de a ArtistaElemento
+        ///     Cambia a la vista de a ArtistaElemento
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnSelectedItem(object sender, MouseButtonEventArgs e)
         {
             var creadorDeContenido = (CreadorContenido) CreadoresDeContenidoListView.SelectedItem;
-            if (creadorDeContenido != null)
-            {
-                NavigationService?.Navigate(new ArtistaElementos(creadorDeContenido));
-            }
+            if (creadorDeContenido != null) NavigationService?.Navigate(new ArtistaElementos(creadorDeContenido));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿﻿ namespace EspotifeiClient.Util.ManejadorDePaginas
+﻿namespace EspotifeiClient.Util.ManejadorDePaginas
 {
     /// <summary>
     ///     Interfaz que habilita la navegabilidad entre páginas. Es obligatorio declarar un atributo IPageManager en

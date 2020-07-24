@@ -42,12 +42,12 @@
             <RowDefinition Height="0.80*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="GridMenu" Width="70" HorizontalAlignment="Left" Background="#FF2281D1" Visibility="Collapsed">
+        <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="GridMenu" Width="70" HorizontalAlignment="Left" Background="#FF2281D1" Visibility="Visible">
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="2" ShadowDepth="1" Color="#FFAEAEAE"/>
             </Grid.Effect>
             <StackPanel>
-                <Grid Height="150" Background="White" RenderTransformOrigin="0.5,0.5">
+                <Grid Height="70" Background="White" RenderTransformOrigin="0.5,0.5">
                     <Grid.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -63,31 +63,49 @@
                         <materialDesign:PackIcon Kind="ArrowLeft" Width="25" Height="25"/>
                     </Button>
 
-                    <Image Height="80" VerticalAlignment="Bottom"/>
+                    
                 </Grid>
+                <ListViewItem x:Name="ItemPlaylist" Height="60">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="Music" Height="25" Width="25" Margin="10" Foreground="White"/>
+                        <TextBlock Text="Canciones" VerticalAlignment="Center"  Margin="10 10" Foreground="White"/>
+                    </StackPanel>
+                </ListViewItem>
+                <ListViewItem x:Name="ItemAlbums" Height="60">
+                    <StackPanel Orientation="Horizontal">
+                        <materialDesign:PackIcon Kind="ImageAlbum" Height="25" Width="25" Margin="10" Foreground="White"/>
+                        <TextBlock Text="Albums" VerticalAlignment="Center"  Margin="10 10" Foreground="White"/>
+                    </StackPanel>
+                </ListViewItem>
                 <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6" ScrollViewer.HorizontalScrollBarVisibility="Disabled" >
                     <ListViewItem x:Name="ItemArtist" Height="60" Selected="OnSelectedItemArtist">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Artist" Height="25" Width="25" Margin="10" Foreground="White"/>
-                            <TextBlock Text="Artistas" VerticalAlignment="Center" Margin="20 10" Foreground="White"/>
+                            <TextBlock Text="Artistas" VerticalAlignment="Center" Margin="10 10" Foreground="White"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="History" Height="25" Width="25" Margin="10" Foreground="White"/>
+                            <TextBlock Text="Historial" VerticalAlignment="Center"  Margin="10 10" Foreground="White"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="Download" Height="25" Width="25" Margin="10" Foreground="White"/>
+                            <TextBlock Text="Canciones desargadas" VerticalAlignment="Center" Margin="10 10" Foreground="White"/>
+                        </StackPanel>
+                    </ListViewItem>
+                    <ListViewItem Height="60">
+                        <StackPanel Orientation="Horizontal">
+                            <materialDesign:PackIcon Kind="FolderMusic" Height="25" Width="25" Margin="10" Foreground="White"/>
+                            <TextBlock Text="My libreria" VerticalAlignment="Center"  Margin="10 10" Foreground="White"/>
                         </StackPanel>
                     </ListViewItem>
                     <ListViewItem x:Name="ItemCreate" Height="60">
                         <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Pencil" Height="25" Width="25" Margin="10" Foreground="White"/>
-                            <TextBlock Text="Create" VerticalAlignment="Center" Margin="20 10" Foreground="White"/>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="60">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Ticket" Height="25" Width="25" Margin="10" Foreground="White"/>
-                            <TextBlock Text="Tickets" VerticalAlignment="Center"  Margin="20 10" Foreground="White"/>
-                        </StackPanel>
-                    </ListViewItem>
-                    <ListViewItem Height="60">
-                        <StackPanel Orientation="Horizontal">
-                            <materialDesign:PackIcon Kind="Message" Height="25" Width="25" Margin="10" Foreground="White"/>
-                            <TextBlock Text="Messages" VerticalAlignment="Center"  Margin="20 10" Foreground="White"/>
+                            <materialDesign:PackIcon Kind="Person" Height="25" Width="25" Margin="10" Foreground="White"/>
+                            <TextBlock Text="Mi perfil" VerticalAlignment="Center" Margin="10 10" Foreground="White"/>
                         </StackPanel>
                     </ListViewItem>
                 </ListView>

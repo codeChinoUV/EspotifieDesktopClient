@@ -44,9 +44,9 @@
             </Button>
         </Grid>
         
-        <ScrollViewer Grid.Row="1">
-            <ListView x:Name="AlbumsListView" ItemsSource="{Binding Album}">
-                <ListView.ItemTemplate>
+        <ScrollViewer Grid.Row="1" MouseDown="emptyEventHandler" MouseDoubleClick="emptyEventHandler" >
+            <ItemsControl x:Name="AlbumsListView" ItemsSource="{Binding Album}" >
+                <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Stretch" Margin="10,10,10,80">
                             <Grid.RowDefinitions>
@@ -83,12 +83,12 @@
                                     Height="45" Width="45" Padding="0" Margin="0,0,20,-55" Tag="{Binding id}" Click="OnClickPlayAlbum">
                                     <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow"  Height="40" Width="40" />
                                 </Button>
-                                
+
                             </Grid>
-                            <ListView Grid.Row="2" x:Name="ListViewCanciones" ItemsSource="{Binding canciones}">
-                                <ListView.ItemTemplate>
+                            <ItemsControl Grid.Row="2" x:Name="ListViewCanciones" ItemsSource="{Binding canciones}" >
+                                <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid>
+                                        <Grid Margin="4">
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="0.60*" />
@@ -99,56 +99,36 @@
                                                 Height="30" Width="30" Padding="0" Margin="0,0,20,0" Tag="{Binding id}" Click="OnClickPlayCancion">
                                                 <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow"  Height="25" Width="25" />
                                             </Button>
-                                            <TextBlock Grid.Column="1" Text="{Binding nombre}" Margin="10,0" FontSize="15" Foreground="Black" />
-                                            <TextBlock Grid.Column="2" Text="{Binding duracionString}" Margin="10,0" FontSize="15" Foreground="Black" />
-                                            <TextBlock Grid.Column="3" Text="{Binding cantidad_de_reproducciones}" Margin="10,0" FontSize="15" Foreground="Black" />
+                                            <TextBlock Grid.Column="1" Text="{Binding nombre}" Margin="10,0" FontSize="15" Foreground="Black"  VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="2" Text="{Binding duracionString}" Margin="10,0" FontSize="15" Foreground="Black" VerticalAlignment="Center"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding cantidad_de_reproducciones}" Margin="10,0" FontSize="15" Foreground="Black" VerticalAlignment="Center"/>
+                                            <Grid.Style>
+                                                <Style TargetType="{x:Type Grid}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="PaleTurquoise"></Setter>
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Grid.Style>
                                         </Grid>
                                     </DataTemplate>
-                                </ListView.ItemTemplate>
-                                <ListView.ItemsPanel>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Vertical" />
                                     </ItemsPanelTemplate>
-                                </ListView.ItemsPanel>
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                                        <Setter Property="Background" Value="Transparent" />
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                            </ListView>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
                         </Grid>
-
                     </DataTemplate>
-                </ListView.ItemTemplate>
-                <ListView.ItemsPanel>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Vertical" />
                     </ItemsPanelTemplate>
-                </ListView.ItemsPanel>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="Template">
-                            <Setter.Value>
-                                <ControlTemplate TargetType="ListViewItem">
-                                    <Border x:Name="border" Background="Transparent">
-                                        <VisualStateManager.VisualStateGroups>
-                                            <VisualStateGroup x:Name="CommonStates">
-                                                <VisualState x:Name="Normal" />
-                                                <VisualState x:Name="Disabled" />
-                                            </VisualStateGroup>
-                                        </VisualStateManager.VisualStateGroups>
-                                        <ContentPresenter/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Setter.Value>
-                        </Setter>
-                    </Style>
-                    
-                </ListView.ItemContainerStyle>
-            </ListView>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
         </ScrollViewer>
     </Grid>
 </Page>

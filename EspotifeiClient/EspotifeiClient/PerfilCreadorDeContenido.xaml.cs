@@ -41,11 +41,20 @@ namespace EspotifeiClient
                 NombreTextBlock.Text = _creadorContenido.nombre;
                 Biografia.Text = _creadorContenido.biografia;
                 GenerosDataGrid.ItemsSource = _creadorContenido.generos;
-                await RecuperarAlbums(_creadorContenido.id);
-                await ObtenerCancionesDeAlbumes(_creadorContenido.id);
-                await ColocarImagenesAlbumes();
-                await ColocarIamgenCreadorDeContenido();
+                await InicializarAlbumes();
             }
+        }
+
+        /// <summary>
+        /// Recupera y muestra todos los elementos de los albumes
+        /// </summary>
+        /// <returns></returns>
+        private async Task InicializarAlbumes()
+        {
+            await RecuperarAlbums(_creadorContenido.id);
+            await ObtenerCancionesDeAlbumes(_creadorContenido.id);
+            await ColocarImagenesAlbumes();
+            await ColocarIamgenCreadorDeContenido();
         }
         
         /// <summary>
@@ -184,7 +193,7 @@ namespace EspotifeiClient
                         if (ex.Message == "AuntenticacionFallida")
                         {
                             new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
-                                                                       "proporcionadas, se cerra la sesion");
+                                                                       "proporcionadas, se cerrara la sesion");
                             MenuInicio.OcultarMenu();
                             MenuInicio.OcultarReproductor();
                             NavigationService?.Navigate(new IniciarSesion());
@@ -201,32 +210,43 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        ///     Recupera la imagen del Album y la coloca
+        ///     Recupera la imagen dOnClikEditarAlbumoca
         /// </summary>
         /// <returns></returns>
         private async Task ColocarImagenesAlbumes()
         {
             if (_albums != null)
             {
-                var clientePortadas = new CoversClient();
+
                 foreach (var album in _albums)
-                    try
-                    {
-                        var bitmap = await clientePortadas.GetAlbumCover(album.id, Calidad.Baja);
-                        if (bitmap != null)
-                            album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
-                        else
-                            album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                        AlbumsListView.ItemsSource = null;
-                        AlbumsListView.ItemsSource = _albums;
-                    }
-                    catch (Exception)
-                    {
-                        album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                    }
+                    await ColocarImagenAlbum(album);
             }
         }
 
+        /// <summary>
+        /// Coloca la portada a un Abum y actualiza la ListView de los Albumes
+        /// </summary>
+        /// <param name="album">El Album a obtener y colocar su portada</param>
+        /// <returns>Task</returns>
+        private async Task ColocarImagenAlbum(Album album)
+        {
+            var clientePortadas = new CoversClient();
+            try
+            {
+                var bitmap = await clientePortadas.GetAlbumCover(album.id, Calidad.Baja);
+                if (bitmap != null)
+                    album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
+                else
+                    album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
+                AlbumsListView.ItemsSource = null;
+                AlbumsListView.ItemsSource = _albums;
+            }
+            catch (Exception)
+            {
+                album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
+            }
+        }
+        
         /// <summary>
         ///     Coloca en la cola de reproduccion el album entero
         /// </summary>
@@ -248,15 +268,39 @@ namespace EspotifeiClient
             //TODO Mandar a reproducir la cancion y borrar la cola
             var idCancion = (int) ((Button) sender).Tag;
         }
-        private void OnClickAgregarAlbumButton(object sender, RoutedEventArgs e)
+        
+        /// <summary>
+        /// Abre una ventana para el registro de un Album y si se actualiza recupera su imagen y actualiza el item source 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void OnClickAgregarAlbumButton(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var albumRegistrado = RegistrarAlbum.MostrarRegistrarAlbum();
+            if (albumRegistrado != null)
+            {
+                _albums.Add(albumRegistrado);
+                await ColocarImagenAlbum(albumRegistrado);
+            }
         }
 
         private void OnClickEditarPerfilButton(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new RegistrarCreadorContenido(_creadorContenido));
         }
-        
+
+        private async void OnClickEditarAlbum(object sender, RoutedEventArgs e)
+        {
+            var idAlbum = (int) ((Button) sender).Tag;
+            var alalbumAEditar = _albums.Find(a => a.id == idAlbum);
+            if (alalbumAEditar != null)
+            {
+                var albumEditado = RegistrarAlbum.EditarAlbum(alalbumAEditar);
+                if (albumEditado != null)
+                {
+                    await InicializarAlbumes();
+                }
+            }
+        }
     }
 }

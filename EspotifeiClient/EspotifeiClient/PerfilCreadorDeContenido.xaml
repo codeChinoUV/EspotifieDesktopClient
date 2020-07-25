@@ -27,72 +27,7 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="0.45*" />
-                <ColumnDefinition Width="0.15*" />
-                <ColumnDefinition Width="0.15*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="0.40*" />
-                <RowDefinition Height="0.60*" />
-            </Grid.RowDefinitions>
-            <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="PortadaImagen" Margin="10" />
-            <TextBlock Grid.Column="1" Grid.Row="0" x:Name="NombreTextBlock" FontSize="25" FontWeight="Black"
-                       Foreground="White" VerticalAlignment="Center" />
-            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="Biografia" FontSize="15" TextWrapping="Wrap"
-                       Foreground="White" />
-            <DataGrid x:Name="GenerosDataGrid" FontSize="10" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="10,0" Background="Transparent" Foreground="White"
-                  CanUserSortColumns="True"
-                  CanUserAddRows="False"
-                  CanUserReorderColumns="False"
-                  AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding genero}" Header="Generos" Width="1.0*" Foreground="White" CanUserResize="False" FontSize="13"/>
-                </DataGrid.Columns>
-                <DataGrid.Resources>
-                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
-                        <Setter Property="Foreground" Value="White" />
-                        <Setter Property="FontWeight" Value="Black" />
-                        <Setter Property="FontSize" Value="18" />
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="Transparent" />
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
-                            <Trigger Property="SortDirection" Value="Ascending">
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
-                            <Trigger Property="SortDirection" Value="Descending">
-                                <Setter Property="Foreground" Value="White" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.Resources>
-            </DataGrid>
-            <StackPanel Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10" >
-                <Button HorizontalAlignment="Stretch" Margin="4,0"
-                 Content="Agregar Album" Background="#FF16A210" BorderBrush="#FF16A210" VerticalContentAlignment="Center"
-                Click="OnClickAgregarAlbumButton"/>
-                <Button
-                 Content="Editar perfil" Background="#FF16A210" BorderBrush="#FF16A210" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
-                Click="OnClickEditarPerfilButton" Margin="4,10" />
-            </StackPanel>
-            <Button Grid.Column="3" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                    Style="{StaticResource MaterialDesignFloatingActionButton}"
-                    Height="60" Width="60" Padding="0" Margin="0,-30,30,-30">
-                <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow" Height="50" Width="50" />
-            </Button>
-        </Grid>
-        <Grid Grid.Row="1" Visibility="Hidden" x:Name="SinConexionGrid">
-            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
-                <Image Source="{StaticResource SinConexion}" Width="100" Height="100" />
-                <TextBlock Text="Sin conexión" Foreground="#49b1fe" FontSize="20" FontWeight="Black" />
-            </StackPanel>
-        </Grid>
-        <ScrollViewer Grid.Row="1">
+        <ScrollViewer Grid.Row="1" Margin="0,30,0,0">
             <ItemsControl x:Name="AlbumsListView" ItemsSource="{Binding Album}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
@@ -131,6 +66,7 @@
                                 </StackPanel>
                                 <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,2"
                                         BorderBrush="Black" HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="2" Grid.Row="0" Content="Editar" Tag="{Binding id}" Click="OnClickEditarAlbum" HorizontalAlignment="Right" />
                                 <Button Grid.Column="2" Grid.Row="2" VerticalAlignment="Top"
                                         HorizontalAlignment="Right"
                                         Style="{StaticResource MaterialDesignFloatingActionButton}"
@@ -196,5 +132,69 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="0.45*" />
+                <ColumnDefinition Width="0.15*" />
+                <ColumnDefinition Width="0.15*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.40*" />
+                <RowDefinition Height="0.60*" />
+            </Grid.RowDefinitions>
+            <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="PortadaImagen" Margin="10" />
+            <TextBlock Grid.Column="1" Grid.Row="0" x:Name="NombreTextBlock" FontSize="25" FontWeight="Black"
+                       Foreground="White" VerticalAlignment="Center" />
+            <TextBlock Grid.Column="1" Grid.Row="1" x:Name="Biografia" FontSize="15" TextWrapping="Wrap"
+                       Foreground="White" />
+            <DataGrid x:Name="GenerosDataGrid" FontSize="10" Grid.Row="0" Grid.Column="2" Grid.RowSpan="2" Margin="10,0" Background="Transparent" Foreground="White"
+                  CanUserSortColumns="True"
+                  CanUserAddRows="False"
+                  CanUserReorderColumns="False"
+                  AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding genero}" Header="Generos" Width="1.0*" Foreground="White" CanUserResize="False" FontSize="13"/>
+                </DataGrid.Columns>
+                <DataGrid.Resources>
+                    <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
+                        <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontWeight" Value="Black" />
+                        <Setter Property="FontSize" Value="18" />
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="SortDirection" Value="Ascending">
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                            <Trigger Property="SortDirection" Value="Descending">
+                                <Setter Property="Foreground" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+            <StackPanel Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10" >
+                <Button HorizontalAlignment="Stretch" Margin="4,0"
+                 Content="Agregar Album" Background="#FF16A210" BorderBrush="#FF16A210" VerticalContentAlignment="Center"
+                Click="OnClickAgregarAlbumButton"/>
+                <Button
+                 Content="Editar perfil" Background="#FF16A210" BorderBrush="#FF16A210" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
+                Click="OnClickEditarPerfilButton" Margin="4,10" />
+            </StackPanel>
+            <Button Grid.Column="3" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                    Style="{StaticResource MaterialDesignFloatingActionButton}"
+                    Height="60" Width="60" Padding="0" Margin="0,-30,30,-30">
+                <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow" Height="50" Width="50" />
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1" Visibility="Hidden" x:Name="SinConexionGrid">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image Source="{StaticResource SinConexion}" Width="100" Height="100" />
+                <TextBlock Text="Sin conexión" Foreground="#49b1fe" FontSize="20" FontWeight="Black" />
+            </StackPanel>
+        </Grid>
     </Grid>
 </Page>

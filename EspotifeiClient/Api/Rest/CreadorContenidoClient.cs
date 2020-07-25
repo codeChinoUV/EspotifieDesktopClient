@@ -21,90 +21,103 @@ namespace Api.Rest
         {
             CreadorContenido contentCreatorRegister;
             var path = "/v1/creador-de-contenido";
-            using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, contentCreator))
+            for (int i = 1; i <= CantidadIntentos; i++)
             {
-                if (response.IsSuccessStatusCode)
+                using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, contentCreator))
                 {
-                    contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
-                    path = "/v1/creador-de-contenido/generos";
-                    foreach (var genero in contentCreator.generos)
-                        using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(path, genero))
-                        {
-                            if (!responseAddGenero.IsSuccessStatusCode)
-                                throw new Exception("No se pudieron guardar todos los generos, " +
-                                                    "puede modificarlos mas adelante");
-                        }
+                    if (response.IsSuccessStatusCode)
+                    {
+                        contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
+                        path = "/v1/creador-de-contenido/generos";
+                        foreach (var genero in contentCreator.generos)
+                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(path, genero))
+                            {
+                                if (!responseAddGenero.IsSuccessStatusCode)
+                                    throw new Exception("No se pudieron guardar todos los generos, " +
+                                                        "puede modificarlos mas adelante");
+                            }
 
-                    return contentCreatorRegister;
-                }
+                        return contentCreatorRegister;
+                    }
 
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    List<ErrorGeneral> errores;
-                    errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
-                    var error = ProcessBadRequesCode(errores[0].error);
-                    throw new Exception(error);
-                }
-                else
-                {
-                    ErrorGeneral error;
-                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
-                    throw new Exception(error.mensaje);
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        List<ErrorGeneral> errores;
+                        errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
+                        var error = ProcessBadRequesCode(errores[0].error);
+                        throw new Exception(error);
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
                 }
             }
+            throw new Exception("AuntenticacionFallida"); 
         }
-        
+
         /// <summary>
         /// Realiza las peticiones al servidor para modificar la información de un creador de contenido 
         /// </summary>
         /// <param name="contentCreator">Variable de tipo de CreadorContenido que contiene su información</param>
+        /// <param name="actuals">La lista de generos actualoizada del creador de contenido</param>
         /// <returns>Una variable de tipo CreadorContenido o una excepción si la respuesta de la solicitud es incorrecta</returns>
         public static async Task<CreadorContenido> EditCreadorContenido(CreadorContenido contentCreator, List<Genero> actuals)
         {
             CreadorContenido contentCreatorRegister;
             var path = "/v1/creador-de-contenido";
-            using (var response = await ApiClient.GetApiClient().PutAsJsonAsync(path, contentCreator))
+            for (int i = 1; i <= CantidadIntentos; i++)
             {
-                if (response.IsSuccessStatusCode)
+                using (var response = await ApiClient.GetApiClient().PutAsJsonAsync(path, contentCreator))
                 {
-                    contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
-                    var generosToDelete = CalculateGenerosToDelete(contentCreator.generos, actuals);
-                    foreach (var genero in generosToDelete)
+                    if (response.IsSuccessStatusCode)
                     {
-                        path = $"/v1/creador-de-contenido/generos/{genero.id}";
-                        using (var responseAddGenero = await ApiClient.GetApiClient().DeleteAsync(path))
+                        contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
+                        var generosToDelete = CalculateGenerosToDelete(contentCreator.generos, actuals);
+                        foreach (var genero in generosToDelete)
                         {
-                            if (!responseAddGenero.IsSuccessStatusCode)
-                                throw new Exception("No se pudieron modificar todos los generos");
+                            path = $"/v1/creador-de-contenido/generos/{genero.id}";
+                            using (var responseAddGenero = await ApiClient.GetApiClient().DeleteAsync(path))
+                            {
+                                if (!responseAddGenero.IsSuccessStatusCode)
+                                    throw new Exception("No se pudieron modificar todos los generos");
+                            }
                         }
-                    }
-                    var generosToAdd = CalculateGenerosToAdd(contentCreator.generos, actuals);
-                    foreach (var genero in generosToAdd)
-                    {
-                        path = "/v1/creador-de-contenido/generos";
-                        using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(path, genero))
+                        var generosToAdd = CalculateGenerosToAdd(contentCreator.generos, actuals);
+                        foreach (var genero in generosToAdd)
                         {
-                            if (!responseAddGenero.IsSuccessStatusCode)
-                                throw new Exception("No se pudieron modificar todos los generos");
+                            path = "/v1/creador-de-contenido/generos";
+                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(path, genero))
+                            {
+                                if (!responseAddGenero.IsSuccessStatusCode)
+                                    throw new Exception("No se pudieron modificar todos los generos");
+                            }
                         }
+                        return contentCreatorRegister;
                     }
-                    return contentCreatorRegister;
-                }
 
-                if (response.StatusCode == HttpStatusCode.BadRequest)
-                {
-                    List<ErrorGeneral> errores;
-                    errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
-                    var error = ProcessBadRequesCode(errores[0].error);
-                    throw new Exception(error);
-                }
-                else
-                {
-                    ErrorGeneral error;
-                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
-                    throw new Exception(error.mensaje);
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        List<ErrorGeneral> errores;
+                        errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
+                        var error = ProcessBadRequesCode(errores[0].error);
+                        throw new Exception(error);
+                    }
+                    else if(response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
                 }
             }
+            throw new Exception("AuntenticacionFallida"); 
         }
 
         /// <summary>

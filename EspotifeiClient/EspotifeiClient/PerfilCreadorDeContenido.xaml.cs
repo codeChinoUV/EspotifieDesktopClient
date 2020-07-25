@@ -255,7 +255,7 @@ namespace EspotifeiClient
 
         private void OnClickEditarPerfilButton(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            NavigationService?.Navigate(new RegistrarCreadorContenido(_creadorContenido));
         }
         
     }

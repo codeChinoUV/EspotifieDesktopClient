@@ -34,7 +34,7 @@
                 <Label Content="REGISTRO DE USUARIO" HorizontalAlignment="Center" VerticalAlignment="Top"
                        Margin="0,0,0,10" Foreground="Gray" FontSize="18" Width="203" />
                 <Button x:Name="agregarImagenButton" Background="{x:Null}" Width="100" Height="100"
-                        Click="OnClickAgregarImagenButton" Padding="0" BorderBrush="White">
+                        Click="OnClickAgregarImagenButton" Padding="2" BorderBrush="#FF2281D1" >
                     <Image x:Name="imagenPerfil" Source="Resources/Añadir.png" />
                 </Button>
                 <TextBox x:Name="nombreTextbox" Margin="0,10" materialDesign:HintAssist.Hint="NOMBRE"

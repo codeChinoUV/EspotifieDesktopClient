@@ -53,7 +53,120 @@ namespace Api.Rest
                 }
             }
         }
+        
+        /// <summary>
+        /// Realiza las peticiones al servidor para modificar la información de un creador de contenido 
+        /// </summary>
+        /// <param name="contentCreator">Variable de tipo de CreadorContenido que contiene su información</param>
+        /// <returns>Una variable de tipo CreadorContenido o una excepción si la respuesta de la solicitud es incorrecta</returns>
+        public static async Task<CreadorContenido> EditCreadorContenido(CreadorContenido contentCreator, List<Genero> actuals)
+        {
+            CreadorContenido contentCreatorRegister;
+            var path = "/v1/creador-de-contenido";
+            using (var response = await ApiClient.GetApiClient().PutAsJsonAsync(path, contentCreator))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
+                    var generosToDelete = CalculateGenerosToDelete(contentCreator.generos, actuals);
+                    foreach (var genero in generosToDelete)
+                    {
+                        path = $"/v1/creador-de-contenido/generos/{genero.id}";
+                        using (var responseAddGenero = await ApiClient.GetApiClient().DeleteAsync(path))
+                        {
+                            if (!responseAddGenero.IsSuccessStatusCode)
+                                throw new Exception("No se pudieron modificar todos los generos");
+                        }
+                    }
+                    var generosToAdd = CalculateGenerosToAdd(contentCreator.generos, actuals);
+                    foreach (var genero in generosToAdd)
+                    {
+                        path = "/v1/creador-de-contenido/generos";
+                        using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(path, genero))
+                        {
+                            if (!responseAddGenero.IsSuccessStatusCode)
+                                throw new Exception("No se pudieron modificar todos los generos");
+                        }
+                    }
+                    return contentCreatorRegister;
+                }
 
+                if (response.StatusCode == HttpStatusCode.BadRequest)
+                {
+                    List<ErrorGeneral> errores;
+                    errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
+                    var error = ProcessBadRequesCode(errores[0].error);
+                    throw new Exception(error);
+                }
+                else
+                {
+                    ErrorGeneral error;
+                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                    throw new Exception(error.mensaje);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Calcula los Generos a eliminar en la edicion de un creador de contenido
+        /// </summary>
+        /// <param name="last">La lista con los generos que tenia el creador de contenido</param>
+        /// <param name="actual">La lista con los generos que tendra el creador de contenido</param>
+        /// <returns>Una lista de generos</returns>
+        private static List<Genero> CalculateGenerosToDelete(List<Genero> last, List<Genero> actual)
+        {
+            var listGenerosToDetele = new List<Genero>();
+            foreach (var genero in last)
+            {
+                var isGenero = false;
+                foreach (var actualGenero in actual)
+                {
+                    if (genero.id == actualGenero.id)
+                    {
+                        isGenero = true;
+                        break;
+                    } 
+                }
+
+                if (!isGenero)
+                {
+                    listGenerosToDetele.Add(genero);
+                }
+            }
+
+            return listGenerosToDetele;
+        }
+
+        /// <summary>
+        /// Calcula los Generos a agregar en la edicion de un creador de contenido
+        /// </summary>
+        /// <param name="last">La lista con los generos que tenia el creador de contenido</param>
+        /// <param name="actual">La lista con los generos que tendra el creador de contenido</param>
+        /// <returns>Una lista de generos</returns>
+        private static List<Genero> CalculateGenerosToAdd(List<Genero> last, List<Genero> actual)
+        {
+            var listaGenerosToAdd = new List<Genero>();
+            foreach (var actualGenero in actual)
+            {
+                var isGenero = false;
+                foreach (var genero in last)
+                {
+                    if (genero.id == actualGenero.id)
+                    {
+                        isGenero = true;
+                        break;
+                    } 
+                }
+
+                if (!isGenero)
+                {
+                    listaGenerosToAdd.Add(actualGenero);
+                }
+            }
+
+            return listaGenerosToAdd;
+        }
+        
         /// <summary>
         ///     Recupera los creadores de contenido por busqueda
         /// </summary>

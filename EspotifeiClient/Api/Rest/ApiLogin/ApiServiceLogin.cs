@@ -15,6 +15,7 @@ namespace Api.Rest.ApiLogin
         private static HttpClient _apiClient;
         private string _autenticationToken = "";
         private Login _userLogin;
+        public Usuario Usuario { get; set; }
 
         private ApiServiceLogin()
         {

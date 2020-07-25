@@ -2,6 +2,7 @@
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Input;
+using Api.Rest;
 using Api.Rest.ApiLogin;
 using Model;
 
@@ -31,6 +32,7 @@ namespace EspotifeiClient
                 try
                 {
                     await ApiServiceLogin.GetServiceLogin().Login(login);
+                    await UsuarioClient.GetUser();
                     NavigationService?.Navigate(new MenuInicio());
                 }
                 catch (HttpRequestException)
@@ -39,6 +41,10 @@ namespace EspotifeiClient
                 }
                 catch (Exception exception)
                 {
+                    if (exception.Message == "AuntenticacionFallida")
+                    {
+                        new MensajeEmergente().MostrarMensajeError("No se pudo iniciar sesión, intentelo nuevamente");
+                    }
                     new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
                 }
 

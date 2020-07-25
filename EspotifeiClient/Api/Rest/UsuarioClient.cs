@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Api.Rest.ApiLogin;
 using Model;
 
 namespace Api.Rest
 {
     public class UsuarioClient
     {
+        private static int TotalTryes = 2;
+        
         /// <summary>
         ///     Solicita al APIREST registrar un nuevo usuario
         /// </summary>
@@ -44,6 +47,44 @@ namespace Api.Rest
         }
 
         /// <summary>
+        /// Recupera el usuario logeado y lo asigna a la variable de Usuario
+        /// </summary>
+        public static async Task GetUser()
+        {
+            var path = "/v1/usuario";
+            var isSuccessfully = false;
+            for (int i = 1; i <= TotalTryes; i++)
+            {
+                using (var response = await ApiClient.GetApiClient().GetAsync(path))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var usuario = await response.Content.ReadAsAsync<Usuario>();
+                        ApiServiceLogin.GetServiceLogin().Usuario = usuario;
+                        isSuccessfully = true;
+                        break;
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+            }
+            if (!isSuccessfully)
+            {
+                throw new Exception("AuntenticacionFallida");    
+            }
+            
+        }
+        
+        /// <summary>
         ///     Procesa los codigos de error para convertirlos a cadenas de informacion para el usuario
         /// </summary>
         /// <param name="badRequestCode">El codigo de error a procesar</param>
@@ -59,5 +100,7 @@ namespace Api.Rest
 
             return response;
         }
+        
+        
     }
 }

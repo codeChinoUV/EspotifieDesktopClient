@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Api.Rest.ApiLogin;
 using Model;
 
 namespace Api.Rest
 {
     public class CreadorContenidoClient
     {
+        private static int CantidadIntentos = 2;
+        
         /// <summary>
         ///     Método del servidor que realiza la petición HTTP para registrar al CreadorContenido
         /// </summary>
@@ -16,7 +19,7 @@ namespace Api.Rest
         /// <returns>Una variable de tipo CreadorContenido o una excepción si la respuesta de la solicitud es incorrecta</returns>
         public static async Task<CreadorContenido> RegisterCreadorContenido(CreadorContenido contentCreator)
         {
-            CreadorContenido contentCreatorRegister = null;
+            CreadorContenido contentCreatorRegister;
             var path = "/v1/creador-de-contenido";
             using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, contentCreator))
             {
@@ -75,6 +78,42 @@ namespace Api.Rest
         }
 
         /// <summary>
+        /// Recupera el creador de contenido del usuario logeado
+        /// </summary>
+        /// <returns>El creador de contenido del usuario logeado</returns>
+        /// <exception cref="Exception">Alguna excepcion que ocurrio en la solicitud</exception>
+        public static async Task<CreadorContenido> GetCreadorContenidoFromActualUser()
+        {
+            var path = "/v1/creador-de-contenido";
+            for (int i = 1; i <= CantidadIntentos; i++)
+            {
+                using (var response = await ApiClient.GetApiClient().GetAsync(path))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var creadores = await response.Content.ReadAsAsync<CreadorContenido>();
+                        return creadores;
+                    }
+                    else if(response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        throw new Exception("SinCreadorDeContenido");
+                    }else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+            }
+            
+            throw new Exception("AuntenticacionFallida"); 
+        }
+        
+        /// <summary>
         ///     Método que procesa las diferentes solicitudes incorrectas y las devuelve en un mensaje de error
         /// </summary>
         /// <param name="badRequestCode">Variable que contiene el nombre del error de la solicitud</param>
@@ -89,5 +128,6 @@ namespace Api.Rest
                 response = "El usuario no tiene permitido realizar la operación solicitada";
             return response;
         }
+        
     }
 }

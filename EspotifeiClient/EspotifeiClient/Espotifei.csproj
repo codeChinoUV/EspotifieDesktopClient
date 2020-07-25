@@ -126,6 +126,9 @@
     <Compile Include="MensajeEmergente.xaml.cs">
       <DependentUpon>MensajeEmergente.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PerfilCreadorDeContenido.xaml.cs">
+      <DependentUpon>PerfilCreadorDeContenido.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Player\Player.cs" />
     <Compile Include="RegistrarAlbum.xaml.cs">
       <DependentUpon>RegistrarAlbum.xaml</DependentUpon>
@@ -180,6 +183,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MenuInicio.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PerfilCreadorDeContenido.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

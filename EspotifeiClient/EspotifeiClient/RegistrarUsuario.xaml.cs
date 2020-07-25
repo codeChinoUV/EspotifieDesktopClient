@@ -160,6 +160,7 @@ namespace EspotifeiClient
                         User = usuario.nombre_usuario
                     };
                     await ApiServiceLogin.GetServiceLogin().Login(usuarioLogin);
+                    await UsuarioClient.GetUser();
                     if (_rutaImagen != "")
                     {
                         var clientePortadas = new CoversClient();

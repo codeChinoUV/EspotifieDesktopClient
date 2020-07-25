@@ -139,9 +139,20 @@ namespace EspotifeiClient
                         "No se pudo guardar la imagen de portada, puede subirla " +
                         "mas adelante");
                 }
-                catch (Exception exception)
+                catch (Exception ex)
                 {
-                    new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
+                    if (ex.Message == "AuntenticacionFallida")
+                    {
+                        new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
+                                                                   "proporcionadas, se cerrara la sesion");
+                        MenuInicio.OcultarMenu();
+                        MenuInicio.OcultarReproductor();
+                        NavigationService?.Navigate(new IniciarSesion());
+                    }
+                    else
+                    {
+                        new MensajeEmergente().MostrarMensajeAdvertencia(ex.Message);
+                    }
                 }
 
                 if (registrado)
@@ -189,9 +200,20 @@ namespace EspotifeiClient
                         "No se pudo guardar la imagen de portada, puede subirla " +
                         "mas adelante");
                 }
-                catch (Exception exception)
+                catch (Exception ex)
                 {
-                    new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
+                    if (ex.Message == "AuntenticacionFallida")
+                    {
+                        new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
+                                                                   "proporcionadas, se cerrara la sesion");
+                        MenuInicio.OcultarMenu();
+                        MenuInicio.OcultarReproductor();
+                        NavigationService?.Navigate(new IniciarSesion());
+                    }
+                    else
+                    {
+                        new MensajeEmergente().MostrarMensajeAdvertencia(ex.Message);
+                    }
                 }
 
                 if (editado)

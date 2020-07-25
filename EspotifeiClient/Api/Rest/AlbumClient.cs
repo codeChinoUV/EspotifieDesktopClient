@@ -48,5 +48,85 @@ namespace Api.Rest
 
             throw new Exception("AuntenticacionFallida");
         }
+
+        /// <summary>
+        /// Solicita al API registrar un album
+        /// </summary>
+        /// <param name="album"></param>
+        /// <returns>El Album registrado</returns>
+        /// <exception cref="Exception">Alguna excepcion que puede ocurrir al mandar la solicitud al servidor</exception>
+        public static async Task<Album> RegisterAlbum(Album album)
+        {
+            var path = "/v1/creador-de-contenido/albumes";
+            for (int i = 1; i <= CantidadIntentos; i++)
+            {
+                using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, album))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var albumRegistered = await response.Content.ReadAsAsync<Album>();
+                        return albumRegistered;
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        List<ErrorGeneral> errores;
+                        errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
+                        throw new Exception(errores[0].mensaje);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+            }
+            throw new Exception("AuntenticacionFallida");
+        }
+        
+        /// <summary>
+        /// Solicita al API registrar un album
+        /// </summary>
+        /// <param name="album"></param>
+        /// <returns>El Album registrado</returns>
+        /// <exception cref="Exception">Alguna excepcion que puede ocurrir al mandar la solicitud al servidor</exception>
+        public static async Task<Album> EditAlbum(int idAlbum, Album album)
+        {
+            var path = $"/v1/creador-de-contenido/albumes/{idAlbum}";
+            for (int i = 1; i <= CantidadIntentos; i++)
+            {
+                using (var response = await ApiClient.GetApiClient().PutAsJsonAsync(path, album))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var albumEdited = await response.Content.ReadAsAsync<Album>();
+                        return albumEdited;
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        List<ErrorGeneral> errores;
+                        errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
+                        throw new Exception(errores[0].mensaje);
+                    }
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+            }
+            throw new Exception("AuntenticacionFallida");
+        }
     }
 }

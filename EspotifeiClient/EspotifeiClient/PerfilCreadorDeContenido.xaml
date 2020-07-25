@@ -50,11 +50,13 @@
                   CanUserReorderColumns="False"
                   AutoGenerateColumns="False">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Binding="{Binding genero}" Header="Generos" Width="1.0*" Foreground="White" FontWeight="Black" CanUserResize="False"/>
+                    <DataGridTextColumn Binding="{Binding genero}" Header="Generos" Width="1.0*" Foreground="White" CanUserResize="False" FontSize="13"/>
                 </DataGrid.Columns>
                 <DataGrid.Resources>
                     <Style BasedOn="{StaticResource {x:Type DataGridColumnHeader}}" TargetType="{x:Type DataGridColumnHeader}">
                         <Setter Property="Foreground" Value="White" />
+                        <Setter Property="FontWeight" Value="Black" />
+                        <Setter Property="FontSize" Value="18" />
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter Property="Background" Value="Transparent" />

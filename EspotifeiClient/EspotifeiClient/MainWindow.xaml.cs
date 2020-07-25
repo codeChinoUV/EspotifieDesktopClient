@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace EspotifeiClient
 {
@@ -33,7 +34,7 @@ namespace EspotifeiClient
 
         private void BuscarListview_Selected(object sender, RoutedEventArgs e)
         {
-            new IniciarSesion();
+            
         }
 
         private void ListaReproduccionListview_Selected(object sender, RoutedEventArgs e)
@@ -44,6 +45,11 @@ namespace EspotifeiClient
         private void OnSelectedItemArtist(object sender, RoutedEventArgs e)
         {
             PantallaFrame.Navigate(new Artistas());
+        }
+
+        private void OnMiPerfilMouseClick(object sender, MouseButtonEventArgs e)
+        {
+            PantallaFrame.Navigate(new PerfilCreadorDeContenido());
         }
     }
 }

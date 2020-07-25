@@ -45,7 +45,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" x:Name="GridMenu" Width="70" HorizontalAlignment="Left"
-              Background="#FF2281D1" Visibility="Visible">
+              Background="#FF2281D1" Visibility="Collapsed">
             <Grid.Effect>
                 <DropShadowEffect BlurRadius="2" ShadowDepth="1" Color="#FFAEAEAE" />
             </Grid.Effect>
@@ -89,7 +89,7 @@
                 </ListViewItem>
                 <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem x:Name="ItemArtist" Height="60" Selected="OnSelectedItemArtist">
+                    <ListViewItem x:Name="ItemArtist" Height="60" MouseLeftButtonUp="OnSelectedItemArtist">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Artist" Height="25" Width="25" Margin="10"
                                                      Foreground="White" />
@@ -118,7 +118,7 @@
                             <TextBlock Text="My libreria" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem x:Name="ItemCreate" Height="60">
+                    <ListViewItem x:Name="MiPerfilItem" Height="60" MouseLeftButtonUp="OnMiPerfilMouseClick" Visibility="Hidden">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Person" Height="25" Width="25" Margin="10"
                                                      Foreground="White" />
@@ -137,7 +137,7 @@
                 <ColumnDefinition Width="0.30*" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Stretch" Margin="10,0">
-                <Image x:Name="coverImage" Height="80" Width="80" />
+                <Image x:Name="coverImage" Height="50" Width="50" />
                 <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10,0,0,0">
                     <TextBlock x:Name="nombreCancionTextBlock" Text="" FontSize="20" FontWeight="DemiBold"
                                Foreground="White" />
@@ -146,19 +146,19 @@
                 </StackPanel>
 
             </StackPanel>
-            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,10,0,0">
+            <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,010,0,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <Button x:Name="anteriorCancion" Height="50" Width="50" Padding="0" Margin="10,0"
+                    <Button x:Name="anteriorCancion" Height="30" Width="30" Padding="0" Margin="10,0"
                             Background="Transparent" BorderBrush="Transparent">
-                        <materialDesign:PackIcon Kind="SkipPrevious" Height="50" Width="50" />
+                        <materialDesign:PackIcon Kind="SkipPrevious" Height="30" Width="30" />
                     </Button>
-                    <Button x:Name="playCancion" Height="50" Width="50" Padding="0" Margin="10,0"
+                    <Button x:Name="playCancion" Height="30" Width="30" Padding="0" Margin="10,0"
                             Background="Transparent" BorderBrush="Transparent">
-                        <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow" Height="50" Width="50" />
+                        <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow" Height="30" Width="30" />
                     </Button>
-                    <Button x:Name="siguienteCancion" Height="50" Width="50" Padding="0" Margin="10,0"
+                    <Button x:Name="siguienteCancion" Height="30" Width="30" Padding="0" Margin="10,0"
                             Background="Transparent" BorderBrush="Transparent">
-                        <materialDesign:PackIcon Kind="SkipNext" Height="50" Width="50" />
+                        <materialDesign:PackIcon Kind="SkipNext" Height="30" Width="30" />
                     </Button>
 
                 </StackPanel>

@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using Api.GrpcClients.Clients;
 using Api.Rest;
 using EspotifeiClient.Util;
@@ -19,17 +20,18 @@ namespace EspotifeiClient
     public partial class RegistrarCreadorContenido
     {
         private string _rutaImagen = "";
-        private readonly List<Genero> listaGenero = new List<Genero>();
+        private readonly List<Genero> _listaGenero = new List<Genero>();
+        private readonly bool _regresarAPerfilCreador = false;
 
-        public RegistrarCreadorContenido()
+        public RegistrarCreadorContenido(bool regresarAPerfilCreador=false)
         {
             InitializeComponent();
-            DataContext = this;
+            _regresarAPerfilCreador = regresarAPerfilCreador;
             ConsultarGeneros();
         }
 
         /// <summary>
-        ///     Método que crea un CreadorContenido a partir de su información
+        /// Método que crea un CreadorContenido a partir de su información
         /// </summary>
         /// <returns>Variable de tipo CreadorContenido</returns>
         private CreadorContenido CrearCreadorContenido()
@@ -38,7 +40,7 @@ namespace EspotifeiClient
             {
                 nombre = nombreCreadorTextbox.Text,
                 biografia = biografiaTextbox.Text,
-                generos = listaGenero,
+                generos = _listaGenero,
                 es_grupo = ValidarCheckBoxGrupo()
             };
             return creadorContenido;
@@ -59,12 +61,12 @@ namespace EspotifeiClient
                 var registrado = false;
                 try
                 {
-                    var creadorContenido = await CreadorContenidoClient.RegisterCreadorContenido(creador);
+                    creador = await CreadorContenidoClient.RegisterCreadorContenido(creador);
                     registrado = true;
                     if (_rutaImagen != "")
                     {
                         var clientePortadas = new CoversClient();
-                        clientePortadas.UploadContentCreatorCover(_rutaImagen, creadorContenido.id);
+                        clientePortadas.UploadContentCreatorCover(_rutaImagen, creador.id);
                     }
                 }
                 catch (HttpRequestException)
@@ -82,7 +84,17 @@ namespace EspotifeiClient
                     new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
                 }
 
-                if (registrado) NavigationService?.Navigate(new MenuInicio());
+                if (registrado)
+                {
+                    if (_regresarAPerfilCreador)
+                    {
+                        NavigationService?.Navigate(new PerfilCreadorDeContenido());
+                    }
+                    else
+                    {
+                        NavigationService?.Navigate(new MenuInicio());
+                    }
+                }
                 cancelarButton.IsEnabled = true;
                 registrarCreadorButton.IsEnabled = true;
             }
@@ -190,15 +202,25 @@ namespace EspotifeiClient
             {
                 id = idGenero
             };
-            listaGenero.Add(generoAgregar);
+            _listaGenero.Add(generoAgregar);
         }
 
 
         private void QuitarGenero(object sender, RoutedEventArgs e)
         {
             var idGenero = (int) ((CheckBox) sender).Tag;
-            var generoAQuitar = listaGenero.Find(g => g.id == idGenero);
-            if (generoAQuitar != null) listaGenero.Remove(generoAQuitar);
+            var generoAQuitar = _listaGenero.Find(g => g.id == idGenero);
+            if (generoAQuitar != null) _listaGenero.Remove(generoAQuitar);
+        }
+
+        /// <summary>
+        /// Navega a la pagina de Menu de inicio si se cancela la operacion
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickCancelarButton(object sender, RoutedEventArgs e)
+        {
+            NavigationService?.Navigate(new MenuInicio());
         }
     }
 }

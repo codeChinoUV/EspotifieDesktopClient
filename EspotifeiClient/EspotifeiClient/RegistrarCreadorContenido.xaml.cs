@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using Api.GrpcClients.Clients;
 using Api.Rest;
 using EspotifeiClient.Util;
@@ -21,7 +20,8 @@ namespace EspotifeiClient
     {
         private string _rutaImagen = "";
         private readonly List<Genero> _listaGenero = new List<Genero>();
-        private readonly bool _regresarAPerfilCreador = false;
+        private readonly bool _regresarAPerfilCreador;
+        private CreadorContenido _creadorContenidoAEditar;
 
         public RegistrarCreadorContenido(bool regresarAPerfilCreador=false)
         {
@@ -29,7 +29,52 @@ namespace EspotifeiClient
             _regresarAPerfilCreador = regresarAPerfilCreador;
             ConsultarGeneros();
         }
+        
+        public RegistrarCreadorContenido(CreadorContenido creadorContenidoAEditar)
+        {
+            InitializeComponent();
+            _creadorContenidoAEditar = creadorContenidoAEditar;
+            ColocarElementosCreadorDeContenidoEditar();
+            ConsultarGeneros();
+        }
 
+        private void ColocarElementosCreadorDeContenidoEditar()
+        {
+            tituloLabel.Content = "EDICIÓN DE CREADOR";
+            portadaCreadorImage.Source = _creadorContenidoAEditar.PortadaImagen;
+            nombreCreadorTextbox.Text = _creadorContenidoAEditar.nombre;
+            biografiaTextbox.Text = _creadorContenidoAEditar.biografia;
+            grupoCheckbox.IsChecked = _creadorContenidoAEditar.es_grupo;
+        }
+
+        /// <summary>
+        /// Marca como seleccionadas los generos que tenga el creador de contenido
+        /// </summary>
+        private List<Genero> InicializarEstadoCheckBox(List<Genero> generos)
+        {
+            foreach (var genero in _creadorContenidoAEditar.generos)
+            {
+                var index = generos?.FindIndex(g => g.id == genero.id);
+                if (index != null)
+                {
+                    generos[(int)index].seleccionado = true;
+                    _listaGenero.Add(generos[(int)index]);
+                }
+            }
+
+            return generos;
+        }
+
+        /// <summary>
+        /// Actualiza los campos del creador de contenido igualandolos con la informacion en los campos
+        /// </summary>
+        private void ActualizarCreadorDeContenidoAPartirDeCampos()
+        {
+            _creadorContenidoAEditar.nombre = nombreCreadorTextbox.Text;
+            _creadorContenidoAEditar.biografia = biografiaTextbox.Text;
+            _creadorContenidoAEditar.es_grupo = ValidarCheckBoxGrupo();
+        }
+        
         /// <summary>
         /// Método que crea un CreadorContenido a partir de su información
         /// </summary>
@@ -47,11 +92,26 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        ///     Método que contiene el evento para registrar un CreadorContenido al pulsar clic sobre el botón Registrar
+        /// Edita o registra un creador de contenido dependiendo de la pantalla mostrada
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void OnClickRegistrarCreadorButton(object sender, RoutedEventArgs e)
+        private void OnClickRegistrarCreadorButton(object sender, RoutedEventArgs e)
+        {
+            if (_creadorContenidoAEditar != null)
+            {
+                EditarCreadorDeContenido();
+            }
+            else
+            {
+                RegistrarCreadorDeContenido();
+            }
+        }
+
+        /// <summary>
+        /// Registra en el servidor un creador de contendo
+        /// </summary>
+        private async void RegistrarCreadorDeContenido()
         {
             if (ValidarTextBoxNombre() && ValidarTextBoxBiografia())
             {
@@ -100,6 +160,49 @@ namespace EspotifeiClient
             }
         }
 
+        private async void EditarCreadorDeContenido()
+        {
+            if (ValidarTextBoxNombre() && ValidarTextBoxBiografia())
+            {
+                cancelarButton.IsEnabled = false;
+                registrarCreadorButton.IsEnabled = false;
+                ActualizarCreadorDeContenidoAPartirDeCampos();
+                var editado = false;
+                try
+                {
+                    _creadorContenidoAEditar =
+                        await CreadorContenidoClient.EditCreadorContenido(_creadorContenidoAEditar, _listaGenero);
+                    editado = true;
+                    if (_rutaImagen != "")
+                    {
+                        var clientePortadas = new CoversClient();
+                        clientePortadas.UploadContentCreatorCover(_rutaImagen, _creadorContenidoAEditar.id);
+                    }
+                }
+                catch (HttpRequestException)
+                {
+                    new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
+                }
+                catch (RpcException)
+                {
+                    new MensajeEmergente().MostrarMensajeError(
+                        "No se pudo guardar la imagen de portada, puede subirla " +
+                        "mas adelante");
+                }
+                catch (Exception exception)
+                {
+                    new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
+                }
+
+                if (editado)
+                { 
+                    NavigationService?.Navigate(new PerfilCreadorDeContenido());
+                }
+                cancelarButton.IsEnabled = true;
+                registrarCreadorButton.IsEnabled = true;
+            }
+        }
+        
         /// <summary>
         ///     Método que consulta los géneros registrados en el servidor
         /// </summary>
@@ -108,6 +211,10 @@ namespace EspotifeiClient
             try
             {
                 var listaGeneros = await GeneroClient.GetGeneros();
+                if (_creadorContenidoAEditar != null)
+                {
+                    listaGeneros = InicializarEstadoCheckBox(listaGeneros);
+                }
                 GenerosTabla.ItemsSource = listaGeneros;
             }
             catch (HttpRequestException)

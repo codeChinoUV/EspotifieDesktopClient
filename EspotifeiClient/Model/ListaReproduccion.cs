@@ -1,4 +1,5 @@
-﻿using System.Windows.Media.Imaging;
+﻿using System.Collections.Generic;
+using System.Windows.Media.Imaging;
 
 namespace Model
 {
@@ -13,5 +14,7 @@ namespace Model
         public int duracion_total { get; set; }
 
         public BitmapImage PortadaImagen { get; set; }
+
+        public List<Cancion> canciones { get; set; }
     }
 }

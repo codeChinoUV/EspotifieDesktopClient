@@ -28,10 +28,6 @@ namespace EspotifeiClient.Player
         {
             _songsClient.OnInitialRecivedSong += ReceiveInitialSongChunk;
             _songsClient.OnSongChunkRived += RecivedSongChunk;
-            _songsClient.isPersonalGetSong = false;
-            _songsClient.idGetSong = idSong;
-            var recivedSongThread = new Thread(_songsClient.GetSong);
-            recivedSongThread.Start();
         }
 
 

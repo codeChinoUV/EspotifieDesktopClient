@@ -6,7 +6,6 @@ using Api.GrpcClients.Clients;
 using Api.Rest;
 using EspotifeiClient.Util;
 using Grpc.Core;
-using MaterialDesignThemes.Wpf;
 using Microsoft.Win32;
 using Model;
 

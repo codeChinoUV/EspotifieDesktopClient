@@ -38,6 +38,9 @@ namespace EspotifeiClient
             ConsultarGeneros();
         }
 
+        /// <summary>
+        /// Coloca todos los elementos del creador de contenido a editar en la pantalla
+        /// </summary>
         private void ColocarElementosCreadorDeContenidoEditar()
         {
             tituloLabel.Content = "EDICIÓN DE CREADOR";
@@ -94,8 +97,8 @@ namespace EspotifeiClient
         /// <summary>
         /// Edita o registra un creador de contenido dependiendo de la pantalla mostrada
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void OnClickRegistrarCreadorButton(object sender, RoutedEventArgs e)
         {
             if (_creadorContenidoAEditar != null)
@@ -171,6 +174,9 @@ namespace EspotifeiClient
             }
         }
 
+        /// <summary>
+        /// Edita la informacion de un creador de contenido en base a lo que hay en los campos
+        /// </summary>
         private async void EditarCreadorDeContenido()
         {
             if (ValidarTextBoxNombre() && ValidarTextBoxBiografia())
@@ -226,7 +232,7 @@ namespace EspotifeiClient
         }
         
         /// <summary>
-        ///     Método que consulta los géneros registrados en el servidor
+        /// Método que consulta los géneros registrados en el servidor
         /// </summary>
         private async void ConsultarGeneros()
         {
@@ -266,7 +272,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        ///     Método que valida el tamaño del campo biografiaTextbox
+        /// Método que valida el tamaño del campo biografiaTextbox
         /// </summary>
         /// <returns>Verdadero si el TextBox tiene una longitud valida</returns>
         private bool ValidarTextBoxBiografia()
@@ -283,7 +289,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        ///     Método que valida si el CheckBox del grupo está activado o no
+        /// Método que valida si el CheckBox del grupo está activado o no
         /// </summary>
         /// <returns>Verdadero si el CheckBox está activado</returns>
         private bool ValidarCheckBoxGrupo()
@@ -295,10 +301,10 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        ///     Método que contiene el evento para abrir el explorador de archivos y cargar una imagen
+        /// Método que contiene el evento para abrir el explorador de archivos y cargar una imagen
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void OnClickAgregarImagenImage(object sender, RoutedEventArgs e)
         {
             BitmapDecoder bitmap;
@@ -323,7 +329,11 @@ namespace EspotifeiClient
                 }
         }
 
-
+        /// <summary>
+        /// Agrega el genero seleccionado a la lista de generos del creador de contenido
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void AgregarGenero(object sender, RoutedEventArgs e)
         {
             var idGenero = (int) ((CheckBox) sender).Tag;
@@ -334,7 +344,11 @@ namespace EspotifeiClient
             _listaGenero.Add(generoAgregar);
         }
 
-
+        /// <summary>
+        /// Quita el genero seleccionado de la lista de generos
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void QuitarGenero(object sender, RoutedEventArgs e)
         {
             var idGenero = (int) ((CheckBox) sender).Tag;
@@ -345,8 +359,8 @@ namespace EspotifeiClient
         /// <summary>
         /// Navega a la pagina de Menu de inicio si se cancela la operacion
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void OnClickCancelarButton(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new MenuInicio());

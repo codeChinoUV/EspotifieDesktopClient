@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Api.GrpcClients.Clients;
 
 namespace Api.GrpcClients.Interfaces
@@ -11,7 +10,7 @@ namespace Api.GrpcClients.Interfaces
         void GetSong(int idSong, bool isPersonal);
 
         event SongsClient.OnRecivedSong OnInitialRecivedSong;
-        
+
         event SongsClient.OnChuckRecived OnSongChunkRived;
     }
 }

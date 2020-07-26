@@ -1,36 +1,48 @@
 ﻿using System.Windows;
 using System.Windows.Media.Imaging;
+
 namespace EspotifeiClient
 {
     /// <summary>
-    /// Lógica de interacción para MensajeEmergenteVentana.xaml
+    ///     Lógica de interacción para MensajeEmergenteVentana.xaml
     /// </summary>
     public partial class MensajeEmergente
     {
+        private bool _acepto;
+
         public MensajeEmergente()
         {
             InitializeComponent();
         }
-        
-        private static bool _acepto;
-        
+
+        public MensajeEmergente(string mensaje)
+        {
+            InitializeComponent();
+            MensajeTextBlock.Text = "Confirmacion";
+            CuerpoMensajeTextBlock.Text = mensaje;
+            MensajeImagen.Source = (BitmapImage) FindResource("ConfirmacionImagen");
+            cancelarButton.Visibility = Visibility.Visible;
+        }
+
+        public bool GetResultado()
+        {
+            return _acepto;
+        }
+
         /// <summary>
-        /// Muestra un mensaje de confirmacion
+        ///     Muestra un mensaje de confirmacion
         /// </summary>
         /// <param name="cuerpoMensaje">El mensaje a mostrar</param>
         /// <returns>True si se acepto o False si se cancelo</returns>
-        public bool MostrarMensajeConfirmacion(string cuerpoMensaje)
+        public static bool MostrarMensajeConfirmacion(string cuerpoMensaje)
         {
-            MensajeTextBlock.Text = "Confirmacion";
-            CuerpoMensajeTextBlock.Text = cuerpoMensaje;
-            MensajeImagen.Source = (BitmapImage) FindResource("ConfirmacionImagen");
-            cancelarButton.Visibility = Visibility.Visible;
-            ShowDialog();
-            return _acepto;
+            var ventana = new MensajeEmergente(cuerpoMensaje);
+            ventana.ShowDialog();
+            return ventana.GetResultado();
         }
-        
+
         /// <summary>
-        /// Muestra un mensaje de advertencia
+        ///     Muestra un mensaje de advertencia
         /// </summary>
         /// <param name="cuerpoMensaje">El mensaje a mostrar</param>
         public void MostrarMensajeAdvertencia(string cuerpoMensaje)
@@ -40,9 +52,9 @@ namespace EspotifeiClient
             MensajeImagen.Source = (BitmapImage) FindResource("AlertaImagen");
             ShowDialog();
         }
-        
+
         /// <summary>
-        /// Muestra un mensaje de error
+        ///     Muestra un mensaje de error
         /// </summary>
         /// <param name="cuerpoMensaje">El mensaje a mostrar</param>
         public void MostrarMensajeError(string cuerpoMensaje)
@@ -52,9 +64,9 @@ namespace EspotifeiClient
             MensajeImagen.Source = (BitmapImage) FindResource("ErrorImagen");
             ShowDialog();
         }
-        
+
         /// <summary>
-        /// Muestra un mensaje de informacion
+        ///     Muestra un mensaje de informacion
         /// </summary>
         /// <param name="cuerpoMensaje">El mensaje a mostrar</param>
         public void MostrarMensajeInformacion(string cuerpoMensaje)
@@ -64,9 +76,9 @@ namespace EspotifeiClient
             MensajeImagen.Source = (BitmapImage) FindResource("InformacionImagen");
             ShowDialog();
         }
-        
+
         /// <summary>
-        /// Coloca el valor de aceptado y cierra la ventana
+        ///     Coloca el valor de aceptado y cierra la ventana
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -77,7 +89,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Coloca el valor de no aceptado y cierra la ventana
+        ///     Coloca el valor de no aceptado y cierra la ventana
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

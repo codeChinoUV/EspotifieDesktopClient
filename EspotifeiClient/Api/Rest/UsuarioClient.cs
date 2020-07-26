@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Api.Rest.ApiLogin;
 using Model;
 
 namespace Api.Rest
 {
     public class UsuarioClient
     {
+        private static int TotalTryes = 2;
+        
         /// <summary>
-        /// Solicita al APIREST registrar un nuevo usuario
+        ///     Solicita al APIREST registrar un nuevo usuario
         /// </summary>
         /// <param name="user"></param>
         /// <returns>El nuevo usuario registrado</returns>
@@ -19,14 +22,15 @@ namespace Api.Rest
         {
             Usuario userRegister;
             var path = "/v1/usuario";
-            using (HttpResponseMessage response = await ApiClient.GetApiClient().PostAsJsonAsync(path, user))
+            using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, user))
             {
                 if (response.IsSuccessStatusCode)
                 {
                     userRegister = await response.Content.ReadAsAsync<Usuario>();
                     return userRegister;
                 }
-                else if(response.StatusCode == HttpStatusCode.BadRequest)
+
+                if (response.StatusCode == HttpStatusCode.BadRequest)
                 {
                     List<ErrorGeneral> errores;
                     errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
@@ -43,7 +47,45 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Procesa los codigos de error para convertirlos a cadenas de informacion para el usuario
+        /// Recupera el usuario logeado y lo asigna a la variable de Usuario
+        /// </summary>
+        public static async Task GetUser()
+        {
+            var path = "/v1/usuario";
+            var isSuccessfully = false;
+            for (int i = 1; i <= TotalTryes; i++)
+            {
+                using (var response = await ApiClient.GetApiClient().GetAsync(path))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var usuario = await response.Content.ReadAsAsync<Usuario>();
+                        ApiServiceLogin.GetServiceLogin().Usuario = usuario;
+                        isSuccessfully = true;
+                        break;
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+            }
+            if (!isSuccessfully)
+            {
+                throw new Exception("AuntenticacionFallida");    
+            }
+            
+        }
+        
+        /// <summary>
+        ///     Procesa los codigos de error para convertirlos a cadenas de informacion para el usuario
         /// </summary>
         /// <param name="badRequestCode">El codigo de error a procesar</param>
         /// <returns>Una cadena que contiene informacion para el usuario a partir de los codigos de error</returns>
@@ -51,16 +93,14 @@ namespace Api.Rest
         {
             var response = "Validale que los campos sean correctos";
             if (badRequestCode == "nombre_usuario_en_uso")
-            {
                 response = "El nombre de usuario ya se encuentra en uso, por favor eliga otro";
-            }
 
             if (badRequestCode == "email_en_uso")
-            {
                 response = "El correo ya se ha registrado en otra cuenta, intente con otro correo";
-            }
 
             return response;
         }
+        
+        
     }
 }

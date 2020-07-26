@@ -51,10 +51,14 @@ namespace EspotifeiClient
             NombreTextBlock.Text = listaReproduccion.nombre;
             DescripcionTextBlock.Text = listaReproduccion.descripcion;
             await ObtenerCancionesDeListasReproduccion(_listaReproduccion.id);
-            //await ColocarImagenesAlbumes();
-            //await ColocarIamgenCreadorDeContenido();
+            await ColocarImagenesAlbumes();
         }
 
+        /// <summary>
+        /// Método que recupera las canciones que pertenecen a una determinada ListaReproduccion
+        /// </summary>
+        /// <param name="idListaReproduccion">Identificador de lista de reproducción seleccionada</param>
+        /// <returns></returns>
         private async Task ObtenerCancionesDeListasReproduccion(int idListaReproduccion)
         {
             var ocurrioExcepcion = false;
@@ -77,18 +81,36 @@ namespace EspotifeiClient
             }
         }
 
-        private void ColocarImagenesAlbumes()
+        /// <summary>
+        /// Método que recupera las portadas del servidor y las asigna a su canción correspondiente
+        /// </summary>
+        /// <returns></returns>
+        private async Task ColocarImagenesAlbumes()
         {
-            _album.canciones = _listaReproduccion.canciones;
-            CancionesListView.IsEnabled = false;
-            foreach (var song in _album.canciones)
+            if (_listaReproduccion.canciones != null)
             {
-                _album.PortadaImagen = (BitmapImage) FindResource("ListaReproduccionImagen");
+                var clientePortadas = new CoversClient();
+                foreach (var playlist in _listaReproduccion.canciones)
+                {
+                    try
+                    {
+                        var bitmap = await clientePortadas.GetAlbumCover(playlist.album.id, Calidad.Baja);
+                        if (bitmap != null)
+                        {
+                            playlist.album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
+                        } else
+                        {
+                           playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
+                        }
+                        CancionesListView.ItemsSource = null;
+                        CancionesListView.ItemsSource = _listaReproduccion.canciones;
+                    } catch (Exception)
+                    {
+                        playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
+                    }
+                }
             }
 
-            CancionesListView.ItemsSource = null;
-            CancionesListView.ItemsSource = _listaReproduccion.canciones;
-            CancionesListView.IsEnabled = true;
-
         }
+    }
 }

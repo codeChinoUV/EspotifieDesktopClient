@@ -31,7 +31,7 @@
             <ItemsControl x:Name="AlbumsListView" ItemsSource="{Binding Album}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Grid HorizontalAlignment="Stretch" Margin="10,10,10,80">
+                        <Grid HorizontalAlignment="Stretch" Margin="10,10,10,40">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="0.30*" />
                                 <RowDefinition Height="Auto" />
@@ -57,7 +57,7 @@
                                     </Border.Background>
                                 </Border>
                                 <TextBlock Grid.Column="1" Grid.Row="0" Text="{Binding nombre}" FontSize="18"
-                                           Foreground="Black" Margin="10,0" />
+                                           Foreground="Black" Margin="10,0" TextWrapping="Wrap" />
                                 <TextBlock Grid.Column="1" Grid.Row="1" Text="{Binding anio_lanzamiento}" FontSize="12"
                                            Foreground="Black" Margin="10,0" />
                                 <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="10,0">
@@ -66,6 +66,7 @@
                                 </StackPanel>
                                 <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,2"
                                         BorderBrush="Black" HorizontalAlignment="Stretch" />
+                                <Button Grid.Column="1" Grid.Row="0" Content="Agregar cancion" Tag="{Binding id}" Click="OnClickAgregarCancion" HorizontalAlignment="Right" />
                                 <Button Grid.Column="2" Grid.Row="0" Content="Editar" Tag="{Binding id}" Click="OnClickEditarAlbum" HorizontalAlignment="Right" />
                                 <Button Grid.Column="2" Grid.Row="2" VerticalAlignment="Top"
                                         HorizontalAlignment="Right"

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -22,6 +23,7 @@ namespace EspotifeiClient
         private List<CreadorContenido> _creadoresDeContenido = new List<CreadorContenido>();
         private List<Genero> _listaGeneros = new List<Genero>();
         private Cancion _cancionRegistrada;
+        private Cancion _cancionAEditar;
         private int _idAlbum;
         
         public RegistrarCancion(int idAlbum)
@@ -30,7 +32,16 @@ namespace EspotifeiClient
             _idAlbum = idAlbum;
             ConsultarGeneros();
         }
-        
+
+        public RegistrarCancion(Cancion cancionAEditar, int idAlbum)
+        {
+            InitializeComponent();
+            _cancionAEditar = cancionAEditar;
+            _idAlbum = idAlbum;
+            ConsultarGeneros();
+            LlenarElementosEditarCancion();
+        }
+
         /// <summary>
         /// Regresa la cancion registrada
         /// </summary>
@@ -38,6 +49,59 @@ namespace EspotifeiClient
         private Cancion GetCancionRegistrada()
         {
             return _cancionRegistrada;
+        }
+        
+        /// <summary>
+        /// Muestra la ventana para registrar la una cancion
+        /// </summary>
+        /// <param name="idAlbum">El id del album al que pertenece la cancion</param>
+        /// <returns>La cancion registrada</returns>
+        public static Cancion MostrarRegistrarCancion(int idAlbum)
+        {
+            var ventana = new RegistrarCancion(idAlbum);
+            ventana.ShowDialog();
+            return ventana.GetCancionRegistrada();
+        }
+
+        /// <summary>
+        /// Muestra la ventana para registrar la una cancion
+        /// </summary>
+        /// <param name="cancionAEditar">La cancion a editar</param>
+        /// <param name="idAlbum">El id del album al que pertenece la cancion</param>
+        /// <returns>La cancion registrada</returns>
+        public static Cancion MostrarEditarCancion(Cancion cancionAEditar, int idAlbum)
+        {
+            var ventana = new RegistrarCancion(cancionAEditar, idAlbum);
+            ventana.ShowDialog();
+            return ventana.GetCancionRegistrada();
+        }
+        
+        /// <summary>
+        /// Coloca la informacion de la cancion en los elementos de la pantalla
+        /// </summary>
+        private void LlenarElementosEditarCancion()
+        {
+            tituloTextBox.Content = "EDITAR CANCIÓN";
+            nombreCancionTextbox.Text = _cancionAEditar.nombre;
+            var propioCreadorDeContenido = _cancionAEditar.creadores_de_contenido[0];
+            _cancionAEditar.creadores_de_contenido.Remove(propioCreadorDeContenido);
+            LlenarListaDeCreadoresDeContenidoSeleccionadoConLosDeCancion(_cancionAEditar.creadores_de_contenido);
+        }
+
+        /// <summary>
+        /// Coloca en la lista de creadores de contenido los creadores de contenido que ya tiene la cancion
+        /// </summary>
+        /// <param name="creadorContenidos">La lista de creadores de contenido a agregar</param>
+        private void LlenarListaDeCreadoresDeContenidoSeleccionadoConLosDeCancion(
+            List<CreadorContenido> creadorContenidos)
+        {
+            
+            foreach (var creadorContenido in creadorContenidos)
+            {
+                _creadoresDeContenido.Add(creadorContenido);
+            }
+
+            CreadorDeContenidoSeleccionadosTabla.ItemsSource = _creadoresDeContenido;
         }
 
         /// <summary>
@@ -80,27 +144,19 @@ namespace EspotifeiClient
         /// <returns>True si hay una cancion seleccionada o False si no</returns>
         private bool ValidarCancionSeleccionada()
         {
-            var cancionSeleccionada = ArchivoSeleccionadoText.Text != "";
-            if (!cancionSeleccionada)
+            var cancionSeleccionada = true;
+            if (_cancionAEditar == null)
             {
-                new MensajeEmergente().MostrarMensajeAdvertencia("Debe de seleccionar una cancion");
+                cancionSeleccionada = ArchivoSeleccionadoText.Text != "";
+                if (!cancionSeleccionada)
+                {
+                    new MensajeEmergente().MostrarMensajeAdvertencia("Debe de seleccionar una cancion");
+                }
             }
-
+            
             return cancionSeleccionada;
         }
         
-        /// <summary>
-        /// Muestra la ventana para registrar la una cancion
-        /// </summary>
-        /// <param name="idAlbum">El id del album al que pertenece la cancion</param>
-        /// <returns>La cancion registrada</returns>
-        public static Cancion MostrarRegistrarCancion(int idAlbum)
-        {
-            var ventana = new RegistrarCancion(idAlbum);
-            ventana.ShowDialog();
-            return ventana.GetCancionRegistrada();
-        }
-
         /// <summary>
         /// Método que consulta los géneros registrados en el servidor
         /// </summary>
@@ -109,10 +165,10 @@ namespace EspotifeiClient
             try
             {
                 var listaGeneros = await GeneroClient.GetGeneros();
-                /*if (_creadorContenidoAEditar != null)
+                if (_cancionAEditar != null)
                 {
-                    listaGeneros = InicializarEstadoCheckBox(listaGeneros);
-                }*/
+                    listaGeneros = await InicializarEstadoCheckBox(listaGeneros);
+                }
                 GenerosTabla.ItemsSource = listaGeneros;
             }
             catch (HttpRequestException)
@@ -123,6 +179,24 @@ namespace EspotifeiClient
             {
                 new MensajeEmergente().MostrarMensajeError(ex.Message);
             }
+        }
+        
+        /// <summary>
+        /// Recupera los generos de la cancion y marca como seleccionadas los generos que tenga la cancion
+        /// </summary>
+        private async Task<List<Genero>> InicializarEstadoCheckBox(List<Genero> generos)
+        {
+            _cancionAEditar.generos = await CancionClient.GetGenerosFromCancion(_cancionAEditar.id, _idAlbum);
+            foreach (var genero in _cancionAEditar.generos)
+            {
+                var index = generos?.FindIndex(g => g.id == genero.id);
+                if (index != null)
+                {
+                    generos[(int)index].seleccionado = true;
+                    _listaGeneros.Add(generos[(int)index]);
+                }
+            }
+            return generos;
         }
         
         /// <summary>
@@ -208,6 +282,14 @@ namespace EspotifeiClient
         }
 
         /// <summary>
+        /// Actualiza la informacion de la cancion a editar
+        /// </summary>
+        private void ActualizarCancionEditar()
+        {
+            _cancionAEditar.nombre = nombreCancionTextbox.Text;
+        }
+
+        /// <summary>
         /// Cierra la ventana
         /// </summary>
         /// <param name="sender"></param>
@@ -238,14 +320,14 @@ namespace EspotifeiClient
         /// </summary>
         private void HabilitarElementosPantalla()
         {
-            cancelarButton.IsEnabled = false;
-            registrarAlbumButton.IsEnabled = false;
-            subirCancionButton.IsEnabled = false;
-            CreadoreContenidoTabla.IsEnabled = false;
-            nombreCancionTextbox.IsEnabled = false;
-            BuscarTextBox.IsEnabled = false;
-            CreadorDeContenidoSeleccionadosTabla.IsEnabled = false;
-            GenerosTabla.IsEnabled = false;
+            cancelarButton.IsEnabled = true;
+            registrarAlbumButton.IsEnabled = true;
+            subirCancionButton.IsEnabled = true;
+            CreadoreContenidoTabla.IsEnabled = true;
+            nombreCancionTextbox.IsEnabled = true;
+            BuscarTextBox.IsEnabled = true;
+            CreadorDeContenidoSeleccionadosTabla.IsEnabled = true;
+            GenerosTabla.IsEnabled = true;
         }
 
         /// <summary>
@@ -253,7 +335,91 @@ namespace EspotifeiClient
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
-        private async void OnClickGuardatButton(object sender, RoutedEventArgs e)
+        private void OnClickGuardatButton(object sender, RoutedEventArgs e)
+        {
+            if (_cancionAEditar != null)
+            {
+                EditarCancion();
+            }
+            else
+            {
+                RegistrarNuevaCancion();
+            }
+        }
+
+        /// <summary>
+        /// Edita la informacion de una cancion y sube la cancion al servidor
+        /// </summary>
+        private async void EditarCancion()
+        {
+            if (ValidarNombre() && ValidarGeneroSeleccionado() && ValidarCancionSeleccionada())
+            {
+                DeshabilitarElementosPantalla();
+                ActualizarCancionEditar();
+                try
+                {
+                    _cancionRegistrada = await CancionClient.EditSong(_cancionAEditar, _idAlbum, _listaGeneros, _creadoresDeContenido);
+                    if (ArchivoSeleccionadoText.Text != "")
+                    {
+                        try
+                        {
+                            var clienteCanciones = new SongsClient();
+                            clienteCanciones.OnPorcentageUp += SubirPorcentajeAvanza;
+                            clienteCanciones.OnUploadTerminated += TerminarSubirCancion;
+                            await clienteCanciones.UploadSong(ArchivoSeleccionadoText.Text, _cancionRegistrada.id, false);
+                        }
+                        catch (RpcException)
+                        {
+                            new MensajeEmergente().MostrarMensajeError("No se pudo subir la cancion, la puede volver a " +
+                                                                       "subir mas adelante");
+                            Close();
+                        }
+                        catch (Exception ex)
+                        {
+                            if (ex.Message == "AuntenticacionFallida")
+                            {
+                                new MensajeEmergente().MostrarMensajeError("No se pudo autenticar con el usuario con el " +
+                                                                           "cual inicio sesión, se guardo la informacion de la " +
+                                                                           "cancion pero no el archivo");
+                            }
+                            else
+                            {
+                                new MensajeEmergente().MostrarMensajeError(ex.Message);
+                            }
+                            Close();
+                        }
+                    }else
+                    {
+                        new MensajeEmergente().MostrarMensajeInformacion("La cancion se ha modifico correctamente");
+                        Close();
+                    }
+                }
+                catch (HttpRequestException)
+                {
+                    new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor, porfavor verifique " +
+                                                               "su conexión a internet");
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message == "AuntenticacionFallida")
+                    {
+                        new MensajeEmergente().MostrarMensajeError("No se pudo autenticar con el usuario con el " +
+                                                                   "cual inicio sesión, no se ha guardado la canción");
+                        Close();
+                    }
+                    else
+                    {
+                        new MensajeEmergente().MostrarMensajeError(ex.Message);
+                    }
+                }
+                HabilitarElementosPantalla();
+            }
+        }
+        
+        /// <summary>
+        /// Registra la informacion de una cancion y sube la cancion al servidor
+        /// </summary>
+        private async void RegistrarNuevaCancion()
         {
             if (ValidarNombre() && ValidarGeneroSeleccionado() && ValidarCancionSeleccionada())
             {

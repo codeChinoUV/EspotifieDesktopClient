@@ -33,7 +33,7 @@
                 <RowDefinition Height="0.55*" />
                 <RowDefinition Height="0.20*" />
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Content="REGISTRO CANCION" HorizontalAlignment="Center" VerticalAlignment="Center"
+            <Label x:Name="tituloTextBox" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Content="REGISTRO CANCION" HorizontalAlignment="Center" VerticalAlignment="Center"
                 Foreground="Black" FontSize="18" />
             <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,5"  x:Name="nombreCancionTextbox" materialDesign:HintAssist.Hint="NOMBRE"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines"

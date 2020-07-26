@@ -327,5 +327,67 @@ namespace EspotifeiClient
                 await InicializarAlbumes();
             }
         }
+
+        private void OnClickEliminarCancion(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
+        }
+        
+        private async void OnClickEditarCancion(object sender, RoutedEventArgs e)
+        {
+            int idCancion = (int) ((Button) sender).Tag;
+            var album = BuscarAlbumDeCancion(idCancion);
+            var cancion = BuscarCancionEnAlbumes(idCancion);
+            if (album != null && cancion != null)
+            {
+                var cancionEditada = RegistrarCancion.MostrarEditarCancion(cancion, album.id);
+                if (cancionEditada != null)
+                {
+                    await InicializarAlbumes();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Busca la cancion con el idCancion dentro de los Albums
+        /// </summary>
+        /// <param name="idCancion">El id de la cancion a buscar</param>
+        /// <returns>La cancion del id cancion</returns>
+        private Cancion BuscarCancionEnAlbumes(int idCancion)
+        {
+            Cancion cancionCoincide = null;
+            foreach (var album in _albums)
+            {
+                var cancion = album.canciones.Find(c => c.id == idCancion);
+                if (cancion != null)
+                {
+                    cancionCoincide = cancion;
+                    break;
+                }
+            }
+
+            return cancionCoincide;
+        }
+
+        /// <summary>
+        /// Busca el album en donde se encuentra contenido la cancion con el idCancion
+        /// </summary>
+        /// <param name="idCancion">El id de la cancion a buscar su album</param>
+        /// <returns>El album de la cancion</returns>
+        private Album BuscarAlbumDeCancion(int idCancion)
+        {
+            Album albumDeCancion = null;
+            foreach (var album in _albums)
+            {
+                var cancion = album.canciones.Find(c => c.id == idCancion);
+                if (cancion != null)
+                {
+                    albumDeCancion = album;
+                    break;
+                }
+            }
+
+            return albumDeCancion;
+        }
     }
 }

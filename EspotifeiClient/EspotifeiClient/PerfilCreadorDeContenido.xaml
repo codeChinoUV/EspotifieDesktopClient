@@ -36,6 +36,62 @@
                                 <RowDefinition Height="0.30*" />
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
+                            <ItemsControl Grid.Row="2" x:Name="ListViewCanciones" ItemsSource="{Binding canciones}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="4">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="0.50*" />
+                                                <ColumnDefinition Width="0.10*" />
+                                                <ColumnDefinition Width="0.10*" />
+                                                <ColumnDefinition Width="0.10*" />
+
+                                            </Grid.ColumnDefinitions>
+                                            <Button Grid.Column="0" Grid.Row="2" VerticalAlignment="Top"
+                                                    HorizontalAlignment="Right"
+                                                    Style="{StaticResource MaterialDesignFloatingActionButton}"
+                                                    Background="#FF025EFF" BorderBrush="Transparent"
+                                                    Height="30" Width="30" Padding="0" Margin="0,0,20,0"
+                                                    Tag="{Binding id}" Click="OnClickPlayCancion">
+                                                <materialDesign:PackIcon x:Name="icon_playPause_button"
+                                                                         Kind="PlayArrow" Height="25" Width="25" />
+                                            </Button>
+                                            <TextBlock Grid.Column="1" Text="{Binding nombre}" Margin="10,0"
+                                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="2" Text="{Binding duracionString}" Margin="10,0"
+                                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
+                                            <TextBlock Grid.Column="3" Text="{Binding cantidad_de_reproducciones}"
+                                                       Margin="10,0" FontSize="15" Foreground="Black"
+                                                       VerticalAlignment="Center" />
+                                            <StackPanel Grid.Column="5" Orientation="Horizontal" >
+                                                <Button Background="{x:Null}" Width="30" Height="25" Margin="5,0" BorderBrush="Transparent" Tag="{Binding id}" Padding="0"
+                                                Click="OnClickEliminarCancion" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                    <materialDesign:PackIcon Kind="Delete" Height="25" Width="25" Foreground="Red"/>
+                                                </Button>
+                                                <Button Background="{x:Null}" Width="30" Height="25" Margin="5,0" BorderBrush="Transparent" Tag="{Binding id}" Padding="0"
+                                                Click="OnClickEditarCancion" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                    <materialDesign:PackIcon Kind="Edit" Height="25" Width="25" Foreground="#FF16A210"/>
+                                                </Button>
+                                            </StackPanel>
+                                            <Grid.Style>
+                                                <Style TargetType="{x:Type Grid}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Background" Value="PaleTurquoise" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Grid.Style>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                            </ItemsControl>
                             <Grid Grid.Row="0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto" />
@@ -66,63 +122,22 @@
                                 </StackPanel>
                                 <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,2"
                                         BorderBrush="Black" HorizontalAlignment="Stretch" />
-                                <Button Grid.Column="1" Grid.Row="0" Content="Agregar cancion" Tag="{Binding id}" Click="OnClickAgregarCancion" HorizontalAlignment="Right" />
-                                <Button Grid.Column="2" Grid.Row="0" Content="Editar" Tag="{Binding id}" Click="OnClickEditarAlbum" HorizontalAlignment="Right" />
+                                <StackPanel Grid.Column="2" Grid.Row="0" Orientation="Horizontal"  HorizontalAlignment="Right" >
+                                    <Button Content="Agregar cancion" Tag="{Binding id}" Click="OnClickAgregarCancion" Margin="10,0"/>
+                                    <Button Content="Editar" Tag="{Binding id}" Click="OnClickEditarAlbum" Margin="10,0,0,0" />
+                                </StackPanel>
+                                
                                 <Button Grid.Column="2" Grid.Row="2" VerticalAlignment="Top"
                                         HorizontalAlignment="Right"
                                         Style="{StaticResource MaterialDesignFloatingActionButton}"
                                         Background="#FF025EFF" BorderBrush="Transparent"
-                                        Height="45" Width="45" Padding="0" Margin="0,0,20,-55" Tag="{Binding id}"
+                                        Height="45" Width="45" Padding="0" Margin="0,0,20,-50" Tag="{Binding id}"
                                         Click="OnClickPlayAlbum">
                                     <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow"
                                                              Height="40" Width="40" />
                                 </Button>
 
                             </Grid>
-                            <ItemsControl Grid.Row="2" x:Name="ListViewCanciones" ItemsSource="{Binding canciones}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Margin="4">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="0.60*" />
-                                                <ColumnDefinition Width="0.15*" />
-                                                <ColumnDefinition Width="0.15*" />
-                                            </Grid.ColumnDefinitions>
-                                            <Button Grid.Column="0" Grid.Row="2" VerticalAlignment="Top"
-                                                    HorizontalAlignment="Right"
-                                                    Style="{StaticResource MaterialDesignFloatingActionButton}"
-                                                    Background="#FF025EFF" BorderBrush="Transparent"
-                                                    Height="30" Width="30" Padding="0" Margin="0,0,20,0"
-                                                    Tag="{Binding id}" Click="OnClickPlayCancion">
-                                                <materialDesign:PackIcon x:Name="icon_playPause_button"
-                                                                         Kind="PlayArrow" Height="25" Width="25" />
-                                            </Button>
-                                            <TextBlock Grid.Column="1" Text="{Binding nombre}" Margin="10,0"
-                                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
-                                            <TextBlock Grid.Column="2" Text="{Binding duracionString}" Margin="10,0"
-                                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
-                                            <TextBlock Grid.Column="3" Text="{Binding cantidad_de_reproducciones}"
-                                                       Margin="10,0" FontSize="15" Foreground="Black"
-                                                       VerticalAlignment="Center" />
-                                            <Grid.Style>
-                                                <Style TargetType="{x:Type Grid}">
-                                                    <Style.Triggers>
-                                                        <Trigger Property="IsMouseOver" Value="True">
-                                                            <Setter Property="Background" Value="PaleTurquoise" />
-                                                        </Trigger>
-                                                    </Style.Triggers>
-                                                </Style>
-                                            </Grid.Style>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                            </ItemsControl>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

@@ -13,7 +13,7 @@ namespace Api.Rest
         private static int CantidadIntentos = 2;
         
         /// <summary>
-        ///     Método del servidor que realiza la petición HTTP para registrar al CreadorContenido
+        /// Método del servidor que realiza la petición HTTP para registrar al CreadorContenido
         /// </summary>
         /// <param name="contentCreator">Variable de tipo de CreadorContenido que contiene su información</param>
         /// <returns>Una variable de tipo CreadorContenido o una excepción si la respuesta de la solicitud es incorrecta</returns>
@@ -28,9 +28,9 @@ namespace Api.Rest
                     if (response.IsSuccessStatusCode)
                     {
                         contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
-                        path = "/v1/creador-de-contenido/generos";
+                        var pathRegisteredGenero = "/v1/creador-de-contenido/generos";
                         foreach (var genero in contentCreator.generos)
-                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(path, genero))
+                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(pathRegisteredGenero, genero))
                             {
                                 if (!responseAddGenero.IsSuccessStatusCode)
                                     throw new Exception("No se pudieron guardar todos los generos, " +
@@ -47,7 +47,10 @@ namespace Api.Rest
                         var error = ProcessBadRequesCode(errores[0].error);
                         throw new Exception(error);
                     }
-                    else
+                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }else
                     {
                         ErrorGeneral error;
                         error = await response.Content.ReadAsAsync<ErrorGeneral>();

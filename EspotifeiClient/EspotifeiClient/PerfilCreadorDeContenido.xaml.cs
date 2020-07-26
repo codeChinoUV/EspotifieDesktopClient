@@ -328,9 +328,47 @@ namespace EspotifeiClient
             }
         }
 
-        private void OnClickEliminarCancion(object sender, RoutedEventArgs e)
+        /// <summary>
+        /// Elimina la cancion seleccionada
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private async void OnClickEliminarCancion(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var confirmacion =
+                MensajeEmergente.MostrarMensajeConfirmacion("¿Seguro que desea eliminar la cancion seleccionada?");
+            if (confirmacion)
+            {
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                AlbumsListView.Visibility = Visibility.Visible;
+                int idCancion = (int) ((Button) sender).Tag;
+                var album = BuscarAlbumDeCancion(idCancion);
+                try
+                {
+                    var cancionEliminada = CancionClient.DeteleCancion(idCancion, album.id);
+                    await InicializarAlbumes();
+                }
+                catch (HttpRequestException)
+                {
+                    SinConexionGrid.Visibility = Visibility.Visible;
+                    AlbumsListView.Visibility = Visibility.Hidden;
+                }
+                catch (Exception ex)
+                {
+                    if (ex.Message == "AuntenticacionFallida")
+                    {
+                        new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
+                                                                   "proporcionadas, se cerrara la sesion");
+                        MenuInicio.OcultarMenu();
+                        MenuInicio.OcultarReproductor();
+                        NavigationService?.Navigate(new IniciarSesion());
+                    }
+                    else
+                    {
+                        new MensajeEmergente().MostrarMensajeError(ex.Message);
+                    }
+                }
+            }
         }
         
         private async void OnClickEditarCancion(object sender, RoutedEventArgs e)

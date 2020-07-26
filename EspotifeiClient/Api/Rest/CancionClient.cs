@@ -139,7 +139,44 @@ namespace Api.Rest
                     }
                     else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
-                        throw new Exception("No existe el album a donde desea agregar la cancion");
+                        throw new Exception("No existe la cancion que se desea editar");
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+
+            throw new Exception("AuntenticacionFallida");
+        }
+
+        /// <summary>
+        /// Solicita al servidor eliminar una cancion
+        /// </summary>
+        /// <param name="idCancion">El id de la cancion a eliminar</param>
+        /// <param name="idAlbum">El id del album al que pertenece la canciónn</param>
+        /// <returns>La cancion eliminada</returns>
+        /// <exception cref="Exception">Una excepcion que pueda ocurrir</exception>
+        public static async Task<Cancion> DeteleCancion(int idCancion, int idAlbum)
+        {
+            var path = $"/v1/creador-de-contenido/albumes/{idAlbum}/canciones/{idCancion}";
+            for (var i = 1; i <= CantidadIntentos; i++)
+                using (var response = await ApiClient.GetApiClient().DeleteAsync(path))
+                {
+                    if (response.StatusCode == HttpStatusCode.Accepted)
+                    {
+                        var cancionDeleted = await response.Content.ReadAsAsync<Cancion>();
+                        return cancionDeleted;
+                    }
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        throw new Exception("No existe la cancion que se desea eliminar");
                     }
                     else
                     {

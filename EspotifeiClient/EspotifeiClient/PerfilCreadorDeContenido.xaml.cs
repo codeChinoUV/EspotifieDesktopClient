@@ -284,11 +284,21 @@ namespace EspotifeiClient
             }
         }
 
+        /// <summary>
+        /// Cambia a la pagina Registrar creador de contenido
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void OnClickEditarPerfilButton(object sender, RoutedEventArgs e)
         {
             NavigationService?.Navigate(new RegistrarCreadorContenido(_creadorContenido));
         }
 
+        /// <summary>
+        /// Muestra la ventana de edicion de Album
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private async void OnClickEditarAlbum(object sender, RoutedEventArgs e)
         {
             var idAlbum = (int) ((Button) sender).Tag;
@@ -300,6 +310,21 @@ namespace EspotifeiClient
                 {
                     await InicializarAlbumes();
                 }
+            }
+        }
+
+        /// <summary>
+        /// Muestra la ventana de registro de cancion
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private async void OnClickAgregarCancion(object sender, RoutedEventArgs e)
+        {
+            var idAlbum = (int) ((Button) sender).Tag;
+            var cancionRegistrada = RegistrarCancion.MostrarRegistrarCancion(idAlbum);
+            if (cancionRegistrada != null)
+            {
+                await InicializarAlbumes();
             }
         }
     }

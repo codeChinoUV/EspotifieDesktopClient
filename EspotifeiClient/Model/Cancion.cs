@@ -22,5 +22,7 @@ namespace Model
                 return time.ToString("mm':'ss");
             }
         }
+
+        public Album album { get; set; }
     }
 }

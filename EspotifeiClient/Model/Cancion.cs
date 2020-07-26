@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Model
 {
@@ -13,6 +14,10 @@ namespace Model
         public int cantidad_de_reproducciones { get; set; }
 
         public float calificacion_promedio { get; set; }
+        
+        public List<Genero> generos { get; set; }
+        
+        public List<CreadorContenido> creadores_de_contenido { get; set; }
 
         public string duracionString
         {

@@ -8,11 +8,25 @@ namespace EspotifeiClient
     /// </summary>
     public partial class MensajeEmergente
     {
-        private static bool _acepto;
+        private bool _acepto;
 
         public MensajeEmergente()
         {
             InitializeComponent();
+        }
+
+        public MensajeEmergente(string mensaje)
+        {
+            InitializeComponent();
+            MensajeTextBlock.Text = "Confirmacion";
+            CuerpoMensajeTextBlock.Text = mensaje;
+            MensajeImagen.Source = (BitmapImage) FindResource("ConfirmacionImagen");
+            cancelarButton.Visibility = Visibility.Visible;
+        }
+
+        public bool GetResultado()
+        {
+            return _acepto;
         }
 
         /// <summary>
@@ -20,14 +34,11 @@ namespace EspotifeiClient
         /// </summary>
         /// <param name="cuerpoMensaje">El mensaje a mostrar</param>
         /// <returns>True si se acepto o False si se cancelo</returns>
-        public bool MostrarMensajeConfirmacion(string cuerpoMensaje)
+        public static bool MostrarMensajeConfirmacion(string cuerpoMensaje)
         {
-            MensajeTextBlock.Text = "Confirmacion";
-            CuerpoMensajeTextBlock.Text = cuerpoMensaje;
-            MensajeImagen.Source = (BitmapImage) FindResource("ConfirmacionImagen");
-            cancelarButton.Visibility = Visibility.Visible;
-            ShowDialog();
-            return _acepto;
+            var ventana = new MensajeEmergente(cuerpoMensaje);
+            ventana.ShowDialog();
+            return ventana.GetResultado();
         }
 
         /// <summary>

@@ -45,11 +45,11 @@
                    TextAlignment="Center" FontSize="16" TextWrapping="Wrap" HorizontalAlignment="Center" Width="350"
                    Height="80" />
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button x:Name="aceptarButton" Width="117" Margin="30,0" Content="CANCELAR" Background="#FF025EFF"
-                    BorderBrush="#FF025EFF" Height="25" FontSize="14" Click="OnClickAceptarButton"
+            <Button x:Name="cancelarButton" Width="117" Margin="30,0" Content="CANCELAR" Background="#FF025EFF"
+                    BorderBrush="#FF025EFF" Height="25" FontSize="14" Click="OnClickCancelarButton"
                     Visibility="Collapsed" />
-            <Button x:Name="cancelarButton" Width="117" Margin="30,0" Content="ACEPTAR" Background="#FF16A210"
-                    BorderBrush="#FF16A210" Height="25" FontSize="14" Click="OnClickCancelarButton" />
+            <Button x:Name="aceptarButton" Width="117" Margin="30,0" Content="ACEPTAR" Background="#FF16A210"
+                    BorderBrush="#FF16A210" Height="25" FontSize="14" Click="OnClickAceptarButton" />
         </StackPanel>
 
     </Grid>

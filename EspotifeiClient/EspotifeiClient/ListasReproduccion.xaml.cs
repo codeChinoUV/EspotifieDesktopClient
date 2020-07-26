@@ -5,10 +5,7 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Model;
 using Api.Rest;
-using Api.GrpcClients.Clients;
 using System.Net.Http;
-using ManejadorDeArchivos;
-using EspotifeiClient.Util;
 
 namespace EspotifeiClient
 {
@@ -23,6 +20,11 @@ namespace EspotifeiClient
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Método que obtiene las listas de reproducción que coincidan con los términos de búsqueda
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public async void BuscarListasReproduccion(object sender, KeyEventArgs e)
         {
             var cadenaBusqueda = buscarTextBox.Text;
@@ -49,26 +51,12 @@ namespace EspotifeiClient
         /// <summary>
         /// Método que recupera las imágenes de las listas de reproducción
         /// </summary>
-        private async void ColocarImagenesListasReproduccion()
+        private void ColocarImagenesListasReproduccion()
         {
             ListasReproduccionListView.IsEnabled = false;
-            var clientePortadas = new CoversClient();
             foreach (var playlist in _listasReproduccion)
             {
-                try
-                {
-                    var bitmap = await clientePortadas.GetContentCreatorCover(playlist.id, Calidad.Baja);
-                    if (bitmap != null)
-                    {
-                        playlist.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
-                    } else
-                    {
-                       playlist.PortadaImagen = (BitmapImage) FindResource("ListaDesconocidaImagen");
-                    }
-                } catch (Exception)
-                {
-                    playlist.PortadaImagen = (BitmapImage) FindResource("ListaDesconocidaImagen");
-                }
+                playlist.PortadaImagen = (BitmapImage) FindResource("ListaReproduccionImagen");
             }
 
             ListasReproduccionListView.ItemsSource = null;
@@ -76,13 +64,19 @@ namespace EspotifeiClient
             ListasReproduccionListView.IsEnabled = true;
         }
 
-        /*private void OnSelectedItem(object sender, MouseButtonEventArgs e)
+        /// <summary>
+        /// Método que permite seleccionar una lista de reproducción en específico y navegar a la siguiente pantalla
+        /// para consultar las canciones dentro de esa lista
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnSelectedItem(object sender, MouseButtonEventArgs e)
         {
-            var creadorDeContenido = (CreadorContenido) CreadoresDeContenidoListView.SelectedItem;
-            if (creadorDeContenido != null)
+            var listaReproduccion = (ListaReproduccion) ListasReproduccionListView.SelectedItem;
+            if (listaReproduccion != null)
             {
-                NavigationService?.Navigate(new ArtistaElementos(creadorDeContenido));
+                NavigationService?.Navigate(new ListaReproduccionElementos(listaReproduccion));
             }
-        }*/
+        }
     }
 }

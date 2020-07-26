@@ -81,18 +81,18 @@ namespace Api.Rest
                         var generosToDelete = CalculateGenerosToDelete(contentCreator.generos, actuals);
                         foreach (var genero in generosToDelete)
                         {
-                            path = $"/v1/creador-de-contenido/generos/{genero.id}";
-                            using (var responseAddGenero = await ApiClient.GetApiClient().DeleteAsync(path))
+                             var pathToDeleteGenero = $"/v1/creador-de-contenido/generos/{genero.id}";
+                            using (var responseAddGenero = await ApiClient.GetApiClient().DeleteAsync(pathToDeleteGenero))
                             {
                                 if (!responseAddGenero.IsSuccessStatusCode)
                                     throw new Exception("No se pudieron modificar todos los generos");
                             }
                         }
                         var generosToAdd = CalculateGenerosToAdd(contentCreator.generos, actuals);
+                        var pathToAddGenero = "/v1/creador-de-contenido/generos";
                         foreach (var genero in generosToAdd)
                         {
-                            path = "/v1/creador-de-contenido/generos";
-                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(path, genero))
+                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(pathToAddGenero, genero))
                             {
                                 if (!responseAddGenero.IsSuccessStatusCode)
                                     throw new Exception("No se pudieron modificar todos los generos");

@@ -11,7 +11,7 @@ namespace Api.Rest
     public class CancionClient
     {
         private static readonly int CantidadIntentos = 2;
-        
+
         public static async Task<List<Cancion>> GetSongsFromAlbum(int idContentCreator, int idAlbum)
         {
             var path = $"/v1/creadores-de-contenido/{idContentCreator.ToString()}/albumes/{idAlbum.ToString()}/" +
@@ -24,15 +24,13 @@ namespace Api.Rest
                     {
                         var canciones = await response.Content.ReadAsAsync<List<Cancion>>();
                         return canciones;
-                    } else if(response.StatusCode == HttpStatusCode.Unauthorized)
+                    } else if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ApiServiceLogin.GetServiceLogin().ReLogin();
-                    }
-                    else if(response.StatusCode == HttpStatusCode.NotFound)
+                    } else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         throw new Exception("No existe el album indicado");
-                    }
-                    else
+                    } else
                     {
                         ErrorGeneral error;
                         error = await response.Content.ReadAsAsync<ErrorGeneral>();
@@ -42,7 +40,26 @@ namespace Api.Rest
             }
             throw new Exception("AuntenticacionFallida");
         }
-        
-        
+
+        public static async Task<List<Cancion>> GetSongsFromPlaylist(int idPlaylist)
+        {
+            var path = $"/v1/listas-de-reproduccion/{idPlaylist.ToString()}/canciones";
+            using (HttpResponseMessage response = await ApiClient.GetApiClient().GetAsync(path))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var canciones = await response.Content.ReadAsAsync<List<Cancion>>();
+                    return canciones;
+                } else if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    throw new Exception("No existe la lista de reproducción indicada");
+                } else
+                {
+                    ErrorGeneral error;
+                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                    throw new Exception(error.mensaje);
+                }
+            }
+        }
     }
 }

@@ -4,69 +4,223 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-        xmlns:local="clr-namespace:EspotifeiClient"
         mc:Ignorable="d"
-        Title="Registrar cancion" Height="476.613" Width="800" Background="#FF025EFF" FontFamily="Segoe UI Emoji">
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        ResizeMode="NoResize"
+        Title="Registrar cancion" Height="500" Width="750" FontFamily="Segoe UI Emoji">
     <Grid>
-        <Grid.Background>
-            <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
-                <GradientStop Color="Black" />
-                <GradientStop Color="#FF025EFF" Offset="0.952" />
-            </LinearGradientBrush>
-        </Grid.Background>
-        <Rectangle Fill="White" HorizontalAlignment="Left" Height="361" Margin="34,36,0,0" RadiusY="10" RadiusX="10"
-                   VerticalAlignment="Top" Width="724" />
-        <Label Content="REGISTRO DE CANCIONES" HorizontalAlignment="Center" VerticalAlignment="Top"
-               Margin="302,36,268,0" Foreground="Gray" FontSize="18" Width="222" />
-        <TextBox x:Name="nombreCancionTextbox" Margin="58,108,426,289" materialDesign:HintAssist.Hint="NOMBRE"
+        <Rectangle Height="400" VerticalAlignment="Top">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF2281D1" />
+                    <GradientStop Color="#FF34268A" Offset="1" />
+                    <GradientStop Color="#FF025EFF" Offset="0.546" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Rectangle Fill="White" HorizontalAlignment="Center" Height="370"  RadiusY="10" RadiusX="10"
+                   VerticalAlignment="Top" Width="700" Margin="0,20" />
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Height="370" Width="700" Margin="0,20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="0.33*" />
+                <ColumnDefinition Width="0.33*" />
+                <ColumnDefinition Width="0.33*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.10*" />
+                <RowDefinition Height="0.15*" />
+                <RowDefinition Height="0.55*" />
+                <RowDefinition Height="0.20*" />
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Content="REGISTRO CANCION" HorizontalAlignment="Center" VerticalAlignment="Center"
+                Foreground="Black" FontSize="18" />
+            <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="10,5"  x:Name="nombreCancionTextbox" materialDesign:HintAssist.Hint="NOMBRE"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines"
-                 FontSize="16" MaxLength="25" />
-        <DataGrid x:Name="creadoresContenidoDG" Margin="94,192,468,96" FontSize="10"
-                  ItemsSource="{Binding ActividadesObservableCollection}"
-                  CanUserSortColumns="True"
-                  CanUserAddRows="False"
-                  CanUserReorderColumns="False"
-                  AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Creador}" Header="Creador" />
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.Header>
-                        <Label x:Name="marcarTodoCheckbox" Content="Selecciona los creadores" />
-                    </DataGridTemplateColumn.Header>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox x:Name="marcarUno" Margin="45 2 0 0" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-        <Button x:Name="registrarCancionButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                Margin="440,0,202,38" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" />
-        <Button x:Name="cancelarButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                Margin="236,0,406,38" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF" />
-        <TextBox x:Name="cancionTextbox" Margin="427,108,57,289" materialDesign:HintAssist.Hint="ARCHIVO CANCIÓN"
+                 FontSize="16" MaxLength="70" />
+            <Grid Grid.Row="2" Grid.Column="0" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.25*" />
+                    <RowDefinition Height="0.75*" />
+                </Grid.RowDefinitions>
+                <TextBox x:Name="BuscarTextBox" Grid.Row="0" Margin="10,0" materialDesign:HintAssist.Hint="BUSCAR" KeyUp="OnKeyUpBuscar"
                  Style="{StaticResource MaterialDesignFloatingHintTextBox}" FontFamily="Champagne &amp; Limousines"
-                 FontSize="16" MaxLength="25" />
-        <DataGrid x:Name="generosDG" Margin="466,192,96,96" FontSize="10"
-                  ItemsSource="{Binding ActividadesObservableCollection}"
-                  CanUserSortColumns="True"
-                  CanUserAddRows="False"
-                  CanUserReorderColumns="False"
-                  AutoGenerateColumns="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Genero}" Header="Genero" />
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.Header>
-                        <Label x:Name="marcarTodoCheckboxGenero" Content="Selecciona los géneros" />
-                    </DataGridTemplateColumn.Header>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <CheckBox x:Name="marcarUnoGenero" Margin="45 2 0 0" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
+                 FontSize="12" MaxLength="40" />
+                <Grid Grid.Row="1" Margin="0,5,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="0.20*" />
+                        <RowDefinition Height="0.80*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="0.80*" />
+                            <ColumnDefinition Width="0.20*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="Artistas" FontSize="15" Margin="10,0"
+                                       VerticalAlignment="Center"  />
+
+                        <Border Grid.ColumnSpan="2" BorderThickness="0,0,0,2" BorderBrush="Black" />
+                    </Grid>
+                    <ScrollViewer Grid.Row="1">
+                        <ItemsControl x:Name="CreadoreContenidoTabla" ItemsSource="{Binding CreadorContenido}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="0,2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="0.70*" />
+                                            <ColumnDefinition Width="0.30*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding nombre}" FontSize="12"/>
+                                        <Button Grid.Column="1" Background="Transparent" Width="80" Height="20" BorderBrush="Transparent" Tag="{Binding id}" Padding="0"
+                                        Click="OnClickAgregarArtista" HorizontalAlignment="Left">
+                                            <Image x:Name="portadaCreadorImage" Source="Resources/Añadir.png" Width="20" Height="20" />
+                                        </Button>
+                                        <Grid.Style>
+                                            <Style TargetType="{x:Type Grid}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="AliceBlue" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <StackPanel Orientation="Vertical" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="1" Grid.Row="2" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.20*" />
+                    <RowDefinition Height="0.80*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.80*" />
+                        <ColumnDefinition Width="0.20*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Artistas Seleccionados" FontSize="15" Margin="10,0"
+                                       VerticalAlignment="Center" />
+
+                    <Border Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,0,0,2" />
+                </Grid>
+                <ScrollViewer Grid.Row="1">
+                    <ItemsControl x:Name="CreadorDeContenidoSeleccionadosTabla" ItemsSource="{Binding CreadorContenido}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,2">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.80*" />
+                                        <ColumnDefinition Width="0.20*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding nombre}" FontSize="12" />
+                                    <Button Grid.Column="1" Background="{x:Null}" Width="20" Height="20" BorderBrush="Transparent" Tag="{Binding id}" Padding="0"
+                                        Click="OnClickQuitarArtista">
+                                        <Image x:Name="portadaCreadorImage" Source="Resources/Error.png" />
+                                    </Button>
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="AliceBlue" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+            <Grid Grid.Row="2" Grid.Column="2" Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.20*" />
+                    <RowDefinition Height="0.80*" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="0.60*" />
+                        <ColumnDefinition Width="0.40*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="Genero" FontSize="15" Margin="10,0"
+                                       VerticalAlignment="Center" />
+                    <TextBlock Grid.Column="1" Text="Seleccion" FontSize="15" Margin="10,0"
+                                       VerticalAlignment="Center" />
+                    <Border Grid.ColumnSpan="2" BorderBrush="Black" BorderThickness="0,0,0,2"  />
+                </Grid>
+                <ScrollViewer Grid.Row="1">
+                    <ItemsControl x:Name="GenerosTabla" ItemsSource="{Binding Genero}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.60*" />
+                                        <ColumnDefinition Width="0.40*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="{Binding genero}" FontSize="12" />
+                                    <CheckBox Grid.Column="1" Tag="{Binding id}" IsChecked="{Binding seleccionado}" Checked="AgregarGenero"
+                                                      Unchecked="QuitarGenero" />
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="AliceBlue" />
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+            <Grid  Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="0.70*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="0%" x:Name="PorcentajeTextBloxk" VerticalAlignment="Center" Margin="10,0" />
+                <ProgressBar Grid.Column="1" Height="5" x:Name="SubidaProgressbar" Value="0" Minimum="0" Maximum="100" />
+                <TextBlock Grid.Column="2" Text="100%" VerticalAlignment="Center" Margin="10,0" />
+            </Grid>
+            <Grid Grid.Column="2" Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.40*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0"  HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="subirCancionButton"
+                    Content="SELECCIONAR CANCION" Background="#FF16A210" BorderBrush="#FF16A210" Margin="10,0" Click="OnClickSeleccionarCancion" FontSize="12" />
+                <TextBlock Grid.Row="1" x:Name="ArchivoSeleccionadoText" TextWrapping="Wrap" VerticalAlignment="Center" FontSize="10" Visibility="Visible" />
+            </Grid>
+        </Grid>
+
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,10" >
+            <Button x:Name="cancelarButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                    Margin="30,0" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF" Click="OnClickCancelarButton" />
+            <Button x:Name="registrarAlbumButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                    Content="GUARDAR" Background="#FF16A210" BorderBrush="#FF16A210" Margin="30,0" Click="OnClickGuardatButton" />
+        </StackPanel>
+
     </Grid>
 </Window>

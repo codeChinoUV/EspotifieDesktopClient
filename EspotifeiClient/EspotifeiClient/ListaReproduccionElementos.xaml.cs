@@ -50,6 +50,7 @@ namespace EspotifeiClient
             PortadaImagen.Source = listaReproduccion.PortadaImagen;
             NombreTextBlock.Text = listaReproduccion.nombre;
             DescripcionTextBlock.Text = listaReproduccion.descripcion;
+            MinutosTextBlock.Text = "Duración en minutos: "+listaReproduccion.duracion_total.ToString();
             await ObtenerCancionesDeListasReproduccion(_listaReproduccion.id);
             await ColocarImagenesAlbumes();
         }

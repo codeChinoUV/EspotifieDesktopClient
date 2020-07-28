@@ -113,5 +113,10 @@ namespace EspotifeiClient
             }
 
         }
+
+        private void OnClickPlayListaReproduccionButton(object sender, RoutedEventArgs e)
+        {    
+            Player.Player.GetPlayer().AñadirCancionesDeListaDeReproduccionACola(_listaReproduccion);
+        }
     }
 }

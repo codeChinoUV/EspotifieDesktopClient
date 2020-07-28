@@ -12,9 +12,7 @@ namespace EspotifeiClient.Player
     {
         /*
          * TODO:
-         *  El final de las canciones, la cancion siguiente y la cancion anterior
-         *  El seeker de la barra de reproducion
-         *  El volumen
+         *  Sekkto
          *  La pagina de cola de reproduccion
          */
         
@@ -66,7 +64,17 @@ namespace EspotifeiClient.Player
             _waveOutEvent.DesiredLatency = desiredLatency;
             _seguidorDeEventosDelReproductor = new DispatcherTimer();
             _seguidorDeEventosDelReproductor.Tick += SeguidorDeTiempoReproduccion;
-            _seguidorDeEventosDelReproductor.Interval = new TimeSpan(0, 0, 0, 1);
+            _seguidorDeEventosDelReproductor.Interval = new TimeSpan(0, 0, 0, 0, 500);
+        }
+
+        /// <summary>
+        /// Actualiza el volumen del reproductor
+        /// </summary>
+        /// <param name="volumenActualizado">El nuevo volumen del reproductor</param>
+        public void ActualizarVolumen(int volumenActualizado)
+        {
+            float volumen = Convert.ToSingle(volumenActualizado / Convert.ToSingle(100));
+            _waveOutEvent.Volume = volumen;
         }
 
         private void SeguidorDeTiempoReproduccion(object sender, EventArgs e)

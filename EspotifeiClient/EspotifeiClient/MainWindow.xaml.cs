@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
 using Model;
@@ -12,6 +13,7 @@ namespace EspotifeiClient
     /// </summary>
     public partial class MainWindow
     {
+
         public MainWindow()
         {
             InitializeComponent();
@@ -128,6 +130,47 @@ namespace EspotifeiClient
         private void OnClickCancionAnterior(object sender, RoutedEventArgs e)
         {
             Player.Player.GetPlayer().ReproducirCancionAnterior();
+        }
+
+        /// <summary>
+        /// Cambia el icono del reproductor y cambia el volumen de reproduccion
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnValueChangedVolumen(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            var volumen = (int) ((Slider) sender).Value;
+            if (volumen == 0)
+            {
+                VolumenImage.Kind = PackIconKind.VolumeMute;
+            }
+            else
+            {
+                VolumenImage.Kind = PackIconKind.VolumeHigh;
+            }
+            Player.Player.GetPlayer().ActualizarVolumen(volumen);
+        }
+
+        /// <summary>
+        /// Coloca el volumen de reproduccion a 0 o a 100 dependiendo del valor del slider
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private void OnClickVolumenButton(object sender, RoutedEventArgs e)
+        {
+            var volumen = (int) VolumenSlider.Value;
+            if (volumen == 0)
+            {
+                Player.Player.GetPlayer().ActualizarVolumen(100);
+                VolumenImage.Kind = PackIconKind.VolumeHigh;
+                VolumenSlider.Value = 100;
+            }
+            else
+            {
+                Player.Player.GetPlayer().ActualizarVolumen(0);
+                VolumenImage.Kind = PackIconKind.VolumeMute;
+                VolumenSlider.Value = 0;
+            }
         }
     }
 }

@@ -171,7 +171,7 @@
                     <TextBlock Grid.Column="0" TextAlignment="Left" x:Name="tiempoActualTextBlock" Text="0:00"
                                Foreground="White" />
                     <Slider Grid.Column="1" x:Name="duracionSlider" Orientation="Horizontal" Maximum="100" Minimum="0"
-                            Value="0"
+                            Value="0" IsEnabled="False"
                             VerticalAlignment="Center" HorizontalAlignment="Stretch" Margin="1,0" Width="Auto"
                             Foreground="White" />
                     <TextBlock Grid.Column="2" TextAlignment="Right" x:Name="tiempoTotalTextBlock" Text="00:00"
@@ -196,14 +196,14 @@
                         <ColumnDefinition Width="0.30*" />
                         <ColumnDefinition Width="0.70*" />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" x:Name="volumenBoton" Padding="0" Background="Transparent"
+                    <Button Grid.Column="0" Padding="0" Background="Transparent" Click="OnClickVolumenButton"
                             BorderBrush="Transparent">
-                        <materialDesign:PackIcon Kind="VolumeMedium" Height="Auto" Width="Auto"
-                                                 HorizontalAlignment="Right" />
+                        <materialDesign:PackIcon Kind="VolumeHigh" Height="Auto" Width="Auto"
+                                                 HorizontalAlignment="Right" x:Name="VolumenImage" />
                     </Button>
-                    <Slider Grid.Column="1" x:Name="volumenSlider" Orientation="Horizontal" Maximum="100" Minimum="0"
-                            Value="50" Width="Auto"
-                            VerticalAlignment="Center" Foreground="White" />
+                    <Slider Grid.Column="1" Orientation="Horizontal" Maximum="100" Minimum="0" x:Name="VolumenSlider"
+                            Value="100" Width="Auto" 
+                            VerticalAlignment="Center" Foreground="White" ValueChanged="OnValueChangedVolumen"/>
                 </Grid>
 
                 <materialDesign:PopupBox Grid.Column="2" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False"

@@ -1,5 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
+using MaterialDesignThemes.Wpf;
+using Model;
 
 namespace EspotifeiClient
 {
@@ -13,8 +17,62 @@ namespace EspotifeiClient
             InitializeComponent();
             MenuInicio.SetMainWindow(this);
             PantallaFrame.NavigationService.Navigate(new IniciarSesion());
+            Player.Player.GetPlayer().OnIniciaReproduccionCancion += ColocarElementosCancion;
+            Player.Player.GetPlayer().OnAvanceCancion += RecibirAvanceCancion;
+            Player.Player.GetPlayer().OnCambioEstadoReproduccion += RecibirCambioEstadoReproduccion;
         }
 
+        private void RecibirCambioEstadoReproduccion(bool estaReproducciendo)
+        {
+            if (estaReproducciendo)
+            {
+                playImage.Kind = PackIconKind.Pause;
+            }
+            else
+            {
+                playImage.Kind = PackIconKind.PlayArrow;
+            }
+        }
+
+        private void RecibirAvanceCancion(double tiempoactual)
+        {
+            var time = TimeSpan.FromSeconds(tiempoactual);
+            duracionSlider.Value = tiempoactual;
+            tiempoActualTextBlock.Text = time.ToString("mm':'ss");
+        }
+
+        private void ColocarElementosCancion(Cancion cancion)
+        {
+            if (cancion != null)
+            {
+                tiempoActualTextBlock.Text = "00:00";
+                duracionSlider.Value = 0;
+                duracionSlider.Maximum = cancion.duracion;
+                nombreCancionTextBlock.Text = cancion.nombre;
+                artistaCacionTextBlock.Text = DarFormatoACreadoresDeContenidoDeCancion(cancion.creadores_de_contenido);
+                coverImage.Source = cancion.album.PortadaImagen;
+                tiempoTotalTextBlock.Text = cancion.duracionString;
+            }
+        }
+
+        private string DarFormatoACreadoresDeContenidoDeCancion(List<CreadorContenido> creadoresContenido)
+        {
+            var creadoresDeContenido = "";
+            if (creadoresContenido != null)
+            {
+                foreach (var creadorContenido in creadoresContenido)
+                {
+                    creadoresDeContenido += $"{creadorContenido.nombre}, ";
+                }
+                if (creadoresDeContenido != "")
+                {
+                    creadoresDeContenido = creadoresDeContenido.Substring(0, creadoresDeContenido.Length - 2);
+                }
+            }
+
+            return creadoresDeContenido;
+        }
+        
         private void AbrirMenuButton_Click(object sender, RoutedEventArgs e)
         {
             abrirMenuButton.Visibility = Visibility.Collapsed;
@@ -50,6 +108,26 @@ namespace EspotifeiClient
         private void OnMiPerfilMouseClick(object sender, MouseButtonEventArgs e)
         {
             PantallaFrame.Navigate(new PerfilCreadorDeContenido());
+        }
+
+        private void OnClickPlaylists(object sender, RoutedEventArgs e)
+        {
+            PantallaFrame.Navigate(new ListasReproduccion());
+        }
+
+        private void OnClickPlayButton(object sender, RoutedEventArgs e)
+        {
+            Player.Player.GetPlayer().Play();
+        }
+
+        private void OnClickNextButton(object sender, RoutedEventArgs e)
+        {
+            Player.Player.GetPlayer().ReproducirSiguienteCancion();
+        }
+
+        private void OnClickCancionAnterior(object sender, RoutedEventArgs e)
+        {
+            Player.Player.GetPlayer().ReproducirCancionAnterior();
         }
     }
 }

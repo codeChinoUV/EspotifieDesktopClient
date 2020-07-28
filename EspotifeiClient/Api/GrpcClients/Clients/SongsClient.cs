@@ -11,23 +11,19 @@ namespace Api.GrpcClients.Clients
 {
     public class SongsClient
     {
+
+        private bool _getSong = true;
+        public delegate void ErrorRaised(string message);
+        public event ErrorRaised OnErrorRaised;
         public delegate void PorcentegeUp(float porcentage);
-
         public event PorcentegeUp OnPorcentageUp;
-
         public delegate void UploadTerminated();
-
         public event UploadTerminated OnUploadTerminated;
         public delegate void OnChuckRecived(byte[] bytesSong);
-
         public delegate void OnRecivedSong(byte[] bytesSong, string extension);
-
         private const int ChunkSize = 64 * 1000;
-
         public event OnChuckRecived OnSongChunkRived;
-
         public event OnRecivedSong OnInitialRecivedSong;
-
         private const int CounTrys = 2;
 
         /// <summary>
@@ -37,13 +33,10 @@ namespace Api.GrpcClients.Clients
         /// <param name="idSong">El id de la cancion a subir</param>
         /// <param name="isPersonal">Indica si la cancion personal</param>
         /// <returns>Task</returns>
-        /// <exception cref="RpcException">Una excepcion Rcp</exception>
-        /// <exception cref="Exception">Una excepcion normal</exception>
         public async Task UploadSong(string path, int idSong, bool isPersonal)
         {
             var channel = new Channel(Configuration.URIGrpcServer, ChannelCredentials.Insecure);
             var client = new Canciones.CancionesClient(channel);
-
             var extension = Path.GetExtension(path).Replace(".", "");
             var formatAudio = ConvertExtensionToFormatAudio(extension);
             if (File.Exists(path))
@@ -71,7 +64,6 @@ namespace Api.GrpcClients.Clients
                                 await call.RequestStream.WriteAsync(resquestUploadSong);
                                 OnPorcentageUp?.Invoke(CalculatePercentageUpload(i, totalChunks));
                             }
-
                             resquestUploadSong.Data =
                                 ByteString.CopyFrom(FileManager.SubArray(songBytes, totalChunks, finalBytes));
                             await call.RequestStream.WriteAsync(resquestUploadSong);
@@ -100,47 +92,113 @@ namespace Api.GrpcClients.Clients
             }
         }
 
-        public async void GetSong(int idGetSong, bool isPersonalGetSong)
+        /// <summary>
+        /// Solicita al servidor la cancion con el id cancion en la calidad indicada
+        /// </summary>
+        /// <param name="idGetSong">El id de la cancion a solicitar al servidor</param>
+        /// <param name="calidad">La calidad de la cancion a solicitar</param>
+        /// <param name="isPersonalGetSong">Indica si la cancion es personal o normal</param>
+        public async void GetSong(int idGetSong, Calidad calidad, bool isPersonalGetSong)
         {
-            var channel = new Channel("ec2-54-160-126-163.compute-1.amazonaws.com:5001", ChannelCredentials.Insecure);
+            _getSong = true;
+            var channel = new Channel(Configuration.URIGrpcServer, ChannelCredentials.Insecure);
             var client = new Canciones.CancionesClient(channel);
-
             var request = new SolicitudObtenerCancion();
             var memoryStream = new MemoryStream();
             var position = 0;
-            var formatAudio = FormatoAudio.Mp3;
+            FormatoAudio formatAudio;
             var error = Error.Ninguno;
-            try
+            for (int i = 1; i <= CounTrys; i++)
             {
-                request.IdCancion = idGetSong;
-                request.CalidadCancionARecuperar = Calidad.Baja;
-                request.TokenAutenticacion =
-                    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZF91c3VhcmlvIjoxLCJleHAiOjE1OTUyMjkxOTd9.ynuG-YfgIm1UpLwfLG1at4lxeUREJckFd9cal3tid2g";
-                var call = isPersonalGetSong ? client.ObtenerCancionPersonal(request) : client.ObtenerCancion(request);
-                using (call)
+                try
                 {
-                    while (await call.ResponseStream.MoveNext())
+                    request.IdCancion = idGetSong;
+                    request.CalidadCancionARecuperar = calidad;
+                    request.TokenAutenticacion = ApiServiceLogin.GetServiceLogin().GetAccessToken();
+                    var call = isPersonalGetSong
+                        ? client.ObtenerCancionPersonal(request)
+                        : client.ObtenerCancion(request);
+                    using (call)
                     {
-                        var response = call.ResponseStream.Current;
-                        memoryStream.Write(response.Data.ToByteArray(), 0, response.Data.Length);
-                        position += response.Data.Length;
-                        formatAudio = response.FormatoCancion;
-                        error = response.Error;
-                        if (position == ChunkSize)
-                            OnInitialRecivedSong?.Invoke(response.Data.ToByteArray(),
-                                ConvertFormatAudioToExtension(formatAudio));
-                        else if (position > ChunkSize) OnSongChunkRived?.Invoke(response.Data.ToByteArray());
+                        while (await call.ResponseStream.MoveNext() && _getSong)
+                        {
+                            var response = call.ResponseStream.Current;
+                            memoryStream.Write(response.Data.ToByteArray(), 0, response.Data.Length);
+                            position += response.Data.Length;
+                            formatAudio = response.FormatoCancion;
+                            error = response.Error;
+                            if (position == ChunkSize)
+                                OnInitialRecivedSong?.Invoke(response.Data.ToByteArray(),
+                                    ConvertFormatAudioToExtension(formatAudio));
+                            else if (position > ChunkSize) OnSongChunkRived?.Invoke(response.Data.ToByteArray());
+                        }
                     }
                 }
+                catch (RpcException)
+                {
+                    OnErrorRaised?.Invoke("No se pudo recuperar la canción, porfavor verifique su conexion a internet");
+                    break;
+                }
+                if (error != Error.Ninguno)
+                {
+                    if (error == Error.TokenFaltante || error == Error.TokenInvalido)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }else
+                    {
+                        OnErrorRaised?.Invoke(ManageGetSongError(error));
+                        break;
+                    }
+                }
+                else
+                {
+                    break;
+                }
             }
-            catch (Exception ex)
+
+            if (error == Error.TokenFaltante || error == Error.TokenInvalido)
             {
-                var exe = ex;
+                OnErrorRaised?.Invoke("AuntenticacionFallida");
+            }
+        }
+
+        /// <summary>
+        /// Detiene la solicitud de obtener una cancion
+        /// </summary>
+        public void StopGetSong()
+        {
+            _getSong = false;
+        }
+
+        /// <summary>
+        /// Maneja los errores que puedan ocurrir al recuperar una cancion
+        /// </summary>
+        /// <param name="error">El codigo del error</param>
+        private string ManageGetSongError(Error error)
+        {
+            var errorString = "Ocurrio un error desconocido al obtener la cancion";
+            switch (error)
+            {
+                case Error.Desconocido:
+                    errorString = "Ocurrio un error al recuperar la cancion";
+                    break;
+                case Error.CancionInexistente:
+                    errorString = "La Cancion que desea reproducir no existe";
+                    break;
+                case Error.CancionPersonalInexistente:
+                    errorString = "La cancion que desea reproducir no existe";
+                    break;
+                case Error.CancionNoDisponible:
+                    errorString =
+                        "La cancion que desea reproducir no se encuentra disponible por el momento, intentelo de nuevo en unos minutos";
+                    break;
+                case Error.CancionPersonalNoDisponible:
+                    errorString =
+                        "La cancion que desea reproducir no se encuentra disponible por el momento, intentelo de nuevo en unos minutos";
+                    break;
             }
 
-            var totalSize = memoryStream.ToArray().Length;
-
-            Console.WriteLine(totalSize);
+            return errorString;
         }
 
         /// <summary>

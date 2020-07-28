@@ -200,7 +200,7 @@
                  Content="Editar perfil" Background="#FF16A210" BorderBrush="#FF16A210" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                 Click="OnClickEditarPerfilButton" Margin="4,10" />
             </StackPanel>
-            <Button Grid.Column="3" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+            <Button Grid.Column="3" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="OnClickPlayCreadorDeContenido"
                     Style="{StaticResource MaterialDesignFloatingActionButton}"
                     Height="60" Width="60" Padding="0" Margin="0,-30,30,-30">
                 <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow" Height="50" Width="50" />

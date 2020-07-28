@@ -135,6 +135,9 @@
     <Compile Include="PerfilCreadorDeContenido.xaml.cs">
       <DependentUpon>PerfilCreadorDeContenido.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Player\Cola.cs" />
+    <Compile Include="Player\ElementoCola.cs" />
+    <Compile Include="Player\EstadoReproductor.cs" />
     <Compile Include="Player\Player.cs" />
     <Compile Include="RegistrarAlbum.xaml.cs">
       <DependentUpon>RegistrarAlbum.xaml</DependentUpon>

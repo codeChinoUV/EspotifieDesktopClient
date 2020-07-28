@@ -191,8 +191,12 @@ namespace EspotifeiClient
         /// <param name="e">El evento indicado</param>
         private void OnClickPlayAlbum(object sender, RoutedEventArgs e)
         {
-            var album = (int) ((Button) sender).Tag;
-            //TODO Mandar a la cola todo el album
+            var idAlbum = (int) ((Button) sender).Tag;
+            var album = _albums.Find(a => a.id == idAlbum);
+            if (album != null)
+            {
+                Player.Player.GetPlayer().AñadirCancionesDeAlbumACola(album);
+            }
         }
 
         /// <summary>
@@ -202,8 +206,67 @@ namespace EspotifeiClient
         /// <param name="e"></param>
         private void OnClickPlayCancion(object sender, RoutedEventArgs e)
         {
-            //TODO Mandar a reproducir la cancion y borrar la cola
             var idCancion = (int) ((Button) sender).Tag;
+            var cancion = BuscarCancionEnAlbumes(idCancion);
+            var album = BuscarAlbumDeCancion(idCancion);
+            cancion.album = album;
+            if (album != null)
+            {
+                Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion, false);
+            }
+        }
+        
+        /// <summary>
+        /// Añade las canciones del creador de contenido a la cola de reproduccion
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private void OnClickPlayCreadorContenidoButto(object sender, RoutedEventArgs e)
+        {
+            _creadorContenido.Albums = _albums;
+            Player.Player.GetPlayer().AñadirCancionesDeCreadorDeContenidoACola(_creadorContenido);
+        }
+
+        /// <summary>
+        /// Busca la cancion con el idCancion dentro de los Albums
+        /// </summary>
+        /// <param name="idCancion">El id de la cancion a buscar</param>
+        /// <returns>La cancion del id cancion</returns>
+        private Cancion BuscarCancionEnAlbumes(int idCancion)
+        {
+            Cancion cancionCoincide = null;
+            foreach (var album in _albums)
+            {
+                var cancion = album.canciones.Find(c => c.id == idCancion);
+                if (cancion != null)
+                {
+                    cancionCoincide = cancion;
+                    break;
+                }
+            }
+
+            return cancionCoincide;
+        }
+
+        /// <summary>
+        /// Busca el album en donde se encuentra contenido la cancion con el idCancion
+        /// </summary>
+        /// <param name="idCancion">El id de la cancion a buscar su album</param>
+        /// <returns>El album de la cancion</returns>
+        private Album BuscarAlbumDeCancion(int idCancion)
+        {
+            Album albumDeCancion = null;
+            foreach (var album in _albums)
+            {
+                var cancion = album.canciones.Find(c => c.id == idCancion);
+                if (cancion != null)
+                {
+                    albumDeCancion = album;
+                    break;
+                }
+            }
+
+            return albumDeCancion;
         }
     }
 }

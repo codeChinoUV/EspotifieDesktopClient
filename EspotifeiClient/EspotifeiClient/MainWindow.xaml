@@ -80,11 +80,11 @@
                         <TextBlock Text="Canciones" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                     </StackPanel>
                 </ListViewItem>
-                <ListViewItem x:Name="ItemAlbums" Height="60">
+                <ListViewItem x:Name="ItemAlbums" Height="60" MouseLeftButtonUp="OnClickPlaylists">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ImageAlbum" Height="25" Width="25" Margin="10"
                                                  Foreground="White" />
-                        <TextBlock Text="Albums" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
+                        <TextBlock Text="Playlists" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                     </StackPanel>
                 </ListViewItem>
                 <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6"
@@ -148,17 +148,17 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,010,0,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <Button x:Name="anteriorCancion" Height="30" Width="30" Padding="0" Margin="10,0"
+                    <Button x:Name="anteriorCancion" Height="30" Width="30" Padding="0" Margin="10,0" Click="OnClickCancionAnterior"
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="SkipPrevious" Height="30" Width="30" />
                     </Button>
-                    <Button x:Name="playCancion" Height="30" Width="30" Padding="0" Margin="10,0"
+                    <Button Height="30" Width="30" Padding="0" Margin="10,0" Click="OnClickPlayButton"
                             Background="Transparent" BorderBrush="Transparent">
-                        <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow" Height="30" Width="30" />
+                        <materialDesign:PackIcon Kind="PlayArrow" Height="30" Width="30" x:Name="playImage" />
                     </Button>
-                    <Button x:Name="siguienteCancion" Height="30" Width="30" Padding="0" Margin="10,0"
+                    <Button x:Name="siguienteCancion" Height="30" Width="30" Padding="0" Margin="10,0" Click="OnClickNextButton"
                             Background="Transparent" BorderBrush="Transparent">
-                        <materialDesign:PackIcon Kind="SkipNext" Height="30" Width="30" />
+                        <materialDesign:PackIcon Kind="SkipNext" Height="30" Width="30"/>
                     </Button>
 
                 </StackPanel>

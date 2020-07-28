@@ -254,8 +254,12 @@ namespace EspotifeiClient
         /// <param name="e">El evento indicado</param>
         private void OnClickPlayAlbum(object sender, RoutedEventArgs e)
         {
-            var album = (int) ((Button) sender).Tag;
-            //TODO Mandar a la cola todo el album
+            var idAlbum = (int) ((Button) sender).Tag;
+            var album = _albums.Find(a => a.id == idAlbum);
+            if (album != null)
+            {
+                Player.Player.GetPlayer().AñadirCancionesDeAlbumACola(album);
+            }
         }
 
         /// <summary>
@@ -265,8 +269,10 @@ namespace EspotifeiClient
         /// <param name="e"></param>
         private void OnClickPlayCancion(object sender, RoutedEventArgs e)
         {
-            //TODO Mandar a reproducir la cancion y borrar la cola
             var idCancion = (int) ((Button) sender).Tag;
+            var cancion = BuscarCancionEnAlbumes(idCancion);
+            cancion.album = BuscarAlbumDeCancion(idCancion);
+            Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion, false);
         }
         
         /// <summary>
@@ -345,7 +351,7 @@ namespace EspotifeiClient
                 var album = BuscarAlbumDeCancion(idCancion);
                 try
                 {
-                    var cancionEliminada = CancionClient.DeteleCancion(idCancion, album.id);
+                    await CancionClient.DeteleCancion(idCancion, album.id);
                     await InicializarAlbumes();
                 }
                 catch (HttpRequestException)
@@ -426,6 +432,17 @@ namespace EspotifeiClient
             }
 
             return albumDeCancion;
+        }
+
+        /// <summary>
+        /// Manda a la cola de reproduccion las canciones del creador de contenido
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickPlayCreadorDeContenido(object sender, RoutedEventArgs e)
+        {
+            _creadorContenido.Albums = _albums;
+            Player.Player.GetPlayer().AñadirCancionesDeCreadorDeContenidoACola(_creadorContenido);
         }
     }
 }

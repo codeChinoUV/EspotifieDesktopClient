@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using MaterialDesignThemes.Wpf;
 using Model;
 
@@ -20,6 +21,7 @@ namespace EspotifeiClient
             MenuInicio.SetMainWindow(this);
             PantallaFrame.NavigationService.Navigate(new IniciarSesion());
             Player.Player.GetPlayer().OnIniciaReproduccionCancion += ColocarElementosCancion;
+            Player.Player.GetPlayer().OnIniciaReproduccionCancionPersonal += ColocarElementosCancionPersonal;
             Player.Player.GetPlayer().OnAvanceCancion += RecibirAvanceCancion;
             Player.Player.GetPlayer().OnCambioEstadoReproduccion += RecibirCambioEstadoReproduccion;
         }
@@ -54,6 +56,20 @@ namespace EspotifeiClient
                 artistaCacionTextBlock.Text = DarFormatoACreadoresDeContenidoDeCancion(cancion.creadores_de_contenido);
                 coverImage.Source = cancion.album.PortadaImagen;
                 tiempoTotalTextBlock.Text = cancion.duracionString;
+            }
+        }
+        
+        private void ColocarElementosCancionPersonal(CancionPersonal cancionPersonal)
+        {
+            if (cancionPersonal != null)
+            {
+                tiempoActualTextBlock.Text = "00:00";
+                duracionSlider.Value = 0;
+                duracionSlider.Maximum = cancionPersonal.duracion;
+                nombreCancionTextBlock.Text = cancionPersonal.nombre;
+                artistaCacionTextBlock.Text = cancionPersonal.artistas;
+                coverImage.Source = (BitmapImage) FindResource("CancionPersonal");
+                tiempoTotalTextBlock.Text = cancionPersonal.duracion_string;
             }
         }
 
@@ -171,6 +187,11 @@ namespace EspotifeiClient
                 VolumenImage.Kind = PackIconKind.VolumeMute;
                 VolumenSlider.Value = 0;
             }
+        }
+
+        private void OnClickMiLibreriaButton(object sender, MouseButtonEventArgs e)
+        {
+            PantallaFrame.Navigate(new BibliotecaPersonal());
         }
     }
 }

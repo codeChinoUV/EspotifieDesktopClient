@@ -26,6 +26,7 @@
                 <EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="70" />
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
+        <BitmapImage UriSource="Resources/BibliotecaPersonal.png" x:Key="CancionPersonal" />
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="abrirMenuButton">
@@ -111,7 +112,7 @@
                                        Foreground="White" />
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="60">
+                    <ListViewItem Height="60" MouseLeftButtonUp="OnClickMiLibreriaButton">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="FolderMusic" Height="25" Width="25" Margin="10"
                                                      Foreground="White" />

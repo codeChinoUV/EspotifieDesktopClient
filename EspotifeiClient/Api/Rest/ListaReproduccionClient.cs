@@ -90,5 +90,41 @@ namespace Api.Rest
 
             throw new Exception("AuntenticacionFallida");
         }
+
+        /// <summary>
+        /// Método que solicita al servidor registrar una lista de reproducción
+        /// </summary>
+        /// <param name="listaReproduccion">Instancia de ListaReproduccion</param>
+        /// <returns>La lista de reproducción creada</returns>
+        public static async Task<ListaReproduccion> RegisterListaReproduccion(ListaReproduccion listaReproduccion)
+        {
+            var path = "/v1/listas-de-reproduccion";
+            for (int i = 1; i <= CantidadIntentos; i++)
+            {
+                using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, listaReproduccion))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var listaReproduccionRegistered = await response.Content.ReadAsAsync<ListaReproduccion>();
+                        return listaReproduccionRegistered;
+                    }
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        List<ErrorGeneral> errores;
+                        errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
+                        throw new Exception(errores[0].mensaje);
+                    } else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    } else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+            }
+            throw new Exception("AuntenticacionFallida");
+        }
     }
 }

@@ -212,7 +212,7 @@ namespace EspotifeiClient
             cancion.album = album;
             if (album != null)
             {
-                Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion, false);
+                Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
             }
         }
         

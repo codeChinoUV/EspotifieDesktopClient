@@ -272,7 +272,7 @@ namespace EspotifeiClient
             var idCancion = (int) ((Button) sender).Tag;
             var cancion = BuscarCancionEnAlbumes(idCancion);
             cancion.album = BuscarAlbumDeCancion(idCancion);
-            Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion, false);
+            Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
         }
         
         /// <summary>

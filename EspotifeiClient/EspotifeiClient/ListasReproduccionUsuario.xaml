@@ -61,7 +61,7 @@
                                                        VerticalAlignment="Center" />
                                             <StackPanel Grid.Column="5" Orientation="Horizontal" >
                                                 <Button Background="{x:Null}" Width="30" Height="25" Margin="5,0" BorderBrush="Transparent" Tag="{Binding id}" Padding="0"
-                                                VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                VerticalAlignment="Center" HorizontalAlignment="Center" Click="OnClickEliminarCancionPlaylist">
                                                     <materialDesign:PackIcon Kind="Delete" Height="25" Width="25" Foreground="Red"/>
                                                 </Button>
                                             </StackPanel>

@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Api.GrpcClients.Clients;
+using EspotifeiClient.Util;
+using ManejadorDeArchivos;
 using MaterialDesignThemes.Wpf;
 using Model;
 
@@ -25,6 +29,23 @@ namespace EspotifeiClient
             Player.Player.GetPlayer().OnCambioEstadoReproduccion += RecibirCambioEstadoReproduccion;
         }
 
+        private async Task ColocarImagenAlbum(Album album, Calidad calidad)
+        {
+            var clientePortadas = new CoversClient();
+            try
+            {
+                var bitmap = await clientePortadas.GetAlbumCover(album.id, calidad);
+                if (bitmap != null)
+                    album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
+                else
+                    album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
+            }
+            catch (Exception)
+            {
+                album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
+            }
+        }
+        
         private void RecibirCambioEstadoReproduccion(bool estaReproducciendo)
         {
             if (estaReproducciendo)
@@ -40,7 +61,7 @@ namespace EspotifeiClient
             tiempoActualTextBlock.Text = time.ToString("mm':'ss");
         }
 
-        private void ColocarElementosCancion(Cancion cancion)
+        private async void ColocarElementosCancion(Cancion cancion)
         {
             if (cancion != null)
             {
@@ -49,8 +70,12 @@ namespace EspotifeiClient
                 duracionSlider.Maximum = cancion.duracion;
                 nombreCancionTextBlock.Text = cancion.nombre;
                 artistaCacionTextBlock.Text = DarFormatoACreadoresDeContenidoDeCancion(cancion.creadores_de_contenido);
-                coverImage.Source = cancion.album.PortadaImagen;
                 tiempoTotalTextBlock.Text = cancion.duracionString;
+                if (cancion.album.PortadaImagen == null)
+                {
+                    await ColocarImagenAlbum(cancion.album, Calidad.Baja);
+                }
+                coverImage.Source = cancion.album.PortadaImagen;
             }
         }
 

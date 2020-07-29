@@ -27,6 +27,7 @@
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <BitmapImage UriSource="Resources/BibliotecaPersonal.png" x:Key="CancionPersonal" />
+        <BitmapImage UriSource="Resources/AlbumDesconocido.png" x:Key="AlbumDesconocido" x:Shared="False" />
     </Window.Resources>
     <Window.Triggers>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="abrirMenuButton">

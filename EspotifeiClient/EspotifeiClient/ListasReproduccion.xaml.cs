@@ -6,6 +6,7 @@ using System.Windows.Media.Imaging;
 using Model;
 using Api.Rest;
 using System.Net.Http;
+using System.Windows;
 
 namespace EspotifeiClient
 {
@@ -15,6 +16,7 @@ namespace EspotifeiClient
     public partial class ListasReproduccion : Page
     {
         private List<ListaReproduccion> _listasReproduccion;
+
         public ListasReproduccion()
         {
             InitializeComponent();
@@ -77,6 +79,16 @@ namespace EspotifeiClient
             {
                 NavigationService?.Navigate(new ListaReproduccionElementos(listaReproduccion));
             }
+        }
+
+        /// <summary>
+        /// Método que permite acceder a la pantalla de las listas de reproducción del usuario
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickVerMisPlaylists(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new ListasReproduccionUsuario());
         }
     }
 }

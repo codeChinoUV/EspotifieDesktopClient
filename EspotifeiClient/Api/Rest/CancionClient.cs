@@ -189,6 +189,40 @@ namespace Api.Rest
         }
 
         /// <summary>
+        /// Método que solicita al servidor eliminar una canción de una palylist
+        /// </summary>
+        /// <param name="idListaReproduccion">El id de la lista de reproducción a la que pertenece la canción</param>
+        /// <param name="idCancion">El id de la canción a eliminar</param>
+        /// <returns></returns>
+        public static async Task<Cancion> DeteleCancionPlaylist(int idListaReproduccion, int idCancion)
+        {
+            var path = $"/v1/listas-de-reproduccion/{idListaReproduccion}/canciones/{idCancion}";
+            for (var i = 1; i <= CantidadIntentos; i++)
+                using (var response = await ApiClient.GetApiClient().DeleteAsync(path))
+                {
+                    if (response.StatusCode == HttpStatusCode.Accepted)
+                    {
+                        var cancionDeleted = await response.Content.ReadAsAsync<Cancion>();
+                        return cancionDeleted;
+                    }
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    } else if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        throw new Exception("No existe la cancion que se desea eliminar");
+                    } else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+
+            throw new Exception("AuntenticacionFallida");
+        }
+
+        /// <summary>
         /// Agrega los nuevos generos a una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a la que se le agregaran los generos</param>

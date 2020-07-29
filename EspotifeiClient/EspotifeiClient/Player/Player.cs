@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Threading;
 using Api.GrpcClients.Clients;
@@ -10,12 +11,6 @@ namespace EspotifeiClient.Player
 {
     public class Player
     {
-        /*
-         * TODO:
-         *  Sekkto
-         *  La pagina de cola de reproduccion
-         */
-        
         public delegate void IniciaReproduccionCancion(Cancion cancion);
 
         public event IniciaReproduccionCancion OnIniciaReproduccionCancion;
@@ -23,10 +18,6 @@ namespace EspotifeiClient.Player
         public delegate void IniciaReproduccionCancionPersonal(CancionPersonal cancionPersonal);
 
         public event IniciaReproduccionCancionPersonal OnIniciaReproduccionCancionPersonal;
-        
-        public delegate void IniciaReproduccionCancionSinConexion(CancionSinConexion cancionSinConexion);
-
-        public event IniciaReproduccionCancionSinConexion OnIniciaReproduccionCancionSinConexion;
 
         public delegate void AvanzaCancion(double tiempoActual);
 
@@ -127,7 +118,14 @@ namespace EspotifeiClient.Player
                         var proximaCancion = _colaDeReproduccion.ObtenerCancion(false);
                         if (proximaCancion != null)
                         {
-                            EmpezarAReproducirCancion(proximaCancion, false);
+                            EmpezarAReproducirCancion(proximaCancion);
+                        }
+                        break;
+                    case Cola.TipoCancionAReproducir.CancionPersonal:
+                        var proximaCancionPersonal = _colaDeReproduccion.ObtenerCancionPersonal(false);
+                        if (proximaCancionPersonal != null)
+                        {
+                            EmpezarAReproducirCancionPersonal(proximaCancionPersonal);
                         }
                         break;
                 }
@@ -148,7 +146,14 @@ namespace EspotifeiClient.Player
                         var cancionAnterior = _colaDeReproduccion.ObtenerCancion(true);
                         if (cancionAnterior != null)
                         {
-                            EmpezarAReproducirCancion(cancionAnterior, false);
+                            EmpezarAReproducirCancion(cancionAnterior);
+                        }
+                        break;
+                    case Cola.TipoCancionAReproducir.CancionPersonal:
+                        var cancionPersonalAnterior = _colaDeReproduccion.ObtenerCancionPersonal(true);
+                        if (cancionPersonalAnterior != null)
+                        {
+                            EmpezarAReproducirCancionPersonal(cancionPersonalAnterior);
                         }
                         break;
                 }
@@ -211,6 +216,24 @@ namespace EspotifeiClient.Player
                 ReproducirSiguienteCancion();
             }
         }
+
+        public void AñadirBibliotecaPersonalACola(List<CancionPersonal> cancionesPersonales)
+        {
+           
+            if (cancionesPersonales != null)
+            {
+                _colaDeReproduccion.LimpiarCola();
+                foreach (var cancionPersonal in cancionesPersonales)
+                {
+                    _colaDeReproduccion.AgregarCancionPersonalACola(cancionPersonal);
+                }
+                var tipoCancion = _colaDeReproduccion.ObtenerTipoDeCancionSiguiente();
+                if (tipoCancion != Cola.TipoCancionAReproducir.Ninguno)
+                {
+                    ReproducirSiguienteCancion();
+                }
+            }
+        }
         
         /// <summary>
         /// Añade una cancion a la cola de reproduccion
@@ -243,14 +266,26 @@ namespace EspotifeiClient.Player
         /// Empieza la reproduccion de una cancion
         /// </summary>
         /// <param name="cancion">La cancion a reproducir</param>
-        /// <param name="isPersonal">Indica si la cancion es una cancion personal</param>
-        public void EmpezarAReproducirCancion(Cancion cancion, bool isPersonal)
+        public void EmpezarAReproducirCancion(Cancion cancion)
         {
             OnIniciaReproduccionCancion?.Invoke(cancion);
             OnCambioEstadoReproduccion?.Invoke(true);
             _estadoReproductor = EstadoReproductor.Reproduciendo;
             _duracionTotalDeCancionEnReproduccion = cancion.duracion;
-            ReproducirCancion(cancion.id, isPersonal);
+            ReproducirCancion(cancion.id, false);
+        }
+        
+        /// <summary>
+        /// Empieza la reproduccion de una cancion personal sin afectar la cola de reproduccion
+        /// </summary>
+        /// <param name="cancionPersonal">La cancion personal a reproducir</param>
+        public void EmpezarAReproducirCancionPersonal(CancionPersonal cancionPersonal)
+        {
+            OnIniciaReproduccionCancionPersonal?.Invoke(cancionPersonal);
+            OnCambioEstadoReproduccion?.Invoke(true);
+            _estadoReproductor = EstadoReproductor.Reproduciendo;
+            _duracionTotalDeCancionEnReproduccion = cancionPersonal.duracion;
+            ReproducirCancion(cancionPersonal.id, true);
         }
 
         /// <summary>

@@ -278,7 +278,10 @@ namespace EspotifeiClient.Player
             return cancionSinConexion;
         }
 
-        private void LimpiarCola()
+        /// <summary>
+        /// Borra todos los elementos de la cola de reproducción
+        /// </summary>
+        public void LimpiarCola()
         {
             _colaReproduccion = new List<ElementoCola>();
             _posicionCola = 0;

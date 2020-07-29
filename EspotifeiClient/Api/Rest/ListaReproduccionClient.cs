@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Api.Rest.ApiLogin;
 using Model;
 
 namespace Api.Rest
 {
     public class ListaReproduccionClient
     {
+        private static readonly int CantidadIntentos = 2;
+
         /// <summary>
         /// Tarea que se encarga de recuperar las listas de producción por búsqueda
         /// </summary>
@@ -30,6 +34,61 @@ namespace Api.Rest
                     throw new Exception(error.mensaje);
                 }
             }
+        }
+
+        /// <summary>
+        /// Método que recupera todas las listas de reproducción creadas por un usuario
+        /// </summary>
+        /// <returns>Una Task</returns>
+        public static async Task<List<ListaReproduccion>> GetListaReproduccion()
+        {
+            var path = $"/v1/listas-de-reproduccion";
+            using (HttpResponseMessage response = await ApiClient.GetApiClient().GetAsync(path))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var listasReproduccion = await response.Content.ReadAsAsync<List<ListaReproduccion>>();
+                    return listasReproduccion;
+                } else
+                {
+                    ErrorGeneral error;
+                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                    throw new Exception(error.mensaje);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Método que solicita al servidor eliminar una lista de reproducción
+        /// </summary>
+        /// <param name="idListaReproduccion">El identificador de la lista de reproducción a eliminar</param>
+        /// <returns></returns>
+        public static async Task<ListaReproduccion> DeteleListaReproduccion(int idListaReproduccion)
+        {
+            var path = $"/v1/listas-de-reproduccion/{idListaReproduccion}";
+            for (var i = 1; i <= CantidadIntentos; i++)
+                using (var response = await ApiClient.GetApiClient().DeleteAsync(path))
+                {
+                    if (response.StatusCode == HttpStatusCode.Accepted)
+                    {
+                        var listaReproduccionDeleted = await response.Content.ReadAsAsync<ListaReproduccion>();
+                        return listaReproduccionDeleted;
+                    }
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    } else if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        throw new Exception("No existe la lista de reproducción que se desea eliminar");
+                    } else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+
+            throw new Exception("AuntenticacionFallida");
         }
     }
 }

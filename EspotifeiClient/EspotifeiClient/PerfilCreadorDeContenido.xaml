@@ -80,6 +80,14 @@
                                                     <materialDesign:PackIcon Kind="Edit" Height="25" Width="25"
                                                                              Foreground="#FF16A210" />
                                                 </Button>
+                                                <materialDesign:PopupBox Grid.Column="4" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False"
+                                                                         Foreground="Gray">
+                                                    <StackPanel Width="auto">
+                                                        <Button Content="Agregar a la cola" Click="OnClickAgregarACola" Tag="{Binding id}"/>
+                                                        <Button Content="Empezar radio de cancion" Click="OnClickEmpezarRadio" Tag="{Binding id}" />
+                                                        <Button Content="Agregar a playlist" Click="OnClickAgregarAPlaylist" Tag="{Binding id}" />
+                                                    </StackPanel>
+                                                </materialDesign:PopupBox>
                                             </StackPanel>
                                             <Grid.Style>
                                                 <Style TargetType="{x:Type Grid}">
@@ -219,7 +227,7 @@
                     Click="OnClickPlayCreadorDeContenido"
                     Style="{StaticResource MaterialDesignFloatingActionButton}"
                     Height="60" Width="60" Padding="0" Margin="0,-30,30,-30">
-                <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow" Height="50" Width="50" />
+                <materialDesign:PackIcon Kind="PlayArrow" Height="50" Width="50" />
             </Button>
         </Grid>
         <Grid Grid.Row="1" Visibility="Hidden" x:Name="SinConexionGrid">

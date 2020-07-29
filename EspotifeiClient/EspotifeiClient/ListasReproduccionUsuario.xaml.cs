@@ -142,6 +142,44 @@ namespace EspotifeiClient
         }
 
         /// <summary>
+        /// Método que elimina una canción seleccionada de la lista de reproducción en la que se encuentra el usuario
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void OnClickEliminarCancionPlaylist(object sender, RoutedEventArgs e)
+        {
+            var confirmacion =
+                MensajeEmergente.MostrarMensajeConfirmacion("¿Seguro que desea eliminar la canción seleccionada?");
+            if (confirmacion)
+            {
+                ListaReproduccionListView.Visibility = Visibility.Visible;
+                int idCancion = (int) ((Button) sender).Tag;
+                var playlist = BuscarListaReproduccionDeCancion(idCancion);
+                try
+                {
+                    await CancionClient.DeteleCancionPlaylist(playlist.id, idCancion);
+                    ObtenerListasReproduccion();
+                } catch (HttpRequestException)
+                {
+                    ListaReproduccionListView.Visibility = Visibility.Hidden;
+                } catch (Exception ex)
+                {
+                    if (ex.Message == "AuntenticacionFallida")
+                    {
+                        new MensajeEmergente().MostrarMensajeError("No se puede autenticar con las credenciales " +
+                                                                   "proporcionadas, se cerrará la sesión");
+                        MenuInicio.OcultarMenu();
+                        MenuInicio.OcultarReproductor();
+                        NavigationService?.Navigate(new IniciarSesion());
+                    } else
+                    {
+                        new MensajeEmergente().MostrarMensajeError(ex.Message);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// Método que verifica que la lista de reproducción exista para poder eliminarla
         /// </summary>
         /// <param name="idListaReproduccion"></param>
@@ -159,5 +197,22 @@ namespace EspotifeiClient
             }
             return coincide;
         }
+
+        private ListaReproduccion BuscarListaReproduccionDeCancion(int idCancion)
+        {
+            ListaReproduccion playlistDeCancion = null;
+            foreach (var playlist in _listasReproduccion)
+            {
+                var cancion = playlist.canciones.Find(c => c.id == idCancion);
+                if (cancion != null)
+                {
+                    playlistDeCancion = playlist;
+                    break;
+                }
+            }
+
+            return playlistDeCancion;
+        }
+
     }
 }

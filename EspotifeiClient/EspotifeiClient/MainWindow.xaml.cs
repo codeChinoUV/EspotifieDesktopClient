@@ -97,7 +97,7 @@ namespace EspotifeiClient
 
         private void ListaReproduccionListview_Selected(object sender, RoutedEventArgs e)
         {
-            new RegistrarPlaylist().Show();
+            PantallaFrame.Navigate(new RegistrarPlaylist());
         }
 
         private void OnSelectedItemArtist(object sender, RoutedEventArgs e)

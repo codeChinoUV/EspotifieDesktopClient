@@ -182,8 +182,8 @@ namespace EspotifeiClient
         /// <summary>
         /// Método que verifica que la lista de reproducción exista para poder eliminarla
         /// </summary>
-        /// <param name="idListaReproduccion"></param>
-        /// <returns></returns>
+        /// <param name="idListaReproduccion">id de la lista de reproducción a buscar</param>
+        /// <returns>true si la encuentra</returns>
         private bool BuscarListaReproduccion(int idListaReproduccion)
         {
             bool coincide = false;
@@ -198,6 +198,11 @@ namespace EspotifeiClient
             return coincide;
         }
 
+        /// <summary>
+        /// Método que verifica que exista la canción seleccionada en la lista de reproducción
+        /// </summary>
+        /// <param name="idCancion">id de la canción a buscar</param>
+        /// <returns>La instancia de ListaReproduccion con ese id</returns>
         private ListaReproduccion BuscarListaReproduccionDeCancion(int idCancion)
         {
             ListaReproduccion playlistDeCancion = null;
@@ -212,6 +217,15 @@ namespace EspotifeiClient
             }
 
             return playlistDeCancion;
+        }
+
+        /// <summary>
+        /// Método de evento del botón que redirige a la pantalla RegistrarPlaylist.xaml
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickAgregarPlaylist(object sender, RoutedEventArgs e) {
+            new RegistrarPlaylist().Show();
         }
 
     }

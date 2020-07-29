@@ -156,7 +156,7 @@
             <StackPanel Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10" >
                 <Button HorizontalAlignment="Stretch" Margin="-21,0,4,0"
                  Content="Agregar Playlist" Background="#FF16A210" BorderBrush="#FF16A210" VerticalContentAlignment="Center"
-                />
+                 Click="OnClickAgregarPlaylist"/>
             </StackPanel>
             <Button Grid.Column="3" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right"
                     Style="{StaticResource MaterialDesignFloatingActionButton}"

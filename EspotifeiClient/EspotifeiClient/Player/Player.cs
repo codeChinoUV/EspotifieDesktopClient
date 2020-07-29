@@ -148,10 +148,11 @@ namespace EspotifeiClient.Player
             else
             {
                 _blockAlignedStream.Seek(0, SeekOrigin.Begin);
-                if (_estadoReproductor != EstadoReproductor.Reproduciendo)
+                OnAvanceCancion?.Invoke(0);
+                if (_estadoReproductor == EstadoReproductor.Detenido)
                 {
                     _waveOutEvent.Play();
-                    if (_estadoReproductor == EstadoReproductor.Detenido)
+                    if (_estadoReproductor == EstadoReproductor.Detenido || _estadoReproductor == EstadoReproductor.Pausado)
                     {
                         _seguidorDeEventosDelReproductor.Start();
                         _estadoReproductor = EstadoReproductor.Reproduciendo;
@@ -208,6 +209,24 @@ namespace EspotifeiClient.Player
             }
         }
 
+        /// <summary>
+        /// Agrega las canciones de una radio a la cola de reproducción
+        /// </summary>
+        /// <param name="radio">La radio que contiene las canciones de la lista de reproducción</param>
+        public void AñadirRadioAListaDeReproduccion(List<Cancion> radio)
+        {
+            if (radio != null)
+            {
+                _colaDeReproduccion.LimpiarCola();
+                foreach (var cancion in radio)
+                {
+                    _colaDeReproduccion.AgregarCancionACola(cancion);
+                }
+                var tipoCancion = _colaDeReproduccion.ObtenerTipoDeCancionSiguiente();
+                if (tipoCancion != Cola.TipoCancionAReproducir.Ninguno) ReproducirSiguienteCancion();
+            } 
+        }
+        
         /// <summary>
         ///     Añade una cancion a la cola de reproduccion
         /// </summary>

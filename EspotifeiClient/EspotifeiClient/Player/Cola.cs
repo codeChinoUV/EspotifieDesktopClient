@@ -13,7 +13,7 @@ namespace EspotifeiClient.Player
             Ninguno
         }
 
-        private List<ElementoCola> _colaReproduccion;
+        private List<ElementoCola> _colaReproduccion = new List<ElementoCola>();
         private int _posicionCola;
         private int _posicionReproduccion;
 

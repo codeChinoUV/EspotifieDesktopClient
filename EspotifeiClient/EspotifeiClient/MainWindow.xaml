@@ -97,7 +97,7 @@
                             <TextBlock Text="Artistas" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="60">
+                    <ListViewItem Height="60" MouseLeftButtonUp="OnClickHistorial">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="History" Height="25" Width="25" Margin="10"
                                                      Foreground="White" />
@@ -119,7 +119,8 @@
                             <TextBlock Text="My libreria" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem x:Name="MiPerfilItem" Height="60" MouseLeftButtonUp="OnMiPerfilMouseClick" Visibility="Hidden">
+                    <ListViewItem x:Name="MiPerfilItem" Height="60" MouseLeftButtonUp="OnMiPerfilMouseClick"
+                                  Visibility="Hidden">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Person" Height="25" Width="25" Margin="10"
                                                      Foreground="White" />
@@ -149,7 +150,8 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,010,0,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <Button x:Name="anteriorCancion" Height="30" Width="30" Padding="0" Margin="10,0" Click="OnClickCancionAnterior"
+                    <Button x:Name="anteriorCancion" Height="30" Width="30" Padding="0" Margin="10,0"
+                            Click="OnClickCancionAnterior"
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="SkipPrevious" Height="30" Width="30" />
                     </Button>
@@ -157,9 +159,10 @@
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="PlayArrow" Height="30" Width="30" x:Name="playImage" />
                     </Button>
-                    <Button x:Name="siguienteCancion" Height="30" Width="30" Padding="0" Margin="10,0" Click="OnClickNextButton"
+                    <Button x:Name="siguienteCancion" Height="30" Width="30" Padding="0" Margin="10,0"
+                            Click="OnClickNextButton"
                             Background="Transparent" BorderBrush="Transparent">
-                        <materialDesign:PackIcon Kind="SkipNext" Height="30" Width="30"/>
+                        <materialDesign:PackIcon Kind="SkipNext" Height="30" Width="30" />
                     </Button>
 
                 </StackPanel>
@@ -203,8 +206,8 @@
                                                  HorizontalAlignment="Right" x:Name="VolumenImage" />
                     </Button>
                     <Slider Grid.Column="1" Orientation="Horizontal" Maximum="100" Minimum="0" x:Name="VolumenSlider"
-                            Value="100" Width="Auto" 
-                            VerticalAlignment="Center" Foreground="White" ValueChanged="OnValueChangedVolumen"/>
+                            Value="100" Width="Auto"
+                            VerticalAlignment="Center" Foreground="White" ValueChanged="OnValueChangedVolumen" />
                 </Grid>
 
                 <materialDesign:PopupBox Grid.Column="2" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False"

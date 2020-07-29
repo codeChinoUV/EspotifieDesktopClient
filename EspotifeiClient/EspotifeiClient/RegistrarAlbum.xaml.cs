@@ -16,11 +16,11 @@ namespace EspotifeiClient
     /// </summary>
     public partial class RegistrarAlbum
     {
+        private readonly Album _albumEditar;
 
         private Album _albumRegistrado;
-        private Album _albumEditar;
         private string _rutaImagen = "";
-        
+
         public RegistrarAlbum()
         {
             InitializeComponent();
@@ -32,9 +32,9 @@ namespace EspotifeiClient
             _albumEditar = album;
             LlenarCamposEditarAlbum();
         }
-        
+
         /// <summary>
-        /// Coloca los campos con la informacion del album a editar
+        ///     Coloca los campos con la informacion del album a editar
         /// </summary>
         private void LlenarCamposEditarAlbum()
         {
@@ -43,18 +43,18 @@ namespace EspotifeiClient
             anioLanzamientoTextbox.Text = _albumEditar.anio_lanzamiento;
             imagenAlbum.Source = _albumEditar.PortadaImagen;
         }
-        
+
         /// <summary>
-        /// Regresa el album registrado
+        ///     Regresa el album registrado
         /// </summary>
         /// <returns>Un Album</returns>
         public Album GetAlbumRegistrado()
         {
             return _albumRegistrado;
         }
-        
+
         /// <summary>
-        /// Muestra la pantalla para registrar un Album y regresa el album registrado
+        ///     Muestra la pantalla para registrar un Album y regresa el album registrado
         /// </summary>
         /// <returns>El album registrado</returns>
         public static Album MostrarRegistrarAlbum()
@@ -65,7 +65,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Muestra la ventana para editar un Album y regresa el album editado
+        ///     Muestra la ventana para editar un Album y regresa el album editado
         /// </summary>
         /// <param name="albumAEditar">El album a editar</param>
         /// <returns>El album editado</returns>
@@ -75,9 +75,9 @@ namespace EspotifeiClient
             ventana.ShowDialog();
             return ventana.GetAlbumRegistrado();
         }
-        
+
         /// <summary>
-        /// Muestra una ventana para la seleccion de la portada
+        ///     Muestra una ventana para la seleccion de la portada
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -106,7 +106,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Valida si la longitud del campo nombre tiene la longitud adecuada
+        ///     Valida si la longitud del campo nombre tiene la longitud adecuada
         /// </summary>
         /// <returns>True si es valida o False si no</returns>
         private bool ValidarTamañoNombre()
@@ -115,16 +115,14 @@ namespace EspotifeiClient
             var tamañoMaximo = 70;
             var esValido = ValidacionDeCadenas.ValidarTamañoDeCadena(nombreTextbox.Text, tamañoMinimo, tamañoMaximo);
             if (!esValido)
-            {
-                new MensajeEmergente().MostrarMensajeAdvertencia($"El campo de Nombre debe de tener mas de " +
+                new MensajeEmergente().MostrarMensajeAdvertencia("El campo de Nombre debe de tener mas de " +
                                                                  $"{tamañoMinimo} y menos de {tamañoMaximo} caracteres");
-            }
 
             return esValido;
         }
 
         /// <summary>
-        /// Valida que el campo de año de lanzamiento contengo un año valido
+        ///     Valida que el campo de año de lanzamiento contengo un año valido
         /// </summary>
         /// <returns>True si el año es valido o False si no</returns>
         private bool ValidarAño()
@@ -132,11 +130,8 @@ namespace EspotifeiClient
             var esValido = true;
             try
             {
-                var año = Int32.Parse(anioLanzamientoTextbox.Text);
-                if (año <= 1000 || año >= 3000)
-                {
-                    esValido = false;
-                }
+                var año = int.Parse(anioLanzamientoTextbox.Text);
+                if (año <= 1000 || año >= 3000) esValido = false;
             }
             catch (FormatException)
             {
@@ -144,16 +139,14 @@ namespace EspotifeiClient
             }
 
             if (!esValido)
-            {
                 new MensajeEmergente().MostrarMensajeAdvertencia("El año de lanzamiento debe ser un numero que se " +
                                                                  "encuentre entre el año 1001 y 2999");
-            }
 
             return esValido;
         }
 
         /// <summary>
-        /// Crea un album a partir de la informacion de los campos
+        ///     Crea un album a partir de la informacion de los campos
         /// </summary>
         /// <returns>Un Album</returns>
         private Album CrearAlbum()
@@ -165,9 +158,9 @@ namespace EspotifeiClient
             };
             return album;
         }
-        
+
         /// <summary>
-        /// Cierra la ventana
+        ///     Cierra la ventana
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -177,24 +170,20 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Edita o registra el album dependiendo de la pantalla invocada
+        ///     Edita o registra el album dependiendo de la pantalla invocada
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnClickRegistrarAlbumButton(object sender, RoutedEventArgs e)
         {
             if (_albumEditar != null)
-            {
                 EditarAlbum();
-            }
             else
-            {
                 RegistrarNuevoAlbum();
-            }
         }
 
         /// <summary>
-        /// Registra la informacion de un Album y su portada
+        ///     Registra la informacion de un Album y su portada
         /// </summary>
         private async void RegistrarNuevoAlbum()
         {
@@ -211,7 +200,7 @@ namespace EspotifeiClient
                     if (_rutaImagen != "")
                     {
                         var clientePortadas = new CoversClient();
-                        clientePortadas.UploadAlbumCover(_rutaImagen, _albumRegistrado.id );
+                        clientePortadas.UploadAlbumCover(_rutaImagen, _albumRegistrado.id);
                     }
                 }
                 catch (HttpRequestException)
@@ -232,19 +221,18 @@ namespace EspotifeiClient
                                                                    "con las que se inicio sesion ");
                         Close();
                     }
+
                     new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
                 }
-                if (albumRegistrado)
-                {
-                    Close();
-                }
+
+                if (albumRegistrado) Close();
                 cancelarButton.IsEnabled = true;
                 registrarAlbumButton.IsEnabled = true;
             }
         }
 
         /// <summary>
-        /// Edita un album y guarda su portada
+        ///     Edita un album y guarda su portada
         /// </summary>
         private async void EditarAlbum()
         {
@@ -261,7 +249,7 @@ namespace EspotifeiClient
                     if (_rutaImagen != "")
                     {
                         var clientePortadas = new CoversClient();
-                        clientePortadas.UploadAlbumCover(_rutaImagen, _albumRegistrado.id );
+                        clientePortadas.UploadAlbumCover(_rutaImagen, _albumRegistrado.id);
                     }
                 }
                 catch (HttpRequestException)
@@ -282,12 +270,11 @@ namespace EspotifeiClient
                                                                    "con las que se inicio sesion ");
                         Close();
                     }
+
                     new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
                 }
-                if (albumEditado)
-                {
-                    Close();
-                }
+
+                if (albumEditado) Close();
                 cancelarButton.IsEnabled = true;
                 registrarAlbumButton.IsEnabled = true;
             }

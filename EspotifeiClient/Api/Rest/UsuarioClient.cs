@@ -10,8 +10,8 @@ namespace Api.Rest
 {
     public class UsuarioClient
     {
-        private static int TotalTryes = 2;
-        
+        private static readonly int TotalTryes = 2;
+
         /// <summary>
         ///     Solicita al APIREST registrar un nuevo usuario
         /// </summary>
@@ -47,14 +47,13 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Recupera el usuario logeado y lo asigna a la variable de Usuario
+        ///     Recupera el usuario logeado y lo asigna a la variable de Usuario
         /// </summary>
         public static async Task GetUser()
         {
             var path = "/v1/usuario";
             var isSuccessfully = false;
-            for (int i = 1; i <= TotalTryes; i++)
-            {
+            for (var i = 1; i <= TotalTryes; i++)
                 using (var response = await ApiClient.GetApiClient().GetAsync(path))
                 {
                     if (response.IsSuccessStatusCode)
@@ -76,14 +75,10 @@ namespace Api.Rest
                         throw new Exception(error.mensaje);
                     }
                 }
-            }
-            if (!isSuccessfully)
-            {
-                throw new Exception("AuntenticacionFallida");    
-            }
-            
+
+            if (!isSuccessfully) throw new Exception("AuntenticacionFallida");
         }
-        
+
         /// <summary>
         ///     Procesa los codigos de error para convertirlos a cadenas de informacion para el usuario
         /// </summary>
@@ -100,7 +95,5 @@ namespace Api.Rest
 
             return response;
         }
-        
-        
     }
 }

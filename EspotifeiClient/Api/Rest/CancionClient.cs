@@ -13,7 +13,7 @@ namespace Api.Rest
         private static readonly int CantidadIntentos = 2;
 
         /// <summary>
-        /// Recupera las canciones que pertencen a un album de un creador de contenido
+        ///     Recupera las canciones que pertencen a un album de un creador de contenido
         /// </summary>
         /// <param name="idContentCreator">El id del creador creador de contenido al que pertenece el album </param>
         /// <param name="idAlbum">El id del Album a recuperar sus canciones</param>
@@ -39,7 +39,8 @@ namespace Api.Rest
                     else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         throw new Exception("No existe el album indicado");
-                    } else
+                    }
+                    else
                     {
                         ErrorGeneral error;
                         error = await response.Content.ReadAsAsync<ErrorGeneral>();
@@ -51,7 +52,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Registra una cancion en el servidor
+        ///     Registra una cancion en el servidor
         /// </summary>
         /// <param name="idAlbum">El id del Album al que pertenece la cancion</param>
         /// <param name="cancion">La cancion a registrar</param>
@@ -66,9 +67,11 @@ namespace Api.Rest
                     if (response.StatusCode == HttpStatusCode.Created)
                     {
                         var cancionRegistered = await response.Content.ReadAsAsync<Cancion>();
-                        var pathAddGenero = $"/v1/creador-de-contenido/albumes/{idAlbum}/canciones/{cancionRegistered.id}/generos";
+                        var pathAddGenero =
+                            $"/v1/creador-de-contenido/albumes/{idAlbum}/canciones/{cancionRegistered.id}/generos";
                         foreach (var genero in cancion.generos)
-                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(pathAddGenero, genero))
+                            using (var responseAddGenero =
+                                await ApiClient.GetApiClient().PostAsJsonAsync(pathAddGenero, genero))
                             {
                                 if (responseAddGenero.StatusCode != HttpStatusCode.Created)
                                     throw new Exception("No se pudieron guardar todos los generos, " +
@@ -78,14 +81,17 @@ namespace Api.Rest
                         var pathAddContentCreator = $"/v1/creador-de-contenido/albumes/{idAlbum}/canciones/" +
                                                     $"{cancionRegistered.id}/creadores-de-contenido";
                         foreach (var contentCreator in cancion.creadores_de_contenido)
-                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(pathAddContentCreator, contentCreator))
+                            using (var responseAddGenero = await ApiClient.GetApiClient()
+                                .PostAsJsonAsync(pathAddContentCreator, contentCreator))
                             {
                                 if (responseAddGenero.StatusCode != HttpStatusCode.Created)
                                     throw new Exception("No se pudieron guardar todos los artistas, " +
                                                         "puede modificarlos mas adelante");
                             }
+
                         return cancionRegistered;
                     }
+
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ApiServiceLogin.GetServiceLogin().ReLogin();
@@ -106,7 +112,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Edita una cancion en el servidor
+        ///     Edita una cancion en el servidor
         /// </summary>
         /// <param name="cancion">La cancion a editar</param>
         /// <param name="idAlbum">El id del Album al que pertenece la cancion</param>
@@ -132,6 +138,7 @@ namespace Api.Rest
                             actualsCreadores);
                         return cancionEdited;
                     }
+
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ApiServiceLogin.GetServiceLogin().ReLogin();
@@ -152,7 +159,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Solicita al servidor eliminar una cancion
+        ///     Solicita al servidor eliminar una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a eliminar</param>
         /// <param name="idAlbum">El id del album al que pertenece la canciónn</param>
@@ -169,6 +176,7 @@ namespace Api.Rest
                         var cancionDeleted = await response.Content.ReadAsAsync<Cancion>();
                         return cancionDeleted;
                     }
+
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ApiServiceLogin.GetServiceLogin().ReLogin();
@@ -189,7 +197,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Agrega los nuevos generos a una cancion
+        ///     Agrega los nuevos generos a una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a la que se le agregaran los generos</param>
         /// <param name="idAlbum">El album al que pertenece la cancion</param>
@@ -203,20 +211,16 @@ namespace Api.Rest
             var pathAddGenero = $"/v1/creador-de-contenido/albumes/{idAlbum}/canciones/{idCancion}/generos";
             var generosToAdd = CalculateGenerosToAdd(cancionGeneros, actualsGeneros);
             foreach (var genero in generosToAdd)
-            {
-                using (HttpResponseMessage response =
+                using (var response =
                     await ApiClient.GetApiClient().PostAsJsonAsync(pathAddGenero, genero))
                 {
                     if (response.StatusCode != HttpStatusCode.Created)
-                    {
                         throw new Exception("No se pudieron agregar los nuevos generos");
-                    }
                 }
-            }
         }
-        
+
         /// <summary>
-        /// Agrega los nuevos generos a una cancion
+        ///     Agrega los nuevos generos a una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a la que se le agregaran los generos</param>
         /// <param name="idAlbum">El album al que pertenece la cancion</param>
@@ -232,19 +236,17 @@ namespace Api.Rest
             {
                 var pathToDeleteGenero =
                     $"/v1/creador-de-contenido/albumes/{idAlbum}/canciones/{idCancion}/generos/{genero.id}";
-                using (HttpResponseMessage response =
+                using (var response =
                     await ApiClient.GetApiClient().DeleteAsync(pathToDeleteGenero))
                 {
                     if (response.StatusCode != HttpStatusCode.Accepted)
-                    {
                         throw new Exception("No se pudieron quitar los viejos generos");
-                    }
                 }
             }
         }
-        
+
         /// <summary>
-        /// Agrega los nuevos creadores de contenido a una cancion
+        ///     Agrega los nuevos creadores de contenido a una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a la que se le agregaran los creadores de contenido</param>
         /// <param name="idAlbum">El album al que pertenece la cancion</param>
@@ -259,20 +261,16 @@ namespace Api.Rest
                                  $"{idCancion}/creadores-de-contenido";
             var creadoresToAdd = CalculateCreadoresDeContenidoToAdd(cancionCreadores, actualsCreadores);
             foreach (var creadorDeContenido in creadoresToAdd)
-            {
-                using (HttpResponseMessage response =
+                using (var response =
                     await ApiClient.GetApiClient().PostAsJsonAsync(pathAddCreador, creadorDeContenido))
                 {
                     if (response.StatusCode != HttpStatusCode.Created)
-                    {
                         throw new Exception("No se pudieron agregar los nuevos artistas");
-                    }
                 }
-            }
         }
-        
+
         /// <summary>
-        /// Quita los antiguos creadores de contenido de la cancion
+        ///     Quita los antiguos creadores de contenido de la cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a la que se le quitaran los creadores de contenido</param>
         /// <param name="idAlbum">El album al que pertenece la cancion</param>
@@ -288,19 +286,17 @@ namespace Api.Rest
             {
                 var pathToDeleteGenero = $"/v1/creador-de-contenido/albumes/{idAlbum}/canciones/{idCancion}/" +
                                          $"creadores-de-contenido/{creadorContenido.id}";
-                using (HttpResponseMessage response =
+                using (var response =
                     await ApiClient.GetApiClient().DeleteAsync(pathToDeleteGenero))
                 {
                     if (response.StatusCode != HttpStatusCode.Accepted)
-                    {
                         throw new Exception("No se pudieron quitar los antiguos artistas");
-                    }
                 }
             }
         }
-        
+
         /// <summary>
-        /// Calcula los Generos a eliminar en la edicion de un creador de contenido
+        ///     Calcula los Generos a eliminar en la edicion de un creador de contenido
         /// </summary>
         /// <param name="last">La lista con los generos que tenia el creador de contenido</param>
         /// <param name="actual">La lista con los generos que tendra el creador de contenido</param>
@@ -312,25 +308,20 @@ namespace Api.Rest
             {
                 var isGenero = false;
                 foreach (var actualGenero in actual)
-                {
                     if (genero.id == actualGenero.id)
                     {
                         isGenero = true;
                         break;
-                    } 
-                }
+                    }
 
-                if (!isGenero)
-                {
-                    listGenerosToDetele.Add(genero);
-                }
+                if (!isGenero) listGenerosToDetele.Add(genero);
             }
 
             return listGenerosToDetele;
         }
 
         /// <summary>
-        /// Calcula los Generos a agregar en la edicion de una cancion
+        ///     Calcula los Generos a agregar en la edicion de una cancion
         /// </summary>
         /// <param name="last">La lista con los generos que tenia la cancion</param>
         /// <param name="actual">La lista con los generos que tendra la cancion</param>
@@ -342,30 +333,25 @@ namespace Api.Rest
             {
                 var isGenero = false;
                 foreach (var genero in last)
-                {
                     if (genero.id == actualGenero.id)
                     {
                         isGenero = true;
                         break;
-                    } 
-                }
+                    }
 
-                if (!isGenero)
-                {
-                    listaGenerosToAdd.Add(actualGenero);
-                }
+                if (!isGenero) listaGenerosToAdd.Add(actualGenero);
             }
 
             return listaGenerosToAdd;
         }
-        
+
         /// <summary>
-        /// Calcula los Creadores de contenido a agregar en la edicion de una cancion
+        ///     Calcula los Creadores de contenido a agregar en la edicion de una cancion
         /// </summary>
         /// <param name="last">La lista con los creadores de contenido que tenia la cancion</param>
         /// <param name="actual">La lista con los creadores de contenido que tendra la cancion</param>
         /// <returns>Una lista de creadores de contenido</returns>
-        private static List<CreadorContenido> CalculateCreadoresDeContenidoToAdd(List<CreadorContenido> last, 
+        private static List<CreadorContenido> CalculateCreadoresDeContenidoToAdd(List<CreadorContenido> last,
             List<CreadorContenido> actual)
         {
             var listaCreadorContenidoToAdd = new List<CreadorContenido>();
@@ -373,30 +359,25 @@ namespace Api.Rest
             {
                 var isCreador = false;
                 foreach (var creadorContenido in last)
-                {
                     if (creadorContenido.id == actualCreadorContenido.id)
                     {
                         isCreador = true;
                         break;
-                    } 
-                }
+                    }
 
-                if (!isCreador)
-                {
-                    listaCreadorContenidoToAdd.Add(actualCreadorContenido);
-                }
+                if (!isCreador) listaCreadorContenidoToAdd.Add(actualCreadorContenido);
             }
 
             return listaCreadorContenidoToAdd;
         }
-        
+
         /// <summary>
-        /// Calcula los Creadores de contenido a eliminar en la edicion de una cancion
+        ///     Calcula los Creadores de contenido a eliminar en la edicion de una cancion
         /// </summary>
         /// <param name="last">La lista con los creadores de contenido que tenia la cancion</param>
         /// <param name="actual">La lista con los creadores de contenido que tendra la cancion</param>
         /// <returns>Una lista de creadores de contenido</returns>
-        private static List<CreadorContenido> CalculateCreadoresDeContenidoToDelete(List<CreadorContenido> last, 
+        private static List<CreadorContenido> CalculateCreadoresDeContenidoToDelete(List<CreadorContenido> last,
             List<CreadorContenido> actual)
         {
             var listCreadoresToDetele = new List<CreadorContenido>();
@@ -404,25 +385,20 @@ namespace Api.Rest
             {
                 var isGenero = false;
                 foreach (var actualCreador in actual)
-                {
                     if (creadorContenido.id == actualCreador.id)
                     {
                         isGenero = true;
                         break;
-                    } 
-                }
+                    }
 
-                if (!isGenero)
-                {
-                    listCreadoresToDetele.Add(creadorContenido);
-                }
+                if (!isGenero) listCreadoresToDetele.Add(creadorContenido);
             }
 
             return listCreadoresToDetele;
         }
 
         /// <summary>
-        /// Recupera los generos que pertenecen a una cancion
+        ///     Recupera los generos que pertenecen a una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a recuperar sus generos</param>
         /// <param name="idAlbum">El id del album al que pertenece la cancion</param>
@@ -439,6 +415,7 @@ namespace Api.Rest
                         var generosFromSong = await response.Content.ReadAsAsync<List<Genero>>();
                         return generosFromSong;
                     }
+
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ApiServiceLogin.GetServiceLogin().ReLogin();
@@ -461,21 +438,22 @@ namespace Api.Rest
         public static async Task<List<Cancion>> GetSongsFromPlaylist(int idPlaylist)
         {
             var path = $"/v1/listas-de-reproduccion/{idPlaylist.ToString()}/canciones";
-            using (HttpResponseMessage response = await ApiClient.GetApiClient().GetAsync(path))
+            using (var response = await ApiClient.GetApiClient().GetAsync(path))
             {
                 if (response.IsSuccessStatusCode)
                 {
                     var canciones = await response.Content.ReadAsAsync<List<Cancion>>();
                     return canciones;
-                } else if (response.StatusCode == HttpStatusCode.NotFound)
+                }
+
+                if (response.StatusCode == HttpStatusCode.NotFound)
                 {
                     throw new Exception("No existe la lista de reproducci�n indicada");
-                } else
-                {
-                    ErrorGeneral error;
-                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
-                    throw new Exception(error.mensaje);
                 }
+
+                ErrorGeneral error;
+                error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                throw new Exception(error.mensaje);
             }
         }
     }

@@ -50,7 +50,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Solicita al API registrar un album
+        ///     Solicita al API registrar un album
         /// </summary>
         /// <param name="album"></param>
         /// <returns>El Album registrado</returns>
@@ -58,8 +58,7 @@ namespace Api.Rest
         public static async Task<Album> RegisterAlbum(Album album)
         {
             var path = "/v1/creador-de-contenido/albumes";
-            for (int i = 1; i <= CantidadIntentos; i++)
-            {
+            for (var i = 1; i <= CantidadIntentos; i++)
                 using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, album))
                 {
                     if (response.IsSuccessStatusCode)
@@ -74,7 +73,8 @@ namespace Api.Rest
                         errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
                         throw new Exception(errores[0].mensaje);
                     }
-                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
@@ -85,12 +85,12 @@ namespace Api.Rest
                         throw new Exception(error.mensaje);
                     }
                 }
-            }
+
             throw new Exception("AuntenticacionFallida");
         }
-        
+
         /// <summary>
-        /// Solicita al API registrar un album
+        ///     Solicita al API registrar un album
         /// </summary>
         /// <param name="album"></param>
         /// <returns>El Album registrado</returns>
@@ -98,8 +98,7 @@ namespace Api.Rest
         public static async Task<Album> EditAlbum(int idAlbum, Album album)
         {
             var path = $"/v1/creador-de-contenido/albumes/{idAlbum}";
-            for (int i = 1; i <= CantidadIntentos; i++)
-            {
+            for (var i = 1; i <= CantidadIntentos; i++)
                 using (var response = await ApiClient.GetApiClient().PutAsJsonAsync(path, album))
                 {
                     if (response.IsSuccessStatusCode)
@@ -114,7 +113,8 @@ namespace Api.Rest
                         errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
                         throw new Exception(errores[0].mensaje);
                     }
-                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
+
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
@@ -125,7 +125,7 @@ namespace Api.Rest
                         throw new Exception(error.mensaje);
                     }
                 }
-            }
+
             throw new Exception("AuntenticacionFallida");
         }
     }

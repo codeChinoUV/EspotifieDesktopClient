@@ -21,18 +21,18 @@ namespace EspotifeiClient
         {
             InitializeComponent();
         }
-        
+
         /// <summary>
-        /// Regresa la cancion personal registrada
+        ///     Regresa la cancion personal registrada
         /// </summary>
         /// <returns>La cancion personal registrada</returns>
         private CancionPersonal GetCancionPersonalRegistrada()
         {
             return _cancionRegistrada;
         }
-        
+
         /// <summary>
-        /// Muestra la ventana para registrar la una cancion personal
+        ///     Muestra la ventana para registrar la una cancion personal
         /// </summary>
         /// <returns>La cancion personal registrada</returns>
         public static CancionPersonal MostrarRegistrarCancionPersonal()
@@ -41,9 +41,9 @@ namespace EspotifeiClient
             ventana.ShowDialog();
             return ventana.GetCancionPersonalRegistrada();
         }
-        
+
         /// <summary>
-        /// Valida si el nombre tiene la longitud permitida
+        ///     Valida si el nombre tiene la longitud permitida
         /// </summary>
         /// <returns>True si es valido o False si no</returns>
         private bool ValidarNombre()
@@ -53,16 +53,14 @@ namespace EspotifeiClient
             var tamañoMaximo = 70;
             var esValido = ValidacionDeCadenas.ValidarTamañoDeCadena(cadena, tamañoMinimo, tamañoMaximo);
             if (!esValido)
-            {
                 new MensajeEmergente().MostrarMensajeAdvertencia($"El nombre debe de tener mas de {tamañoMinimo} " +
                                                                  $"caracteres y menos de {tamañoMaximo} caracteres");
-            }
 
             return esValido;
         }
 
         /// <summary>
-        /// Valida si el campo artistas tiene la longitud permitida
+        ///     Valida si el campo artistas tiene la longitud permitida
         /// </summary>
         /// <returns>True si es valido o False si no</returns>
         private bool ValidarArtistas()
@@ -72,16 +70,15 @@ namespace EspotifeiClient
             var tamañoMaximo = 70;
             var esValido = ValidacionDeCadenas.ValidarTamañoDeCadena(cadena, tamañoMinimo, tamañoMaximo);
             if (!esValido)
-            {
-                new MensajeEmergente().MostrarMensajeAdvertencia($"El campo de artistas debe de tener mas de {tamañoMinimo} " +
-                                                                 $"caracteres y menos de {tamañoMaximo} caracteres");
-            }
+                new MensajeEmergente().MostrarMensajeAdvertencia(
+                    $"El campo de artistas debe de tener mas de {tamañoMinimo} " +
+                    $"caracteres y menos de {tamañoMaximo} caracteres");
 
             return esValido;
         }
 
         /// <summary>
-        /// Valida si el album tiene la longitud permitida
+        ///     Valida si el album tiene la longitud permitida
         /// </summary>
         /// <returns>True si es valido o False si no</returns>
         private bool ValidarAlbum()
@@ -91,30 +88,27 @@ namespace EspotifeiClient
             var tamañoMaximo = 70;
             var esValido = ValidacionDeCadenas.ValidarTamañoDeCadena(cadena, tamañoMinimo, tamañoMaximo);
             if (!esValido)
-            {
-                new MensajeEmergente().MostrarMensajeAdvertencia($"El campo del album debe de tener mas de {tamañoMinimo} " +
-                                                                 $"caracteres y menos de {tamañoMaximo} caracteres");
-            }
+                new MensajeEmergente().MostrarMensajeAdvertencia(
+                    $"El campo del album debe de tener mas de {tamañoMinimo} " +
+                    $"caracteres y menos de {tamañoMaximo} caracteres");
 
             return esValido;
         }
 
         /// <summary>
-        /// Valida si ya se selecciono una cancion
+        ///     Valida si ya se selecciono una cancion
         /// </summary>
         /// <returns>True si hay una cancion seleccionada o False si no</returns>
         private bool ValidarCancionSeleccionada()
         {
             var cancionSeleccionada = ArchivoSeleccionadoText.Text != "";
             if (!cancionSeleccionada)
-            {
                 new MensajeEmergente().MostrarMensajeAdvertencia("Debe de seleccionar una cancion");
-            }
             return cancionSeleccionada;
         }
-    
+
         /// <summary>
-        /// Abre una ventana de selección de archivos
+        ///     Abre una ventana de selección de archivos
         /// </summary>
         /// <param name="sender">El objeto invocado</param>
         /// <param name="e">El evento invocado</param>
@@ -132,7 +126,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Crea una cancion personal a partir de los elementos de la pantalla
+        ///     Crea una cancion personal a partir de los elementos de la pantalla
         /// </summary>
         /// <returns>La CancionPersonal creada</returns>
         private CancionPersonal CrearCancionPersonal()
@@ -145,9 +139,9 @@ namespace EspotifeiClient
             };
             return cancion;
         }
-        
+
         /// <summary>
-        /// Cierra la ventana
+        ///     Cierra la ventana
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -158,7 +152,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Deshabilita todos los elementos en pantalla
+        ///     Deshabilita todos los elementos en pantalla
         /// </summary>
         private void DeshabilitarElementosPantalla()
         {
@@ -169,9 +163,9 @@ namespace EspotifeiClient
             nombreCancionTextbox.IsEnabled = false;
             albumCancionTextbox.IsEnabled = false;
         }
-        
+
         /// <summary>
-        /// Habilita todos los elementos en pantalla
+        ///     Habilita todos los elementos en pantalla
         /// </summary>
         private void HabilitarElementosPantalla()
         {
@@ -184,7 +178,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Guarda la información de la canción personal y sube la canción personal
+        ///     Guarda la información de la canción personal y sube la canción personal
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -192,9 +186,9 @@ namespace EspotifeiClient
         {
             RegistrarNuevaCancion();
         }
-        
+
         /// <summary>
-        /// Registra la informacion de una cancion personal y sube la cancion al servidor
+        ///     Registra la informacion de una cancion personal y sube la cancion al servidor
         /// </summary>
         private async void RegistrarNuevaCancion()
         {
@@ -214,22 +208,19 @@ namespace EspotifeiClient
                     }
                     catch (RpcException)
                     {
-                        new MensajeEmergente().MostrarMensajeError("No se pudo subir la cancion personal, la puede volver a " +
-                                                                   "subir mas adelante");
+                        new MensajeEmergente().MostrarMensajeError(
+                            "No se pudo subir la cancion personal, la puede volver a " +
+                            "subir mas adelante");
                         Close();
                     }
                     catch (Exception ex)
                     {
                         if (ex.Message == "AuntenticacionFallida")
-                        {
                             new MensajeEmergente().MostrarMensajeError("No se pudo autenticar con el usuario con el " +
                                                                        "cual inicio sesión, se guardo la informacion de la " +
                                                                        "cancion pero no el archivo");
-                        }
                         else
-                        {
                             new MensajeEmergente().MostrarMensajeError(ex.Message);
-                        }
                         Close();
                     }
                 }
@@ -250,14 +241,14 @@ namespace EspotifeiClient
                     {
                         new MensajeEmergente().MostrarMensajeError(ex.Message);
                     }
-                    
                 }
+
                 HabilitarElementosPantalla();
             }
         }
 
         /// <summary>
-        /// Muestra el mensaje de se termino de subir la cancion y cierra la ventana
+        ///     Muestra el mensaje de se termino de subir la cancion y cierra la ventana
         /// </summary>
         private void TerminarSubirCancion()
         {
@@ -266,15 +257,14 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Aumenta el porcentaje de la cancion subida y el progress bar
+        ///     Aumenta el porcentaje de la cancion subida y el progress bar
         /// </summary>
         /// <param name="porcentage">El porcentaje</param>
         private void SubirPorcentajeAvanza(float porcentage)
         {
-            int porcentajeEntero = (int) porcentage;
+            var porcentajeEntero = (int) porcentage;
             PorcentajeTextBloxk.Text = $"{porcentajeEntero.ToString()}%";
             SubidaProgressbar.Value = porcentage;
         }
-
     }
 }

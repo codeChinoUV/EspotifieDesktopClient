@@ -9,11 +9,10 @@ using Model;
 namespace EspotifeiClient
 {
     /// <summary>
-    /// Lógica de interacción para BibliotecaPersonal.xaml
+    ///     Lógica de interacción para BibliotecaPersonal.xaml
     /// </summary>
     public partial class BibliotecaPersonal
     {
-
         private List<CancionPersonal> _cancionesPersonales = new List<CancionPersonal>();
 
         public BibliotecaPersonal()
@@ -23,7 +22,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Recupera las canciones de la bilioteca personal y las muestra
+        ///     Recupera las canciones de la bilioteca personal y las muestra
         /// </summary>
         private async void CargarCancionesEnBibliotecaPersonal()
         {
@@ -58,15 +57,12 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cola la informacion de la biblioteca personal en sus respectivos campos
+        ///     Cola la informacion de la biblioteca personal en sus respectivos campos
         /// </summary>
         private void ColocarInformacionBibliotecaPersonal()
         {
             float tiempoTotal = 0;
-            foreach (var cancionPersonal in _cancionesPersonales)
-            {
-                tiempoTotal += cancionPersonal.duracion;
-            }
+            foreach (var cancionPersonal in _cancionesPersonales) tiempoTotal += cancionPersonal.duracion;
 
             var time = TimeSpan.FromSeconds(tiempoTotal);
             DuracionTotal.Text = time.ToString("mm':'ss");
@@ -74,7 +70,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Reproduce una cancion de la lista de canciones de la biblioteca personal
+        ///     Reproduce una cancion de la lista de canciones de la biblioteca personal
         /// </summary>
         /// <param name="sender">El objeto invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -82,23 +78,20 @@ namespace EspotifeiClient
         {
             if (_cancionesPersonales.Count >= 250)
             {
-                 new MensajeEmergente().MostrarMensajeAdvertencia("Solo tiene permitido un maximo de 250 canciones" +
-                                                                  " en su biblioteca personal");   
+                new MensajeEmergente().MostrarMensajeAdvertencia("Solo tiene permitido un maximo de 250 canciones" +
+                                                                 " en su biblioteca personal");
             }
             else
             {
-                int idCancion = (int) ((Button) sender).Tag;
+                var idCancion = (int) ((Button) sender).Tag;
                 var cancionAReproducir = BuscarCancionPersonal(idCancion);
                 if (cancionAReproducir != null)
-                {
                     Player.Player.GetPlayer().EmpezarAReproducirCancionPersonal(cancionAReproducir);
-                }
             }
-            
         }
 
         /// <summary>
-        /// Elimina la cancion seleccionada
+        ///     Elimina la cancion seleccionada
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -110,7 +103,7 @@ namespace EspotifeiClient
             {
                 SinConexionGrid.Visibility = Visibility.Hidden;
                 ListViewCancionesPersonales.Visibility = Visibility.Visible;
-                int idCancion = (int) ((Button) sender).Tag;
+                var idCancion = (int) ((Button) sender).Tag;
                 try
                 {
                     await BibliotecaPersonalClient.DeteleCancion(idCancion);
@@ -140,21 +133,18 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Muestra la ventana de AgregarCancionPersonal y recarga la pantalla si el registro fue exitoso
+        ///     Muestra la ventana de AgregarCancionPersonal y recarga la pantalla si el registro fue exitoso
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
         private void OnClickAgregarCancion(object sender, RoutedEventArgs e)
         {
             var cancionRegistrada = RegistrarCancionPersonal.MostrarRegistrarCancionPersonal();
-            if (cancionRegistrada != null)
-            {
-                CargarCancionesEnBibliotecaPersonal();
-            }
+            if (cancionRegistrada != null) CargarCancionesEnBibliotecaPersonal();
         }
 
         /// <summary>
-        /// Coloca en la cola de reproducción todas las canciones en la biblioteca personal
+        ///     Coloca en la cola de reproducción todas las canciones en la biblioteca personal
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -164,13 +154,13 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Busca una cancion personal en la lista de canciones por su id
+        ///     Busca una cancion personal en la lista de canciones por su id
         /// </summary>
         /// <param name="idCancion">El id de la cancion a buscar</param>
         /// <returns>La cancion que coincide con el id</returns>
         private CancionPersonal BuscarCancionPersonal(int idCancion)
         {
-            CancionPersonal cancion = _cancionesPersonales.Find(c => c.id == idCancion);
+            var cancion = _cancionesPersonales.Find(c => c.id == idCancion);
             return cancion;
         }
     }

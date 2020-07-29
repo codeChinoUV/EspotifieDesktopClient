@@ -151,7 +151,8 @@
                        Foreground="White" VerticalAlignment="Center" />
             <TextBlock Grid.Column="1" Grid.Row="1" x:Name="Biografia" FontSize="15" TextWrapping="Wrap"
                        Foreground="White" />
-            <Button Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Click="OnClickPlayCreadorContenidoButto"
+            <Button Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right"
+                    Click="OnClickPlayCreadorContenidoButto"
                     Style="{StaticResource MaterialDesignFloatingActionButton}"
                     Height="60" Width="60" Padding="0" Margin="0,-30,30,-30">
                 <materialDesign:PackIcon Kind="PlayArrow" Height="50" Width="50" />

@@ -193,10 +193,7 @@ namespace EspotifeiClient
         {
             var idAlbum = (int) ((Button) sender).Tag;
             var album = _albums.Find(a => a.id == idAlbum);
-            if (album != null)
-            {
-                Player.Player.GetPlayer().AñadirCancionesDeAlbumACola(album);
-            }
+            if (album != null) Player.Player.GetPlayer().AñadirCancionesDeAlbumACola(album);
         }
 
         /// <summary>
@@ -210,14 +207,11 @@ namespace EspotifeiClient
             var cancion = BuscarCancionEnAlbumes(idCancion);
             var album = BuscarAlbumDeCancion(idCancion);
             cancion.album = album;
-            if (album != null)
-            {
-                Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
-            }
+            if (album != null) Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
         }
-        
+
         /// <summary>
-        /// Añade las canciones del creador de contenido a la cola de reproduccion
+        ///     Añade las canciones del creador de contenido a la cola de reproduccion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -228,7 +222,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Busca la cancion con el idCancion dentro de los Albums
+        ///     Busca la cancion con el idCancion dentro de los Albums
         /// </summary>
         /// <param name="idCancion">El id de la cancion a buscar</param>
         /// <returns>La cancion del id cancion</returns>
@@ -249,7 +243,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Busca el album en donde se encuentra contenido la cancion con el idCancion
+        ///     Busca el album en donde se encuentra contenido la cancion con el idCancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a buscar su album</param>
         /// <returns>El album de la cancion</returns>

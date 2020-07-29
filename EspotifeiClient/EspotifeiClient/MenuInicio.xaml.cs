@@ -20,20 +20,14 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Muestra el item de mi perfil
+        ///     Muestra el item de mi perfil
         /// </summary>
         private void MostrarElementoMiPerfil()
         {
             if (_mainWindow != null)
-            {
                 if (ApiServiceLogin.GetServiceLogin().Usuario != null)
-                {
                     if (ApiServiceLogin.GetServiceLogin().Usuario.tipo_usuario == TipoUsuario.CreadorDeContenido)
-                    {
                         _mainWindow.MiPerfilItem.Visibility = Visibility.Visible;
-                    }
-                }
-            }
         }
 
         public static void MostrarMenu()

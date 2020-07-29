@@ -14,7 +14,6 @@ namespace EspotifeiClient
     /// </summary>
     public partial class MainWindow
     {
-
         public MainWindow()
         {
             InitializeComponent();
@@ -29,13 +28,9 @@ namespace EspotifeiClient
         private void RecibirCambioEstadoReproduccion(bool estaReproducciendo)
         {
             if (estaReproducciendo)
-            {
                 playImage.Kind = PackIconKind.Pause;
-            }
             else
-            {
                 playImage.Kind = PackIconKind.PlayArrow;
-            }
         }
 
         private void RecibirAvanceCancion(double tiempoactual)
@@ -58,7 +53,7 @@ namespace EspotifeiClient
                 tiempoTotalTextBlock.Text = cancion.duracionString;
             }
         }
-        
+
         private void ColocarElementosCancionPersonal(CancionPersonal cancionPersonal)
         {
             if (cancionPersonal != null)
@@ -79,18 +74,14 @@ namespace EspotifeiClient
             if (creadoresContenido != null)
             {
                 foreach (var creadorContenido in creadoresContenido)
-                {
                     creadoresDeContenido += $"{creadorContenido.nombre}, ";
-                }
                 if (creadoresDeContenido != "")
-                {
                     creadoresDeContenido = creadoresDeContenido.Substring(0, creadoresDeContenido.Length - 2);
-                }
             }
 
             return creadoresDeContenido;
         }
-        
+
         private void AbrirMenuButton_Click(object sender, RoutedEventArgs e)
         {
             abrirMenuButton.Visibility = Visibility.Collapsed;
@@ -110,7 +101,6 @@ namespace EspotifeiClient
 
         private void BuscarListview_Selected(object sender, RoutedEventArgs e)
         {
-            
         }
 
         private void ListaReproduccionListview_Selected(object sender, RoutedEventArgs e)
@@ -149,7 +139,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cambia el icono del reproductor y cambia el volumen de reproduccion
+        ///     Cambia el icono del reproductor y cambia el volumen de reproduccion
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -157,18 +147,14 @@ namespace EspotifeiClient
         {
             var volumen = (int) ((Slider) sender).Value;
             if (volumen == 0)
-            {
                 VolumenImage.Kind = PackIconKind.VolumeMute;
-            }
             else
-            {
                 VolumenImage.Kind = PackIconKind.VolumeHigh;
-            }
             Player.Player.GetPlayer().ActualizarVolumen(volumen);
         }
 
         /// <summary>
-        /// Coloca el volumen de reproduccion a 0 o a 100 dependiendo del valor del slider
+        ///     Coloca el volumen de reproduccion a 0 o a 100 dependiendo del valor del slider
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -192,6 +178,11 @@ namespace EspotifeiClient
         private void OnClickMiLibreriaButton(object sender, MouseButtonEventArgs e)
         {
             PantallaFrame.Navigate(new BibliotecaPersonal());
+        }
+
+        private void OnClickHistorial(object sender, MouseButtonEventArgs e)
+        {
+            PantallaFrame.Navigate(new MiHistorial());
         }
     }
 }

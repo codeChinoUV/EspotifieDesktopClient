@@ -10,10 +10,10 @@ namespace Api.Rest
 {
     public class CreadorContenidoClient
     {
-        private static int CantidadIntentos = 2;
-        
+        private static readonly int CantidadIntentos = 2;
+
         /// <summary>
-        /// Método del servidor que realiza la petición HTTP para registrar al CreadorContenido
+        ///     Método del servidor que realiza la petición HTTP para registrar al CreadorContenido
         /// </summary>
         /// <param name="contentCreator">Variable de tipo de CreadorContenido que contiene su información</param>
         /// <returns>Una variable de tipo CreadorContenido o una excepción si la respuesta de la solicitud es incorrecta</returns>
@@ -21,8 +21,7 @@ namespace Api.Rest
         {
             CreadorContenido contentCreatorRegister;
             var path = "/v1/creador-de-contenido";
-            for (int i = 1; i <= CantidadIntentos; i++)
-            {
+            for (var i = 1; i <= CantidadIntentos; i++)
                 using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, contentCreator))
                 {
                     if (response.IsSuccessStatusCode)
@@ -30,7 +29,8 @@ namespace Api.Rest
                         contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
                         var pathRegisteredGenero = "/v1/creador-de-contenido/generos";
                         foreach (var genero in contentCreator.generos)
-                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(pathRegisteredGenero, genero))
+                            using (var responseAddGenero =
+                                await ApiClient.GetApiClient().PostAsJsonAsync(pathRegisteredGenero, genero))
                             {
                                 if (!responseAddGenero.IsSuccessStatusCode)
                                     throw new Exception("No se pudieron guardar todos los generos, " +
@@ -47,68 +47,8 @@ namespace Api.Rest
                         var error = ProcessBadRequesCode(errores[0].error);
                         throw new Exception(error);
                     }
-                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
-                    }else
-                    {
-                        ErrorGeneral error;
-                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
-                        throw new Exception(error.mensaje);
-                    }
-                }
-            }
-            throw new Exception("AuntenticacionFallida"); 
-        }
 
-        /// <summary>
-        /// Realiza las peticiones al servidor para modificar la información de un creador de contenido 
-        /// </summary>
-        /// <param name="contentCreator">Variable de tipo de CreadorContenido que contiene su información</param>
-        /// <param name="actuals">La lista de generos actualoizada del creador de contenido</param>
-        /// <returns>Una variable de tipo CreadorContenido o una excepción si la respuesta de la solicitud es incorrecta</returns>
-        public static async Task<CreadorContenido> EditCreadorContenido(CreadorContenido contentCreator, List<Genero> actuals)
-        {
-            CreadorContenido contentCreatorRegister;
-            var path = "/v1/creador-de-contenido";
-            for (int i = 1; i <= CantidadIntentos; i++)
-            {
-                using (var response = await ApiClient.GetApiClient().PutAsJsonAsync(path, contentCreator))
-                {
-                    if (response.IsSuccessStatusCode)
-                    {
-                        contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
-                        var generosToDelete = CalculateGenerosToDelete(contentCreator.generos, actuals);
-                        foreach (var genero in generosToDelete)
-                        {
-                             var pathToDeleteGenero = $"/v1/creador-de-contenido/generos/{genero.id}";
-                            using (var responseAddGenero = await ApiClient.GetApiClient().DeleteAsync(pathToDeleteGenero))
-                            {
-                                if (!responseAddGenero.IsSuccessStatusCode)
-                                    throw new Exception("No se pudieron modificar todos los generos");
-                            }
-                        }
-                        var generosToAdd = CalculateGenerosToAdd(contentCreator.generos, actuals);
-                        var pathToAddGenero = "/v1/creador-de-contenido/generos";
-                        foreach (var genero in generosToAdd)
-                        {
-                            using (var responseAddGenero = await ApiClient.GetApiClient().PostAsJsonAsync(pathToAddGenero, genero))
-                            {
-                                if (!responseAddGenero.IsSuccessStatusCode)
-                                    throw new Exception("No se pudieron modificar todos los generos");
-                            }
-                        }
-                        return contentCreatorRegister;
-                    }
-
-                    if (response.StatusCode == HttpStatusCode.BadRequest)
-                    {
-                        List<ErrorGeneral> errores;
-                        errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
-                        var error = ProcessBadRequesCode(errores[0].error);
-                        throw new Exception(error);
-                    }
-                    else if(response.StatusCode == HttpStatusCode.Unauthorized)
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
@@ -119,12 +59,77 @@ namespace Api.Rest
                         throw new Exception(error.mensaje);
                     }
                 }
-            }
-            throw new Exception("AuntenticacionFallida"); 
+
+            throw new Exception("AuntenticacionFallida");
         }
 
         /// <summary>
-        /// Calcula los Generos a eliminar en la edicion de un creador de contenido
+        ///     Realiza las peticiones al servidor para modificar la información de un creador de contenido
+        /// </summary>
+        /// <param name="contentCreator">Variable de tipo de CreadorContenido que contiene su información</param>
+        /// <param name="actuals">La lista de generos actualoizada del creador de contenido</param>
+        /// <returns>Una variable de tipo CreadorContenido o una excepción si la respuesta de la solicitud es incorrecta</returns>
+        public static async Task<CreadorContenido> EditCreadorContenido(CreadorContenido contentCreator,
+            List<Genero> actuals)
+        {
+            CreadorContenido contentCreatorRegister;
+            var path = "/v1/creador-de-contenido";
+            for (var i = 1; i <= CantidadIntentos; i++)
+                using (var response = await ApiClient.GetApiClient().PutAsJsonAsync(path, contentCreator))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        contentCreatorRegister = await response.Content.ReadAsAsync<CreadorContenido>();
+                        var generosToDelete = CalculateGenerosToDelete(contentCreator.generos, actuals);
+                        foreach (var genero in generosToDelete)
+                        {
+                            var pathToDeleteGenero = $"/v1/creador-de-contenido/generos/{genero.id}";
+                            using (var responseAddGenero =
+                                await ApiClient.GetApiClient().DeleteAsync(pathToDeleteGenero))
+                            {
+                                if (!responseAddGenero.IsSuccessStatusCode)
+                                    throw new Exception("No se pudieron modificar todos los generos");
+                            }
+                        }
+
+                        var generosToAdd = CalculateGenerosToAdd(contentCreator.generos, actuals);
+                        var pathToAddGenero = "/v1/creador-de-contenido/generos";
+                        foreach (var genero in generosToAdd)
+                            using (var responseAddGenero =
+                                await ApiClient.GetApiClient().PostAsJsonAsync(pathToAddGenero, genero))
+                            {
+                                if (!responseAddGenero.IsSuccessStatusCode)
+                                    throw new Exception("No se pudieron modificar todos los generos");
+                            }
+
+                        return contentCreatorRegister;
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.BadRequest)
+                    {
+                        List<ErrorGeneral> errores;
+                        errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
+                        var error = ProcessBadRequesCode(errores[0].error);
+                        throw new Exception(error);
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+
+            throw new Exception("AuntenticacionFallida");
+        }
+
+        /// <summary>
+        ///     Calcula los Generos a eliminar en la edicion de un creador de contenido
         /// </summary>
         /// <param name="last">La lista con los generos que tenia el creador de contenido</param>
         /// <param name="actual">La lista con los generos que tendra el creador de contenido</param>
@@ -136,25 +141,20 @@ namespace Api.Rest
             {
                 var isGenero = false;
                 foreach (var actualGenero in actual)
-                {
                     if (genero.id == actualGenero.id)
                     {
                         isGenero = true;
                         break;
-                    } 
-                }
+                    }
 
-                if (!isGenero)
-                {
-                    listGenerosToDetele.Add(genero);
-                }
+                if (!isGenero) listGenerosToDetele.Add(genero);
             }
 
             return listGenerosToDetele;
         }
 
         /// <summary>
-        /// Calcula los Generos a agregar en la edicion de un creador de contenido
+        ///     Calcula los Generos a agregar en la edicion de un creador de contenido
         /// </summary>
         /// <param name="last">La lista con los generos que tenia el creador de contenido</param>
         /// <param name="actual">La lista con los generos que tendra el creador de contenido</param>
@@ -166,23 +166,18 @@ namespace Api.Rest
             {
                 var isGenero = false;
                 foreach (var genero in last)
-                {
                     if (genero.id == actualGenero.id)
                     {
                         isGenero = true;
                         break;
-                    } 
-                }
+                    }
 
-                if (!isGenero)
-                {
-                    listaGenerosToAdd.Add(actualGenero);
-                }
+                if (!isGenero) listaGenerosToAdd.Add(actualGenero);
             }
 
             return listaGenerosToAdd;
         }
-        
+
         /// <summary>
         ///     Recupera los creadores de contenido por busqueda
         /// </summary>
@@ -207,15 +202,14 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Recupera el creador de contenido del usuario logeado
+        ///     Recupera el creador de contenido del usuario logeado
         /// </summary>
         /// <returns>El creador de contenido del usuario logeado</returns>
         /// <exception cref="Exception">Alguna excepcion que ocurrio en la solicitud</exception>
         public static async Task<CreadorContenido> GetCreadorContenidoFromActualUser()
         {
             var path = "/v1/creador-de-contenido";
-            for (int i = 1; i <= CantidadIntentos; i++)
-            {
+            for (var i = 1; i <= CantidadIntentos; i++)
                 using (var response = await ApiClient.GetApiClient().GetAsync(path))
                 {
                     if (response.IsSuccessStatusCode)
@@ -223,10 +217,9 @@ namespace Api.Rest
                         var creadores = await response.Content.ReadAsAsync<CreadorContenido>();
                         return creadores;
                     }
-                    else if(response.StatusCode == HttpStatusCode.NotFound)
-                    {
-                        throw new Exception("SinCreadorDeContenido");
-                    }else if (response.StatusCode == HttpStatusCode.Unauthorized)
+
+                    if (response.StatusCode == HttpStatusCode.NotFound) throw new Exception("SinCreadorDeContenido");
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
@@ -237,11 +230,10 @@ namespace Api.Rest
                         throw new Exception(error.mensaje);
                     }
                 }
-            }
-            
-            throw new Exception("AuntenticacionFallida"); 
+
+            throw new Exception("AuntenticacionFallida");
         }
-        
+
         /// <summary>
         ///     Método que procesa las diferentes solicitudes incorrectas y las devuelve en un mensaje de error
         /// </summary>
@@ -257,6 +249,5 @@ namespace Api.Rest
                 response = "El usuario no tiene permitido realizar la operación solicitada";
             return response;
         }
-        
     }
 }

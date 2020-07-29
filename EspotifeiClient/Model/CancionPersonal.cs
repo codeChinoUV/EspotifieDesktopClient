@@ -7,11 +7,11 @@ namespace Model
         public int id { get; set; }
 
         public string nombre { get; set; }
-        
+
         public float duracion { get; set; }
-        
+
         public string artistas { get; set; }
-        
+
         public string album { get; set; }
 
         public string duracion_string

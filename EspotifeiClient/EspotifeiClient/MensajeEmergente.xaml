@@ -30,7 +30,7 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Rectangle Grid.Row="1" Grid.RowSpan="2" Width="395" Height="140" VerticalAlignment="Center"  Fill="White">
+        <Rectangle Grid.Row="1" Grid.RowSpan="2" Width="395" Height="140" VerticalAlignment="Center" Fill="White">
             <Rectangle.Effect>
                 <DropShadowEffect BlurRadius="15" Direction="0" RenderingBias="Quality" ShadowDepth="1"
                                   Color="#FFBBBBBB" />

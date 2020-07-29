@@ -205,7 +205,7 @@ namespace EspotifeiClient
         {
             var idCancion = (int) ((Button) sender).Tag;
             var cancion = BuscarCancionEnAlbumes(idCancion);
-            var album = BuscarAlbumDeCancion(idCancion);
+            var album = BuscarAlbumDeCancion(idCancion); 
             cancion.album = album;
             if (album != null) Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
         }
@@ -219,6 +219,22 @@ namespace EspotifeiClient
         {
             _creadorContenido.Albums = _albums;
             Player.Player.GetPlayer().AñadirCancionesDeCreadorDeContenidoACola(_creadorContenido);
+        }
+        
+        /// <summary>
+        /// Agrega la cancion a la cola de reproducción
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private void OnClickAgregarACola(object sender, RoutedEventArgs e)
+        {
+            var idCancion = (int) ((Button) sender).Tag;
+            var cancion = BuscarCancionEnAlbumes(idCancion);
+            if (cancion != null)
+            {
+                cancion.album = BuscarAlbumDeCancion(idCancion);
+                Player.Player.GetPlayer().AñadirCancionAColaDeReproduccion(cancion);
+            }
         }
 
         /// <summary>
@@ -261,6 +277,49 @@ namespace EspotifeiClient
             }
 
             return albumDeCancion;
+        }
+
+        /// <summary>
+        /// Manda a reproducir la radio de la cancion seleccionada
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el eventp</param>
+        /// <param name="e">El evento invocado</param>
+        private async void OnClickEmpezarRadio(object sender, RoutedEventArgs e)
+        {
+            var idCancion = (int) ((Button) sender).Tag;
+            List<Cancion> radio;
+            try
+            {
+                radio = await CancionClient.GetRadioFromSong(idCancion);
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                AlbumsListView.Visibility = Visibility.Visible;
+                Player.Player.GetPlayer().AñadirRadioAListaDeReproduccion(radio);
+            }
+            catch (HttpRequestException)
+            {
+                SinConexionGrid.Visibility = Visibility.Visible;
+                AlbumsListView.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "AuntenticacionFallida")
+                {
+                    new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
+                                                               "proporcionadas, se cerra la sesion");
+                    MenuInicio.OcultarMenu();
+                    MenuInicio.OcultarReproductor();
+                    NavigationService?.Navigate(new IniciarSesion());
+                }
+                else
+                {
+                    new MensajeEmergente().MostrarMensajeError(ex.Message);
+                }
+            }
+        }
+
+        private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

@@ -32,7 +32,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else
                     {
@@ -49,7 +49,6 @@ namespace Api.Rest
         ///     Solicita al servidor eliminar una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a eliminar</param>
-        /// <param name="idAlbum">El id del album al que pertenece la canciónn</param>
         /// <returns>La cancion eliminada</returns>
         /// <exception cref="Exception">Una excepcion que pueda ocurrir</exception>
         public static async Task<CancionPersonal> DeteleCancion(int idCancion)
@@ -66,7 +65,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
@@ -102,7 +101,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else
                     {

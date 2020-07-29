@@ -34,7 +34,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
@@ -94,7 +94,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
@@ -141,7 +141,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
@@ -179,7 +179,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
@@ -418,7 +418,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
@@ -435,6 +435,12 @@ namespace Api.Rest
             throw new Exception("AuntenticacionFallida");
         }
 
+        /// <summary>
+        /// Recupera las canciones de la playlist con el idPlaylist
+        /// </summary>
+        /// <param name="idPlaylist">El id de la lista de reproduccion a recuperar sus canciones</param>
+        /// <returns>Una lista de cnanciones</returns>
+        /// <exception cref="Exception">Alguna excepcion que puede ocurrir</exception>
         public static async Task<List<Cancion>> GetSongsFromPlaylist(int idPlaylist)
         {
             var path = $"/v1/listas-de-reproduccion/{idPlaylist.ToString()}/canciones";
@@ -448,13 +454,50 @@ namespace Api.Rest
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
                 {
-                    throw new Exception("No existe la lista de reproducci�n indicada");
+                    throw new Exception("No existe la lista de reproducción indicada");
                 }
 
                 ErrorGeneral error;
                 error = await response.Content.ReadAsAsync<ErrorGeneral>();
                 throw new Exception(error.mensaje);
             }
+        }
+        
+        /// <summary>
+        /// Obtiene el radio de una cancion
+        /// </summary>
+        /// <param name="idCancion">El id de la cancion de la cual se quiere obtener la radio</param>
+        /// <returns>Una lista de canciones</returns>
+        /// <exception cref="Exception">Una excepcion que indica que algo salio mal en selrvidor</exception>
+        public static async Task<List<Cancion>> GetRadioFromSong(int idCancion)
+        {
+            var path = $"/v1/estacion-de-radio/{idCancion}";
+            for (var i = 1; i <= CantidadIntentos; i++)
+                using (var response = await ApiClient.GetApiClient().GetAsync(path))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var songsOfRadio = await response.Content.ReadAsAsync<List<Cancion>>();
+                        return songsOfRadio;
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        throw new Exception("No existe la cancion indicada");
+                    }
+                    else
+                    {
+                        ErrorGeneral error;
+                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                        throw new Exception(error.mensaje);
+                    }
+                }
+
+            throw new Exception("AuntenticacionFallida");
         }
     }
 }

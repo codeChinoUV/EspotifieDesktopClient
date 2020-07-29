@@ -89,7 +89,7 @@ namespace Api.GrpcClients.Clients
 
                         if (response.Error == Error.TokenInvalido || response.Error == Error.TokenFaltante)
                         {
-                            ApiServiceLogin.GetServiceLogin().ReLogin();
+                            await ApiServiceLogin.GetServiceLogin().ReLogin();
                         }
                         else
                         {
@@ -154,7 +154,7 @@ namespace Api.GrpcClients.Clients
                 {
                     if (error == Error.TokenFaltante || error == Error.TokenInvalido)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else
                     {

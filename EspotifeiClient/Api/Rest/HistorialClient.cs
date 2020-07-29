@@ -37,7 +37,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else
                     {

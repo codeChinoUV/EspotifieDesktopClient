@@ -24,7 +24,7 @@ namespace Api.GrpcClients.Clients
                 {
                     var response = await UploadCover(path, 0, call);
                     if (response.Error == Error.TokenInvalido || response.Error == Error.TokenFaltante)
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     else if (response.Error == Error.Ninguno)
                         break;
                     else
@@ -46,7 +46,7 @@ namespace Api.GrpcClients.Clients
                 {
                     var response = await UploadCover(path, idAlbum, call);
                     if (response.Error == Error.TokenInvalido || response.Error == Error.TokenFaltante)
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     else if (response.Error == Error.Ninguno)
                         break;
                     else
@@ -68,7 +68,7 @@ namespace Api.GrpcClients.Clients
                 {
                     var response = await UploadCover(path, idContentCreator, call);
                     if (response.Error == Error.TokenInvalido || response.Error == Error.TokenFaltante)
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     else if (response.Error == Error.Ninguno)
                         break;
                     else
@@ -152,7 +152,7 @@ namespace Api.GrpcClients.Clients
                 }
                 catch (Exception)
                 {
-                    ApiServiceLogin.GetServiceLogin().ReLogin();
+                    await ApiServiceLogin.GetServiceLogin().ReLogin();
                 }
 
             return cover;
@@ -178,7 +178,7 @@ namespace Api.GrpcClients.Clients
                 }
                 catch (Exception)
                 {
-                    ApiServiceLogin.GetServiceLogin().ReLogin();
+                    await ApiServiceLogin.GetServiceLogin().ReLogin();
                 }
 
             return cover;
@@ -204,7 +204,7 @@ namespace Api.GrpcClients.Clients
                 }
                 catch (Exception)
                 {
-                    ApiServiceLogin.GetServiceLogin().ReLogin();
+                    await ApiServiceLogin.GetServiceLogin().ReLogin();
                 }
 
             return cover;

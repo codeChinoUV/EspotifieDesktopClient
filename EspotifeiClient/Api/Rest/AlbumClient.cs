@@ -32,7 +32,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
@@ -76,7 +76,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else
                     {
@@ -90,10 +90,11 @@ namespace Api.Rest
         }
 
         /// <summary>
-        ///     Solicita al API registrar un album
+        ///     Solicita al API editar un album
         /// </summary>
+        /// <param name="idAlbum">El id del album a editar</param>
         /// <param name="album"></param>
-        /// <returns>El Album registrado</returns>
+        /// <returns>El Album editado</returns>
         /// <exception cref="Exception">Alguna excepcion que puede ocurrir al mandar la solicitud al servidor</exception>
         public static async Task<Album> EditAlbum(int idAlbum, Album album)
         {
@@ -116,7 +117,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else
                     {

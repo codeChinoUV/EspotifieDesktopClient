@@ -34,7 +34,7 @@ namespace Api.Rest.ApiLogin
         /// <summary>
         ///     Vuelve a logear al usuario con los credenciales almacenadas
         /// </summary>
-        public async void ReLogin()
+        public async Task ReLogin()
         {
             await Login(_userLogin);
         }

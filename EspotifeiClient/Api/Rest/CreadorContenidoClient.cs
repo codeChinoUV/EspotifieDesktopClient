@@ -50,7 +50,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else
                     {
@@ -115,7 +115,7 @@ namespace Api.Rest
 
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else
                     {
@@ -221,7 +221,7 @@ namespace Api.Rest
                     if (response.StatusCode == HttpStatusCode.NotFound) throw new Exception("SinCreadorDeContenido");
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
                     else
                     {

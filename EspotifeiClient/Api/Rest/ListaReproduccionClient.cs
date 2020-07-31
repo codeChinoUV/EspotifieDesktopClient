@@ -76,7 +76,7 @@ namespace Api.Rest
                     }
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     } else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         throw new Exception("No existe la lista de reproducción que se desea eliminar");
@@ -115,7 +115,7 @@ namespace Api.Rest
                         throw new Exception(errores[0].mensaje);
                     } else if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     } else
                     {
                         ErrorGeneral error;

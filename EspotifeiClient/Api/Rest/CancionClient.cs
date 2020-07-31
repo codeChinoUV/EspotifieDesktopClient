@@ -207,7 +207,7 @@ namespace Api.Rest
                     }
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
                     } else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         throw new Exception("No existe la cancion que se desea eliminar");

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
+using Api.Rest;
 using EspotifeiClient.Util;
 using ManejadorDeArchivos;
 using MaterialDesignThemes.Wpf;
@@ -18,6 +20,10 @@ namespace EspotifeiClient
     /// </summary>
     public partial class MainWindow
     {
+
+        private int _antiguaCalificacion = 0;
+        private int _idCancionActual = 0;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -65,12 +71,15 @@ namespace EspotifeiClient
         {
             if (cancion != null)
             {
+                _idCancionActual = cancion.id;
                 tiempoActualTextBlock.Text = "00:00";
                 duracionSlider.Value = 0;
                 duracionSlider.Maximum = cancion.duracion;
                 nombreCancionTextBlock.Text = cancion.nombre;
                 artistaCacionTextBlock.Text = DarFormatoACreadoresDeContenidoDeCancion(cancion.creadores_de_contenido);
                 tiempoTotalTextBlock.Text = cancion.duracionString;
+                ObtenerCalificacion(cancion.id);
+                calificacionRatingBar.Visibility = Visibility.Visible;
                 if (cancion.album.PortadaImagen == null)
                 {
                     await ColocarImagenAlbum(cancion.album, Calidad.Baja);
@@ -79,12 +88,48 @@ namespace EspotifeiClient
             }
         }
 
+        /// <summary>
+        /// Coloca la calificación en estrellas de la cancion actual
+        /// </summary>
+        /// <param name="idCancion">El id de la cancion a recuperar su calificacion</param>
+        private async void ObtenerCalificacion(int idCancion)
+        {
+            calificacionRatingBar.IsEnabled = false;
+            try
+            {
+                _antiguaCalificacion = (await CalificacionClient.GetCalificacion(idCancion)).calificacion_estrellas;
+            }
+            catch (HttpRequestException)
+            {
+                new MensajeEmergente().MostrarMensajeError("Verifique su conexión a internet");
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "NoCalificada")
+                {
+                    _antiguaCalificacion = 0;
+                }else if (ex.Message == "AuntenticacionFallida")
+                {
+                    new MensajeEmergente().MostrarMensajeError("No se ha podido logear con las credenciales proporcionadas," +
+                                                               " si el error ocurre de nuevo, cierre y vuelva a iniciar sesion");
+                }
+                else
+                {
+                    new MensajeEmergente().MostrarMensajeError(ex.Message);
+                }
+            }
+
+            calificacionRatingBar.Value = _antiguaCalificacion;
+            calificacionRatingBar.IsEnabled = true;
+        }
+
         private void ColocarElementosCancionPersonal(CancionPersonal cancionPersonal)
         {
             if (cancionPersonal != null)
             {
                 tiempoActualTextBlock.Text = "00:00";
                 duracionSlider.Value = 0;
+                calificacionRatingBar.Visibility = Visibility.Collapsed;
                 duracionSlider.Maximum = cancionPersonal.duracion;
                 nombreCancionTextBlock.Text = cancionPersonal.nombre;
                 artistaCacionTextBlock.Text = cancionPersonal.artistas;
@@ -208,6 +253,41 @@ namespace EspotifeiClient
         private void OnClickHistorial(object sender, MouseButtonEventArgs e)
         {
             PantallaFrame.Navigate(new MiHistorial());
+        }
+
+        /// <summary>
+        /// Actualiza o registra la calificacion de una cancion
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private void OnValueChangedCalificacion(object sender, RoutedPropertyChangedEventArgs<int> e)
+        {
+            var calificacion = ((RatingBar)sender).Value;
+            calificacionRatingBar.IsEnabled = false;
+            try
+            {
+                if (_antiguaCalificacion == 0)
+                {
+                    CalificacionClient.AddCalificacion(_idCancionActual, calificacion);
+                }
+                else
+                {
+                    CalificacionClient.EditCalificacion(_idCancionActual, calificacion);
+                }
+                _antiguaCalificacion = calificacion;
+            }
+            catch (HttpRequestException)
+            {
+                new MensajeEmergente().MostrarMensajeError("No se ha podido guardar la calificación, verifique su " +
+                                                           "conexión a internet e intentelo nuevamente");
+            }
+            catch (Exception ex)
+            {
+                new MensajeEmergente().MostrarMensajeError(ex.Message);
+            }
+
+            calificacionRatingBar.IsEnabled = true;
+            
         }
     }
 }

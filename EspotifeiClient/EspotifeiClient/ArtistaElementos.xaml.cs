@@ -193,10 +193,7 @@ namespace EspotifeiClient
         {
             var idAlbum = (int) ((Button) sender).Tag;
             var album = _albums.Find(a => a.id == idAlbum);
-            if (album != null)
-            {
-                Player.Player.GetPlayer().AñadirCancionesDeAlbumACola(album);
-            }
+            if (album != null) Player.Player.GetPlayer().AñadirCancionesDeAlbumACola(album);
         }
 
         /// <summary>
@@ -208,16 +205,13 @@ namespace EspotifeiClient
         {
             var idCancion = (int) ((Button) sender).Tag;
             var cancion = BuscarCancionEnAlbumes(idCancion);
-            var album = BuscarAlbumDeCancion(idCancion);
+            var album = BuscarAlbumDeCancion(idCancion); 
             cancion.album = album;
-            if (album != null)
-            {
-                Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion, false);
-            }
+            if (album != null) Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
         }
-        
+
         /// <summary>
-        /// Añade las canciones del creador de contenido a la cola de reproduccion
+        ///     Añade las canciones del creador de contenido a la cola de reproduccion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -226,9 +220,25 @@ namespace EspotifeiClient
             _creadorContenido.Albums = _albums;
             Player.Player.GetPlayer().AñadirCancionesDeCreadorDeContenidoACola(_creadorContenido);
         }
+        
+        /// <summary>
+        /// Agrega la cancion a la cola de reproducción
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private void OnClickAgregarACola(object sender, RoutedEventArgs e)
+        {
+            var idCancion = (int) ((Button) sender).Tag;
+            var cancion = BuscarCancionEnAlbumes(idCancion);
+            if (cancion != null)
+            {
+                cancion.album = BuscarAlbumDeCancion(idCancion);
+                Player.Player.GetPlayer().AñadirCancionAColaDeReproduccion(cancion);
+            }
+        }
 
         /// <summary>
-        /// Busca la cancion con el idCancion dentro de los Albums
+        ///     Busca la cancion con el idCancion dentro de los Albums
         /// </summary>
         /// <param name="idCancion">El id de la cancion a buscar</param>
         /// <returns>La cancion del id cancion</returns>
@@ -249,7 +259,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Busca el album en donde se encuentra contenido la cancion con el idCancion
+        ///     Busca el album en donde se encuentra contenido la cancion con el idCancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a buscar su album</param>
         /// <returns>El album de la cancion</returns>
@@ -267,6 +277,49 @@ namespace EspotifeiClient
             }
 
             return albumDeCancion;
+        }
+
+        /// <summary>
+        /// Manda a reproducir la radio de la cancion seleccionada
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el eventp</param>
+        /// <param name="e">El evento invocado</param>
+        private async void OnClickEmpezarRadio(object sender, RoutedEventArgs e)
+        {
+            var idCancion = (int) ((Button) sender).Tag;
+            List<Cancion> radio;
+            try
+            {
+                radio = await CancionClient.GetRadioFromSong(idCancion);
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                AlbumsListView.Visibility = Visibility.Visible;
+                Player.Player.GetPlayer().AñadirRadioAListaDeReproduccion(radio);
+            }
+            catch (HttpRequestException)
+            {
+                SinConexionGrid.Visibility = Visibility.Visible;
+                AlbumsListView.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "AuntenticacionFallida")
+                {
+                    new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
+                                                               "proporcionadas, se cerra la sesion");
+                    MenuInicio.OcultarMenu();
+                    MenuInicio.OcultarReproductor();
+                    NavigationService?.Navigate(new IniciarSesion());
+                }
+                else
+                {
+                    new MensajeEmergente().MostrarMensajeError(ex.Message);
+                }
+            }
+        }
+
+        private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
+        {
+            
         }
     }
 }

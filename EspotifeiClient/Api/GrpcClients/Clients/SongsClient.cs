@@ -11,23 +11,28 @@ namespace Api.GrpcClients.Clients
 {
     public class SongsClient
     {
-
-        private bool _getSong = true;
         public delegate void ErrorRaised(string message);
-        public event ErrorRaised OnErrorRaised;
-        public delegate void PorcentegeUp(float porcentage);
-        public event PorcentegeUp OnPorcentageUp;
-        public delegate void UploadTerminated();
-        public event UploadTerminated OnUploadTerminated;
+
         public delegate void OnChuckRecived(byte[] bytesSong);
+
         public delegate void OnRecivedSong(byte[] bytesSong, string extension);
+
+        public delegate void PorcentegeUp(float porcentage);
+
+        public delegate void UploadTerminated();
+
         private const int ChunkSize = 64 * 1000;
-        public event OnChuckRecived OnSongChunkRived;
-        public event OnRecivedSong OnInitialRecivedSong;
         private const int CounTrys = 2;
 
+        private bool _getSong = true;
+        public event ErrorRaised OnErrorRaised;
+        public event PorcentegeUp OnPorcentageUp;
+        public event UploadTerminated OnUploadTerminated;
+        public event OnChuckRecived OnSongChunkRived;
+        public event OnRecivedSong OnInitialRecivedSong;
+
         /// <summary>
-        /// Solicita al servidor subir una cancion
+        ///     Solicita al servidor subir una cancion
         /// </summary>
         /// <param name="path">La ruta de la cancion</param>
         /// <param name="idSong">El id de la cancion a subir</param>
@@ -41,7 +46,7 @@ namespace Api.GrpcClients.Clients
             var formatAudio = ConvertExtensionToFormatAudio(extension);
             if (File.Exists(path))
             {
-                for (int o = 1; o <= CounTrys; o++)
+                for (var o = 1; o <= CounTrys; o++)
                 {
                     var resquestUploadSong = new SolicitudSubirCancion();
                     resquestUploadSong.InformacionCancion = new InformacionCancion();
@@ -64,6 +69,7 @@ namespace Api.GrpcClients.Clients
                                 await call.RequestStream.WriteAsync(resquestUploadSong);
                                 OnPorcentageUp?.Invoke(CalculatePercentageUpload(i, totalChunks));
                             }
+
                             resquestUploadSong.Data =
                                 ByteString.CopyFrom(FileManager.SubArray(songBytes, totalChunks, finalBytes));
                             await call.RequestStream.WriteAsync(resquestUploadSong);
@@ -73,14 +79,17 @@ namespace Api.GrpcClients.Clients
                         {
                             throw new RpcException(ex.Status);
                         }
+
                         var response = await call.ResponseAsync;
                         if (response.Error == Error.Ninguno)
                         {
                             OnUploadTerminated?.Invoke();
                             return;
-                        }else if (response.Error == Error.TokenInvalido || response.Error == Error.TokenFaltante)
+                        }
+
+                        if (response.Error == Error.TokenInvalido || response.Error == Error.TokenFaltante)
                         {
-                            ApiServiceLogin.GetServiceLogin().ReLogin();
+                            await ApiServiceLogin.GetServiceLogin().ReLogin();
                         }
                         else
                         {
@@ -88,12 +97,13 @@ namespace Api.GrpcClients.Clients
                         }
                     }
                 }
+
                 throw new Exception("AuntenticacionFallida");
             }
         }
 
         /// <summary>
-        /// Solicita al servidor la cancion con el id cancion en la calidad indicada
+        ///     Solicita al servidor la cancion con el id cancion en la calidad indicada
         /// </summary>
         /// <param name="idGetSong">El id de la cancion a solicitar al servidor</param>
         /// <param name="calidad">La calidad de la cancion a solicitar</param>
@@ -108,7 +118,7 @@ namespace Api.GrpcClients.Clients
             var position = 0;
             FormatoAudio formatAudio;
             var error = Error.Ninguno;
-            for (int i = 1; i <= CounTrys; i++)
+            for (var i = 1; i <= CounTrys; i++)
             {
                 try
                 {
@@ -139,12 +149,14 @@ namespace Api.GrpcClients.Clients
                     OnErrorRaised?.Invoke("No se pudo recuperar la canción, porfavor verifique su conexion a internet");
                     break;
                 }
+
                 if (error != Error.Ninguno)
                 {
                     if (error == Error.TokenFaltante || error == Error.TokenInvalido)
                     {
-                        ApiServiceLogin.GetServiceLogin().ReLogin();
-                    }else
+                        await ApiServiceLogin.GetServiceLogin().ReLogin();
+                    }
+                    else
                     {
                         OnErrorRaised?.Invoke(ManageGetSongError(error));
                         break;
@@ -157,13 +169,11 @@ namespace Api.GrpcClients.Clients
             }
 
             if (error == Error.TokenFaltante || error == Error.TokenInvalido)
-            {
                 OnErrorRaised?.Invoke("AuntenticacionFallida");
-            }
         }
 
         /// <summary>
-        /// Detiene la solicitud de obtener una cancion
+        ///     Detiene la solicitud de obtener una cancion
         /// </summary>
         public void StopGetSong()
         {
@@ -171,7 +181,7 @@ namespace Api.GrpcClients.Clients
         }
 
         /// <summary>
-        /// Maneja los errores que puedan ocurrir al recuperar una cancion
+        ///     Maneja los errores que puedan ocurrir al recuperar una cancion
         /// </summary>
         /// <param name="error">El codigo del error</param>
         private string ManageGetSongError(Error error)
@@ -202,19 +212,19 @@ namespace Api.GrpcClients.Clients
         }
 
         /// <summary>
-        /// Calcula el porcentaje de subida actual
+        ///     Calcula el porcentaje de subida actual
         /// </summary>
         /// <param name="actualChunck">El chunckActual de subida</param>
         /// <param name="totalChunk">El total de Chunks</param>
         /// <returns>El porcentaje de subida</returns>
         private float CalculatePercentageUpload(int actualChunck, int totalChunk)
         {
-            float percentage = Convert.ToSingle(actualChunck) / Convert.ToSingle(totalChunk);
+            var percentage = Convert.ToSingle(actualChunck) / Convert.ToSingle(totalChunk);
             return percentage * 100;
         }
-        
+
         /// <summary>
-        /// Convierte un string a un Enum FormatoAudio
+        ///     Convierte un string a un Enum FormatoAudio
         /// </summary>
         /// <param name="extension">El string a convertir</param>
         /// <returns>El FormatoAudio convertido</returns>
@@ -231,7 +241,7 @@ namespace Api.GrpcClients.Clients
         }
 
         /// <summary>
-        /// Convierte el FormatoAudio a string
+        ///     Convierte el FormatoAudio a string
         /// </summary>
         /// <param name="audioFormat">El FormatoAudio a convertir</param>
         /// <returns>El string correspondiente</returns>
@@ -248,7 +258,7 @@ namespace Api.GrpcClients.Clients
         }
 
         /// <summary>
-        /// Maneja los errores que pueda ocurrir al subir una cancion
+        ///     Maneja los errores que pueda ocurrir al subir una cancion
         /// </summary>
         /// <param name="codigoError">El codigo de error</param>
         /// <exception cref="Exception">La excepcion correspondiente al codigo de error</exception>

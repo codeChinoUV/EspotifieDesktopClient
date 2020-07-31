@@ -19,13 +19,13 @@ namespace EspotifeiClient
     /// </summary>
     public partial class RegistrarCancion
     {
-
-        private List<CreadorContenido> _creadoresDeContenido = new List<CreadorContenido>();
-        private List<Genero> _listaGeneros = new List<Genero>();
+        private readonly Cancion _cancionAEditar;
         private Cancion _cancionRegistrada;
-        private Cancion _cancionAEditar;
-        private int _idAlbum;
-        
+
+        private readonly List<CreadorContenido> _creadoresDeContenido = new List<CreadorContenido>();
+        private readonly int _idAlbum;
+        private readonly List<Genero> _listaGeneros = new List<Genero>();
+
         public RegistrarCancion(int idAlbum)
         {
             InitializeComponent();
@@ -43,16 +43,16 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Regresa la cancion registrada
+        ///     Regresa la cancion registrada
         /// </summary>
         /// <returns>La cancion registrada</returns>
         private Cancion GetCancionRegistrada()
         {
             return _cancionRegistrada;
         }
-        
+
         /// <summary>
-        /// Muestra la ventana para registrar la una cancion
+        ///     Muestra la ventana para registrar la una cancion
         /// </summary>
         /// <param name="idAlbum">El id del album al que pertenece la cancion</param>
         /// <returns>La cancion registrada</returns>
@@ -64,7 +64,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Muestra la ventana para registrar la una cancion
+        ///     Muestra la ventana para registrar la una cancion
         /// </summary>
         /// <param name="cancionAEditar">La cancion a editar</param>
         /// <param name="idAlbum">El id del album al que pertenece la cancion</param>
@@ -75,9 +75,9 @@ namespace EspotifeiClient
             ventana.ShowDialog();
             return ventana.GetCancionRegistrada();
         }
-        
+
         /// <summary>
-        /// Coloca la informacion de la cancion en los elementos de la pantalla
+        ///     Coloca la informacion de la cancion en los elementos de la pantalla
         /// </summary>
         private void LlenarElementosEditarCancion()
         {
@@ -89,23 +89,19 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Coloca en la lista de creadores de contenido los creadores de contenido que ya tiene la cancion
+        ///     Coloca en la lista de creadores de contenido los creadores de contenido que ya tiene la cancion
         /// </summary>
         /// <param name="creadorContenidos">La lista de creadores de contenido a agregar</param>
         private void LlenarListaDeCreadoresDeContenidoSeleccionadoConLosDeCancion(
             List<CreadorContenido> creadorContenidos)
         {
-            
-            foreach (var creadorContenido in creadorContenidos)
-            {
-                _creadoresDeContenido.Add(creadorContenido);
-            }
+            foreach (var creadorContenido in creadorContenidos) _creadoresDeContenido.Add(creadorContenido);
 
             CreadorDeContenidoSeleccionadosTabla.ItemsSource = _creadoresDeContenido;
         }
 
         /// <summary>
-        /// Valida si el nombre tiene la longitud permitida
+        ///     Valida si el nombre tiene la longitud permitida
         /// </summary>
         /// <returns>True si es valido o False si no</returns>
         private bool ValidarNombre()
@@ -115,31 +111,27 @@ namespace EspotifeiClient
             var tamañoMaximo = 70;
             var esValido = ValidacionDeCadenas.ValidarTamañoDeCadena(cadena, tamañoMinimo, tamañoMaximo);
             if (!esValido)
-            {
                 new MensajeEmergente().MostrarMensajeAdvertencia($"El nombre debe de tener mas de {tamañoMinimo} " +
                                                                  $"caracteres y menos de {tamañoMaximo} caracteres");
-            }
 
             return esValido;
         }
 
         /// <summary>
-        /// Valida si lo por menos hay un genero seleccionado
+        ///     Valida si lo por menos hay un genero seleccionado
         /// </summary>
         /// <returns>True si tiene por lo menos un genero seleccionado o False si no</returns>
         private bool ValidarGeneroSeleccionado()
         {
             var tieneGeneroSeleccionado = _listaGeneros.Count > 0;
             if (!tieneGeneroSeleccionado)
-            {
                 new MensajeEmergente().MostrarMensajeAdvertencia("Debe de seleccionar por lo menos un genero");
-            }
 
             return tieneGeneroSeleccionado;
         }
 
         /// <summary>
-        /// Valida si ya se selecciono una cancion
+        ///     Valida si ya se selecciono una cancion
         /// </summary>
         /// <returns>True si hay una cancion seleccionada o False si no</returns>
         private bool ValidarCancionSeleccionada()
@@ -149,26 +141,21 @@ namespace EspotifeiClient
             {
                 cancionSeleccionada = ArchivoSeleccionadoText.Text != "";
                 if (!cancionSeleccionada)
-                {
                     new MensajeEmergente().MostrarMensajeAdvertencia("Debe de seleccionar una cancion");
-                }
             }
-            
+
             return cancionSeleccionada;
         }
-        
+
         /// <summary>
-        /// Método que consulta los géneros registrados en el servidor
+        ///     Método que consulta los géneros registrados en el servidor
         /// </summary>
         private async void ConsultarGeneros()
         {
             try
             {
                 var listaGeneros = await GeneroClient.GetGeneros();
-                if (_cancionAEditar != null)
-                {
-                    listaGeneros = await InicializarEstadoCheckBox(listaGeneros);
-                }
+                if (_cancionAEditar != null) listaGeneros = await InicializarEstadoCheckBox(listaGeneros);
                 GenerosTabla.ItemsSource = listaGeneros;
             }
             catch (HttpRequestException)
@@ -180,9 +167,9 @@ namespace EspotifeiClient
                 new MensajeEmergente().MostrarMensajeError(ex.Message);
             }
         }
-        
+
         /// <summary>
-        /// Recupera los generos de la cancion y marca como seleccionadas los generos que tenga la cancion
+        ///     Recupera los generos de la cancion y marca como seleccionadas los generos que tenga la cancion
         /// </summary>
         private async Task<List<Genero>> InicializarEstadoCheckBox(List<Genero> generos)
         {
@@ -192,27 +179,28 @@ namespace EspotifeiClient
                 var index = generos?.FindIndex(g => g.id == genero.id);
                 if (index != null)
                 {
-                    generos[(int)index].seleccionado = true;
-                    _listaGeneros.Add(generos[(int)index]);
+                    generos[(int) index].seleccionado = true;
+                    _listaGeneros.Add(generos[(int) index]);
                 }
             }
+
             return generos;
         }
-        
+
         /// <summary>
-        /// Agrega un artista a la lista de artistas de la cancion
+        ///     Agrega un artista a la lista de artistas de la cancion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
         private void OnClickAgregarArtista(object sender, RoutedEventArgs e)
         {
-            var idCreadorDeContenido = (int)((Button)sender).Tag;
-            var creadoresDeContenido = (List<CreadorContenido>)CreadoreContenidoTabla.ItemsSource;
+            var idCreadorDeContenido = (int) ((Button) sender).Tag;
+            var creadoresDeContenido = (List<CreadorContenido>) CreadoreContenidoTabla.ItemsSource;
             var creadorDeContenido = creadoresDeContenido.Find(c => c.id == idCreadorDeContenido);
-            if(creadorDeContenido != null)
+            if (creadorDeContenido != null)
             {
-                var creadorDeContenidoEnLista =_creadoresDeContenido.Find(c => c.id==creadorDeContenido.id);
-                if(creadorDeContenidoEnLista == null)
+                var creadorDeContenidoEnLista = _creadoresDeContenido.Find(c => c.id == creadorDeContenido.id);
+                if (creadorDeContenidoEnLista == null)
                 {
                     _creadoresDeContenido.Add(creadorDeContenido);
                     CreadorDeContenidoSeleccionadosTabla.ItemsSource = null;
@@ -222,7 +210,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Agrega un genero a la lista de generos de la cancion
+        ///     Agrega un genero a la lista de generos de la cancion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -237,7 +225,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Quita un genero de la lista de generos seleccionados
+        ///     Quita un genero de la lista de generos seleccionados
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -249,7 +237,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Abre una ventana de selección de archivos
+        ///     Abre una ventana de selección de archivos
         /// </summary>
         /// <param name="sender">El objeto invocado</param>
         /// <param name="e">El evento invocado</param>
@@ -267,7 +255,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Crea una cancion a partir de los elementos de la pantalla
+        ///     Crea una cancion a partir de los elementos de la pantalla
         /// </summary>
         /// <returns>La Cancion creada</returns>
         private Cancion CrearCancion()
@@ -282,7 +270,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Actualiza la informacion de la cancion a editar
+        ///     Actualiza la informacion de la cancion a editar
         /// </summary>
         private void ActualizarCancionEditar()
         {
@@ -290,7 +278,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cierra la ventana
+        ///     Cierra la ventana
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -301,7 +289,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Deshabilita todos los elementos en pantalla
+        ///     Deshabilita todos los elementos en pantalla
         /// </summary>
         private void DeshabilitarElementosPantalla()
         {
@@ -314,9 +302,9 @@ namespace EspotifeiClient
             CreadorDeContenidoSeleccionadosTabla.IsEnabled = false;
             GenerosTabla.IsEnabled = false;
         }
-        
+
         /// <summary>
-        /// Habilita todos los elementos en pantalla
+        ///     Habilita todos los elementos en pantalla
         /// </summary>
         private void HabilitarElementosPantalla()
         {
@@ -331,24 +319,20 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Guarda la información de la canción y sube la canción
+        ///     Guarda la información de la canción y sube la canción
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
         private void OnClickGuardatButton(object sender, RoutedEventArgs e)
         {
             if (_cancionAEditar != null)
-            {
                 EditarCancion();
-            }
             else
-            {
                 RegistrarNuevaCancion();
-            }
         }
 
         /// <summary>
-        /// Edita la informacion de una cancion y sube la cancion al servidor
+        ///     Edita la informacion de una cancion y sube la cancion al servidor
         /// </summary>
         private async void EditarCancion()
         {
@@ -358,7 +342,9 @@ namespace EspotifeiClient
                 ActualizarCancionEditar();
                 try
                 {
-                    _cancionRegistrada = await CancionClient.EditSong(_cancionAEditar, _idAlbum, _listaGeneros, _creadoresDeContenido);
+                    _cancionAEditar.album = new Album();
+                    _cancionRegistrada = await CancionClient.EditSong(_cancionAEditar, _idAlbum, _listaGeneros,
+                        _creadoresDeContenido);
                     if (ArchivoSeleccionadoText.Text != "")
                     {
                         try
@@ -366,29 +352,29 @@ namespace EspotifeiClient
                             var clienteCanciones = new SongsClient();
                             clienteCanciones.OnPorcentageUp += SubirPorcentajeAvanza;
                             clienteCanciones.OnUploadTerminated += TerminarSubirCancion;
-                            await clienteCanciones.UploadSong(ArchivoSeleccionadoText.Text, _cancionRegistrada.id, false);
+                            await clienteCanciones.UploadSong(ArchivoSeleccionadoText.Text, _cancionRegistrada.id,
+                                false);
                         }
                         catch (RpcException)
                         {
-                            new MensajeEmergente().MostrarMensajeError("No se pudo subir la cancion, la puede volver a " +
-                                                                       "subir mas adelante");
+                            new MensajeEmergente().MostrarMensajeError(
+                                "No se pudo subir la cancion, la puede volver a " +
+                                "subir mas adelante");
                             Close();
                         }
                         catch (Exception ex)
                         {
                             if (ex.Message == "AuntenticacionFallida")
-                            {
-                                new MensajeEmergente().MostrarMensajeError("No se pudo autenticar con el usuario con el " +
-                                                                           "cual inicio sesión, se guardo la informacion de la " +
-                                                                           "cancion pero no el archivo");
-                            }
+                                new MensajeEmergente().MostrarMensajeError(
+                                    "No se pudo autenticar con el usuario con el " +
+                                    "cual inicio sesión, se guardo la informacion de la " +
+                                    "cancion pero no el archivo");
                             else
-                            {
                                 new MensajeEmergente().MostrarMensajeError(ex.Message);
-                            }
                             Close();
                         }
-                    }else
+                    }
+                    else
                     {
                         new MensajeEmergente().MostrarMensajeInformacion("La cancion se ha modifico correctamente");
                         Close();
@@ -412,12 +398,13 @@ namespace EspotifeiClient
                         new MensajeEmergente().MostrarMensajeError(ex.Message);
                     }
                 }
+
                 HabilitarElementosPantalla();
             }
         }
-        
+
         /// <summary>
-        /// Registra la informacion de una cancion y sube la cancion al servidor
+        ///     Registra la informacion de una cancion y sube la cancion al servidor
         /// </summary>
         private async void RegistrarNuevaCancion()
         {
@@ -444,15 +431,11 @@ namespace EspotifeiClient
                     catch (Exception ex)
                     {
                         if (ex.Message == "AuntenticacionFallida")
-                        {
                             new MensajeEmergente().MostrarMensajeError("No se pudo autenticar con el usuario con el " +
                                                                        "cual inicio sesión, se guardo la informacion de la " +
                                                                        "cancion pero no el archivo");
-                        }
                         else
-                        {
                             new MensajeEmergente().MostrarMensajeError(ex.Message);
-                        }
                         Close();
                     }
                 }
@@ -473,14 +456,14 @@ namespace EspotifeiClient
                     {
                         new MensajeEmergente().MostrarMensajeError(ex.Message);
                     }
-                    
                 }
+
                 HabilitarElementosPantalla();
             }
         }
 
         /// <summary>
-        /// Muestra el mensaje de se termino de subir la cancion y cierra la ventana
+        ///     Muestra el mensaje de se termino de subir la cancion y cierra la ventana
         /// </summary>
         private void TerminarSubirCancion()
         {
@@ -489,18 +472,18 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Aumenta el porcentaje de la cancion subida y el progress bar
+        ///     Aumenta el porcentaje de la cancion subida y el progress bar
         /// </summary>
         /// <param name="porcentage">El porcentaje</param>
         private void SubirPorcentajeAvanza(float porcentage)
         {
-            int porcentajeEntero = (int) porcentage;
+            var porcentajeEntero = (int) porcentage;
             PorcentajeTextBloxk.Text = $"{porcentajeEntero.ToString()}%";
             SubidaProgressbar.Value = porcentage;
         }
 
         /// <summary>
-        /// Solicita al servidor buscar los creadores de contenido que coincida con el nombre
+        ///     Solicita al servidor buscar los creadores de contenido que coincida con el nombre
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -516,8 +499,9 @@ namespace EspotifeiClient
                 }
                 catch (HttpRequestException)
                 {
-                    new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor, verifique su conexión a " +
-                                                               "internet");
+                    new MensajeEmergente().MostrarMensajeError(
+                        "No se puede conectar al servidor, verifique su conexión a " +
+                        "internet");
                 }
                 catch (Exception ex)
                 {
@@ -529,17 +513,16 @@ namespace EspotifeiClient
                 CreadoreContenidoTabla.ItemsSource = null;
                 CreadoreContenidoTabla.ItemsSource = new List<CreadorContenido>();
             }
-            
         }
 
         /// <summary>
-        /// Quita un Creador de Contenido de la lista de los creadores de contenido
+        ///     Quita un Creador de Contenido de la lista de los creadores de contenido
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
         private void OnClickQuitarArtista(object sender, RoutedEventArgs e)
         {
-            var idCreadorDeContenido = (int)((Button)sender).Tag;
+            var idCreadorDeContenido = (int) ((Button) sender).Tag;
             var creadorDeContenido = _creadoresDeContenido.Find(c => c.id == idCreadorDeContenido);
             _creadoresDeContenido.Remove(creadorDeContenido);
             CreadorDeContenidoSeleccionadosTabla.ItemsSource = null;

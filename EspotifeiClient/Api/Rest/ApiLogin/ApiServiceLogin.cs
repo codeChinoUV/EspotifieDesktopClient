@@ -15,11 +15,12 @@ namespace Api.Rest.ApiLogin
         private static HttpClient _apiClient;
         private string _autenticationToken = "";
         private Login _userLogin;
-        public Usuario Usuario { get; set; }
 
         private ApiServiceLogin()
         {
         }
+
+        public Usuario Usuario { get; set; }
 
         /// <summary>
         ///     Devuelve el token de autenticacion del usuario actual
@@ -33,7 +34,7 @@ namespace Api.Rest.ApiLogin
         /// <summary>
         ///     Vuelve a logear al usuario con los credenciales almacenadas
         /// </summary>
-        public async void ReLogin()
+        public async Task ReLogin()
         {
             await Login(_userLogin);
         }
@@ -63,9 +64,7 @@ namespace Api.Rest.ApiLogin
                 }
 
                 if (status == HttpStatusCode.InternalServerError)
-                {
                     throw new Exception("Ocurrio un error en el servidor");
-                }
 
                 var result = await content.ReadAsStringAsync();
                 var splitResult = result.Split(':');

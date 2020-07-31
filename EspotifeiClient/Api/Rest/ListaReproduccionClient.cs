@@ -9,7 +9,7 @@ namespace Api.Rest
     public class ListaReproduccionClient
     {
         /// <summary>
-        /// Tarea que se encarga de recuperar las listas de producción por búsqueda
+        ///     Tarea que se encarga de recuperar las listas de producción por búsqueda
         /// </summary>
         /// <param name="search">La cadena a buscar</param>
         /// <returns>Una lista de Listas de reproducción</returns>
@@ -17,18 +17,17 @@ namespace Api.Rest
         public static async Task<List<ListaReproduccion>> SearchListaReproduccion(string search)
         {
             var path = $"/v1/listas-de-reproduccion/buscar/{search}";
-            using (HttpResponseMessage response = await ApiClient.GetApiClient().GetAsync(path))
+            using (var response = await ApiClient.GetApiClient().GetAsync(path))
             {
                 if (response.IsSuccessStatusCode)
                 {
                     var listasReproduccion = await response.Content.ReadAsAsync<List<ListaReproduccion>>();
                     return listasReproduccion;
-                } else
-                {
-                    ErrorGeneral error;
-                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
-                    throw new Exception(error.mensaje);
                 }
+
+                ErrorGeneral error;
+                error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                throw new Exception(error.mensaje);
             }
         }
     }

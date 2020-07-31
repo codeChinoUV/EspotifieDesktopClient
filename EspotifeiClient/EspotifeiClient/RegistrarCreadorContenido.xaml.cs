@@ -18,18 +18,18 @@ namespace EspotifeiClient
     /// </summary>
     public partial class RegistrarCreadorContenido
     {
-        private string _rutaImagen = "";
         private readonly List<Genero> _listaGenero = new List<Genero>();
         private readonly bool _regresarAPerfilCreador;
         private CreadorContenido _creadorContenidoAEditar;
+        private string _rutaImagen = "";
 
-        public RegistrarCreadorContenido(bool regresarAPerfilCreador=false)
+        public RegistrarCreadorContenido(bool regresarAPerfilCreador = false)
         {
             InitializeComponent();
             _regresarAPerfilCreador = regresarAPerfilCreador;
             ConsultarGeneros();
         }
-        
+
         public RegistrarCreadorContenido(CreadorContenido creadorContenidoAEditar)
         {
             InitializeComponent();
@@ -39,7 +39,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Coloca todos los elementos del creador de contenido a editar en la pantalla
+        ///     Coloca todos los elementos del creador de contenido a editar en la pantalla
         /// </summary>
         private void ColocarElementosCreadorDeContenidoEditar()
         {
@@ -51,7 +51,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Marca como seleccionadas los generos que tenga el creador de contenido
+        ///     Marca como seleccionadas los generos que tenga el creador de contenido
         /// </summary>
         private List<Genero> InicializarEstadoCheckBox(List<Genero> generos)
         {
@@ -60,8 +60,8 @@ namespace EspotifeiClient
                 var index = generos?.FindIndex(g => g.id == genero.id);
                 if (index != null)
                 {
-                    generos[(int)index].seleccionado = true;
-                    _listaGenero.Add(generos[(int)index]);
+                    generos[(int) index].seleccionado = true;
+                    _listaGenero.Add(generos[(int) index]);
                 }
             }
 
@@ -69,7 +69,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Actualiza los campos del creador de contenido igualandolos con la informacion en los campos
+        ///     Actualiza los campos del creador de contenido igualandolos con la informacion en los campos
         /// </summary>
         private void ActualizarCreadorDeContenidoAPartirDeCampos()
         {
@@ -77,9 +77,9 @@ namespace EspotifeiClient
             _creadorContenidoAEditar.biografia = biografiaTextbox.Text;
             _creadorContenidoAEditar.es_grupo = ValidarCheckBoxGrupo();
         }
-        
+
         /// <summary>
-        /// Método que crea un CreadorContenido a partir de su información
+        ///     Método que crea un CreadorContenido a partir de su información
         /// </summary>
         /// <returns>Variable de tipo CreadorContenido</returns>
         private CreadorContenido CrearCreadorContenido()
@@ -95,24 +95,20 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Edita o registra un creador de contenido dependiendo de la pantalla mostrada
+        ///     Edita o registra un creador de contenido dependiendo de la pantalla mostrada
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
         private void OnClickRegistrarCreadorButton(object sender, RoutedEventArgs e)
         {
             if (_creadorContenidoAEditar != null)
-            {
                 EditarCreadorDeContenido();
-            }
             else
-            {
                 RegistrarCreadorDeContenido();
-            }
         }
 
         /// <summary>
-        /// Registra en el servidor un creador de contendo
+        ///     Registra en el servidor un creador de contendo
         /// </summary>
         private async void RegistrarCreadorDeContenido()
         {
@@ -161,21 +157,18 @@ namespace EspotifeiClient
                 if (registrado)
                 {
                     if (_regresarAPerfilCreador)
-                    {
                         NavigationService?.Navigate(new PerfilCreadorDeContenido());
-                    }
                     else
-                    {
                         NavigationService?.Navigate(new MenuInicio());
-                    }
                 }
+
                 cancelarButton.IsEnabled = true;
                 registrarCreadorButton.IsEnabled = true;
             }
         }
 
         /// <summary>
-        /// Edita la informacion de un creador de contenido en base a lo que hay en los campos
+        ///     Edita la informacion de un creador de contenido en base a lo que hay en los campos
         /// </summary>
         private async void EditarCreadorDeContenido()
         {
@@ -222,27 +215,21 @@ namespace EspotifeiClient
                     }
                 }
 
-                if (editado)
-                { 
-                    NavigationService?.Navigate(new PerfilCreadorDeContenido());
-                }
+                if (editado) NavigationService?.Navigate(new PerfilCreadorDeContenido());
                 cancelarButton.IsEnabled = true;
                 registrarCreadorButton.IsEnabled = true;
             }
         }
-        
+
         /// <summary>
-        /// Método que consulta los géneros registrados en el servidor
+        ///     Método que consulta los géneros registrados en el servidor
         /// </summary>
         private async void ConsultarGeneros()
         {
             try
             {
                 var listaGeneros = await GeneroClient.GetGeneros();
-                if (_creadorContenidoAEditar != null)
-                {
-                    listaGeneros = InicializarEstadoCheckBox(listaGeneros);
-                }
+                if (_creadorContenidoAEditar != null) listaGeneros = InicializarEstadoCheckBox(listaGeneros);
                 GenerosTabla.ItemsSource = listaGeneros;
             }
             catch (HttpRequestException)
@@ -272,7 +259,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que valida el tamaño del campo biografiaTextbox
+        ///     Método que valida el tamaño del campo biografiaTextbox
         /// </summary>
         /// <returns>Verdadero si el TextBox tiene una longitud valida</returns>
         private bool ValidarTextBoxBiografia()
@@ -289,7 +276,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que valida si el CheckBox del grupo está activado o no
+        ///     Método que valida si el CheckBox del grupo está activado o no
         /// </summary>
         /// <returns>Verdadero si el CheckBox está activado</returns>
         private bool ValidarCheckBoxGrupo()
@@ -301,7 +288,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que contiene el evento para abrir el explorador de archivos y cargar una imagen
+        ///     Método que contiene el evento para abrir el explorador de archivos y cargar una imagen
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -330,7 +317,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Agrega el genero seleccionado a la lista de generos del creador de contenido
+        ///     Agrega el genero seleccionado a la lista de generos del creador de contenido
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -345,7 +332,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Quita el genero seleccionado de la lista de generos
+        ///     Quita el genero seleccionado de la lista de generos
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -357,7 +344,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Navega a la pagina de Menu de inicio si se cancela la operacion
+        ///     Navega a la pagina de Menu de inicio si se cancela la operacion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>

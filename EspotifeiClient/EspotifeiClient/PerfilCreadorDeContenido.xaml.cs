@@ -16,7 +16,7 @@ using Model;
 namespace EspotifeiClient
 {
     /// <summary>
-    /// Lógica de interacción para PerfilCreadorDeContenido.xaml
+    ///     Lógica de interacción para PerfilCreadorDeContenido.xaml
     /// </summary>
     public partial class PerfilCreadorDeContenido
     {
@@ -46,25 +46,27 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Recupera y muestra todos los elementos de los albumes
+        ///     Recupera y muestra todos los elementos de los albumes
         /// </summary>
         /// <returns></returns>
         private async Task InicializarAlbumes()
         {
             await RecuperarAlbums(_creadorContenido.id);
+            AlbumsListView.ItemsSource = _albums;
             await ObtenerCancionesDeAlbumes(_creadorContenido.id);
+            AlbumsListView.ItemsSource = null;
+            AlbumsListView.ItemsSource = _albums;
             await ColocarImagenesAlbumes();
-            await ColocarIamgenCreadorDeContenido();
+            await ColocarImagenCreadorDeContenido();
         }
-        
+
         /// <summary>
-        /// Recupera el creador de contenido del usuario logeado
+        ///     Recupera el creador de contenido del usuario logeado
         /// </summary>
         /// <returns>Task</returns>
         private async Task RecuperarCreadorDeContenido()
         {
             if (ApiServiceLogin.GetServiceLogin().Usuario != null)
-            {
                 try
                 {
                     _creadorContenido = await CreadorContenidoClient.GetCreadorContenidoFromActualUser();
@@ -98,19 +100,18 @@ namespace EspotifeiClient
                         new MensajeEmergente().MostrarMensajeError(ex.Message);
                     }
                 }
-            }
         }
 
         /// <summary>
         ///     Recupera la imagen del creador de contenido en calidad media y la colca en la portada del creador de
         ///     contenido
         /// </summary>
-        private async Task ColocarIamgenCreadorDeContenido()
+        private async Task ColocarImagenCreadorDeContenido()
         {
             var clientePortadas = new CoversClient();
             try
             {
-                var portada = await clientePortadas.GetContentCreatorCover(_creadorContenido.id, Calidad.Media);
+                var portada = await clientePortadas.GetContentCreatorCover(_creadorContenido.id, Calidad.Baja);
                 if (portada != null)
                 {
                     _creadorContenido.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(portada);
@@ -136,10 +137,8 @@ namespace EspotifeiClient
                 _albums = await AlbumClient.GetAlbumsFromContentCreator(idCreadorContenido);
                 SinConexionGrid.Visibility = Visibility.Hidden;
                 AlbumsListView.Visibility = Visibility.Visible;
-                if (_albums != null)
-                    AlbumsListView.ItemsSource = _albums;
-                else
-                    AlbumsListView.ItemsSource = new List<Album>();
+                if (_albums == null)
+                    _albums = new List<Album>();
             }
             catch (HttpRequestException)
             {
@@ -179,8 +178,6 @@ namespace EspotifeiClient
                     try
                     {
                         album.canciones = await CancionClient.GetSongsFromAlbum(idCreadorDeContenido, album.id);
-                        AlbumsListView.ItemsSource = null;
-                        AlbumsListView.ItemsSource = _albums;
                     }
                     catch (HttpRequestException)
                     {
@@ -216,37 +213,35 @@ namespace EspotifeiClient
         private async Task ColocarImagenesAlbumes()
         {
             if (_albums != null)
-            {
-
                 foreach (var album in _albums)
-                    await ColocarImagenAlbum(album);
-            }
+                    await ColocarImagenAlbum(album, Calidad.Baja);
+            AlbumsListView.ItemsSource = null;
+            AlbumsListView.ItemsSource = _albums;
         }
 
         /// <summary>
-        /// Coloca la portada a un Abum y actualiza la ListView de los Albumes
+        ///     Coloca la portada a un Abum y actualiza la ListView de los Albumes
         /// </summary>
         /// <param name="album">El Album a obtener y colocar su portada</param>
+        /// <param name="calidad">La calidad de la imagen a recuperar</param>
         /// <returns>Task</returns>
-        private async Task ColocarImagenAlbum(Album album)
+        private async Task ColocarImagenAlbum(Album album, Calidad calidad)
         {
             var clientePortadas = new CoversClient();
             try
             {
-                var bitmap = await clientePortadas.GetAlbumCover(album.id, Calidad.Baja);
+                var bitmap = await clientePortadas.GetAlbumCover(album.id, calidad);
                 if (bitmap != null)
                     album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
                 else
                     album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                AlbumsListView.ItemsSource = null;
-                AlbumsListView.ItemsSource = _albums;
             }
             catch (Exception)
             {
                 album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
             }
         }
-        
+
         /// <summary>
         ///     Coloca en la cola de reproduccion el album entero
         /// </summary>
@@ -256,10 +251,7 @@ namespace EspotifeiClient
         {
             var idAlbum = (int) ((Button) sender).Tag;
             var album = _albums.Find(a => a.id == idAlbum);
-            if (album != null)
-            {
-                Player.Player.GetPlayer().AñadirCancionesDeAlbumACola(album);
-            }
+            if (album != null) Player.Player.GetPlayer().AñadirCancionesDeAlbumACola(album);
         }
 
         /// <summary>
@@ -272,11 +264,11 @@ namespace EspotifeiClient
             var idCancion = (int) ((Button) sender).Tag;
             var cancion = BuscarCancionEnAlbumes(idCancion);
             cancion.album = BuscarAlbumDeCancion(idCancion);
-            Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion, false);
+            Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
         }
-        
+
         /// <summary>
-        /// Abre una ventana para el registro de un Album y si se actualiza recupera su imagen y actualiza el item source 
+        ///     Abre una ventana para el registro de un Album y si se actualiza recupera su imagen y actualiza el item source
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -286,12 +278,14 @@ namespace EspotifeiClient
             if (albumRegistrado != null)
             {
                 _albums.Add(albumRegistrado);
-                await ColocarImagenAlbum(albumRegistrado);
+                await ColocarImagenAlbum(albumRegistrado, Calidad.Baja);
+                AlbumsListView.ItemsSource = null;
+                AlbumsListView.ItemsSource = _albums;
             }
         }
 
         /// <summary>
-        /// Cambia a la pagina Registrar creador de contenido
+        ///     Cambia a la pagina Registrar creador de contenido
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -301,26 +295,26 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Muestra la ventana de edicion de Album
+        ///     Muestra la ventana de edicion de Album
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
         private async void OnClickEditarAlbum(object sender, RoutedEventArgs e)
         {
+            AlbumsListView.IsEnabled = false;
             var idAlbum = (int) ((Button) sender).Tag;
             var alalbumAEditar = _albums.Find(a => a.id == idAlbum);
+            await ColocarImagenAlbum(alalbumAEditar, Calidad.Media);
             if (alalbumAEditar != null)
             {
                 var albumEditado = RegistrarAlbum.EditarAlbum(alalbumAEditar);
-                if (albumEditado != null)
-                {
-                    await InicializarAlbumes();
-                }
+                AlbumsListView.IsEnabled = true;
+                if (albumEditado != null) await InicializarAlbumes();
             }
         }
 
         /// <summary>
-        /// Muestra la ventana de registro de cancion
+        ///     Muestra la ventana de registro de cancion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -328,14 +322,11 @@ namespace EspotifeiClient
         {
             var idAlbum = (int) ((Button) sender).Tag;
             var cancionRegistrada = RegistrarCancion.MostrarRegistrarCancion(idAlbum);
-            if (cancionRegistrada != null)
-            {
-                await InicializarAlbumes();
-            }
+            if (cancionRegistrada != null) await InicializarAlbumes();
         }
 
         /// <summary>
-        /// Elimina la cancion seleccionada
+        ///     Elimina la cancion seleccionada
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -347,7 +338,7 @@ namespace EspotifeiClient
             {
                 SinConexionGrid.Visibility = Visibility.Hidden;
                 AlbumsListView.Visibility = Visibility.Visible;
-                int idCancion = (int) ((Button) sender).Tag;
+                var idCancion = (int) ((Button) sender).Tag;
                 var album = BuscarAlbumDeCancion(idCancion);
                 try
                 {
@@ -376,24 +367,21 @@ namespace EspotifeiClient
                 }
             }
         }
-        
+
         private async void OnClickEditarCancion(object sender, RoutedEventArgs e)
         {
-            int idCancion = (int) ((Button) sender).Tag;
+            var idCancion = (int) ((Button) sender).Tag;
             var album = BuscarAlbumDeCancion(idCancion);
             var cancion = BuscarCancionEnAlbumes(idCancion);
             if (album != null && cancion != null)
             {
                 var cancionEditada = RegistrarCancion.MostrarEditarCancion(cancion, album.id);
-                if (cancionEditada != null)
-                {
-                    await InicializarAlbumes();
-                }
+                if (cancionEditada != null) await InicializarAlbumes();
             }
         }
 
         /// <summary>
-        /// Busca la cancion con el idCancion dentro de los Albums
+        ///     Busca la cancion con el idCancion dentro de los Albums
         /// </summary>
         /// <param name="idCancion">El id de la cancion a buscar</param>
         /// <returns>La cancion del id cancion</returns>
@@ -414,7 +402,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Busca el album en donde se encuentra contenido la cancion con el idCancion
+        ///     Busca el album en donde se encuentra contenido la cancion con el idCancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a buscar su album</param>
         /// <returns>El album de la cancion</returns>
@@ -435,7 +423,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Manda a la cola de reproduccion las canciones del creador de contenido
+        ///     Manda a la cola de reproduccion las canciones del creador de contenido
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -443,6 +431,65 @@ namespace EspotifeiClient
         {
             _creadorContenido.Albums = _albums;
             Player.Player.GetPlayer().AñadirCancionesDeCreadorDeContenidoACola(_creadorContenido);
+        }
+
+        /// <summary>
+        /// Agrega la cancion a la cola de reproducción
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private void OnClickAgregarACola(object sender, RoutedEventArgs e)
+        {
+            var idCancion = (int) ((Button) sender).Tag;
+            var cancion = BuscarCancionEnAlbumes(idCancion);
+            if (cancion != null)
+            {
+                cancion.album = BuscarAlbumDeCancion(idCancion);
+                Player.Player.GetPlayer().AñadirCancionAColaDeReproduccion(cancion);
+            }
+        }
+        
+        /// <summary>
+        /// Manda a reproducir la radio de la cancion seleccionada
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el eventp</param>
+        /// <param name="e">El evento invocado</param>
+        private async void OnClickEmpezarRadio(object sender, RoutedEventArgs e)
+        {
+            var idCancion = (int) ((Button) sender).Tag;
+            List<Cancion> radio;
+            try
+            {
+                radio = await CancionClient.GetRadioFromSong(idCancion);
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                AlbumsListView.Visibility = Visibility.Visible;
+                Player.Player.GetPlayer().AñadirRadioAListaDeReproduccion(radio);
+            }
+            catch (HttpRequestException)
+            {
+                SinConexionGrid.Visibility = Visibility.Visible;
+                AlbumsListView.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message == "AuntenticacionFallida")
+                {
+                    new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
+                                                               "proporcionadas, se cerra la sesion");
+                    MenuInicio.OcultarMenu();
+                    MenuInicio.OcultarReproductor();
+                    NavigationService?.Navigate(new IniciarSesion());
+                }
+                else
+                {
+                    new MensajeEmergente().MostrarMensajeError(ex.Message);
+                }
+            }
+        }
+
+        private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
     }
 }

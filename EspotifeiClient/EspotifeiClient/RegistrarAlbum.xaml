@@ -13,7 +13,7 @@
         Height="450" Width="550"
         FontFamily="Segoe UI Emoji">
     <Grid>
-        
+
         <Rectangle Height="345" VerticalAlignment="Top">
             <Rectangle.Fill>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -23,7 +23,8 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-        <Rectangle HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" Height="300" Width="500"  RadiusY="10" RadiusX="10" Fill="White">
+        <Rectangle HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" Height="300" Width="500"
+                   RadiusY="10" RadiusX="10" Fill="White">
             <Rectangle.Effect>
                 <DropShadowEffect BlurRadius="15" Direction="0" RenderingBias="Quality" ShadowDepth="1"
                                   Color="#FFBBBBBB" />
@@ -38,10 +39,11 @@
                 <RowDefinition Height="0.15*" />
                 <RowDefinition Height="0.85*" />
             </Grid.RowDefinitions>
-            <Label Grid.Column="0" Grid.Row="0" x:Name="tituloLabel" Grid.ColumnSpan="2" Content="REGISTRO DE ÁLBUM" HorizontalAlignment="Center" VerticalAlignment="Center" 
+            <Label Grid.Column="0" Grid.Row="0" x:Name="tituloLabel" Grid.ColumnSpan="2" Content="REGISTRO DE ÁLBUM"
+                   HorizontalAlignment="Center" VerticalAlignment="Center"
                    Foreground="Gray" FontSize="18" />
             <Button Grid.Column="0" Grid.Row="1" Background="{x:Null}" Width="200" Height="200" Margin="10"
-                        Click="OnClickAgregarImagenButton" Padding="5" BorderBrush="#FF2281D1" >
+                    Click="OnClickAgregarImagenButton" Padding="5" BorderBrush="#FF2281D1">
                 <Image x:Name="imagenAlbum" Source="Resources/Añadir.png" />
             </Button>
             <StackPanel Grid.Row="1" Grid.Column="1" Margin="10" VerticalAlignment="Center">
@@ -54,12 +56,14 @@
                          FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="4" />
             </StackPanel>
         </Grid>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20" >
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20">
             <Button x:Name="cancelarButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                    Margin="30,0" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF" Click="OnClickCancelarButton" />
+                    Margin="30,0" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF"
+                    Click="OnClickCancelarButton" />
             <Button x:Name="registrarAlbumButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                    Content="GUARDAR" Background="#FF16A210" BorderBrush="#FF16A210" Margin="30,0" Click="OnClickRegistrarAlbumButton" />
+                    Content="GUARDAR" Background="#FF16A210" BorderBrush="#FF16A210" Margin="30,0"
+                    Click="OnClickRegistrarAlbumButton" />
         </StackPanel>
-        
+
     </Grid>
 </Window>

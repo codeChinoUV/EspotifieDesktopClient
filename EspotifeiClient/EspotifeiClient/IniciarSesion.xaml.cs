@@ -42,9 +42,7 @@ namespace EspotifeiClient
                 catch (Exception exception)
                 {
                     if (exception.Message == "AuntenticacionFallida")
-                    {
                         new MensajeEmergente().MostrarMensajeError("No se pudo iniciar sesión, intentelo nuevamente");
-                    }
                     new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
                 }
 

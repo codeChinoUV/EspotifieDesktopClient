@@ -1,6 +1,6 @@
 namespace EspotifeiClient.Player
 {
-    enum EstadoReproductor
+    internal enum EstadoReproductor
     {
         Reproduciendo,
         Pausado,

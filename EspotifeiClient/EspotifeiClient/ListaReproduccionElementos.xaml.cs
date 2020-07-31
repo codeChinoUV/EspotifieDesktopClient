@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 using Model;
 using Api.Rest;
 using System.Net.Http;
+using System.Windows;
 using Api.GrpcClients.Clients;
 using Api.Rest;
 using EspotifeiClient.Util;

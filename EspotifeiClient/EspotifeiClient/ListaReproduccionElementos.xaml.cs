@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using Model;
+using Api.Rest;
+using System.Net.Http;
 using Api.GrpcClients.Clients;
 using Api.Rest;
 using EspotifeiClient.Util;
@@ -16,7 +18,6 @@ namespace EspotifeiClient
     /// </summary>
     public partial class ListaReproduccionElementos : Page
     {
-        private Album _album;
         private ListaReproduccion _listaReproduccion;
 
         public ListaReproduccionElementos()
@@ -97,6 +98,16 @@ namespace EspotifeiClient
                         playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
                     }
             }
+        }
+
+        /// <summary>
+        /// Método que añade las canciones del creador de contenido a la cola de reproduccion
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnClickPlayListaReproduccionButton(object sender, RoutedEventArgs e)
+        {    
+            Player.Player.GetPlayer().AñadirCancionesDeListaDeReproduccionACola(_listaReproduccion);
         }
     }
 }

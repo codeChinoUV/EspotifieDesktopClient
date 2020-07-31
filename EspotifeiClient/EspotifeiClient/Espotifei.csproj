@@ -132,6 +132,9 @@
     <Compile Include="ListasReproduccion.xaml.cs">
       <DependentUpon>ListasReproduccion.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ListasReproduccionUsuario.xaml.cs">
+      <DependentUpon>ListasReproduccionUsuario.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MensajeEmergente.xaml.cs">
       <DependentUpon>MensajeEmergente.xaml</DependentUpon>
     </Compile>
@@ -190,6 +193,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ListasReproduccion.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ListasReproduccionUsuario.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -336,6 +343,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\ListaReproduccion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\ListaReproduccionDesconocida.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\BibliotecaPersonal.png" />

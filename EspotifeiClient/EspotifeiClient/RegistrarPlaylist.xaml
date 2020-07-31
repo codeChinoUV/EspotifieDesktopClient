@@ -7,8 +7,6 @@
         xmlns:local="clr-namespace:EspotifeiClient"
         mc:Ignorable="d"
         Title="Registrar playlist" Height="373.404" Width="411.5"
-        ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen"
         FontFamily="Segoe UI Emoji">
     <Grid>
         <Rectangle Height="345" VerticalAlignment="Top">
@@ -33,19 +31,17 @@
             <StackPanel VerticalAlignment="Center" Margin="10,109,10,-24" Height="241">
                 <TextBox x:Name="nombreTextbox" Margin="0,10" materialDesign:HintAssist.Hint="NOMBRE"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                         FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25" />
+                         FontFamily="Champagne &amp; Limousines" FontSize="14" />
                 <TextBox x:Name="descripcionTextbox" Margin="0,10" materialDesign:HintAssist.Hint="DESCRIPCIÓN"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                         FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="4" Height="84" />
-                <TextBox x:Name="imagenTextbox" Margin="0,10,99,10" materialDesign:HintAssist.Hint="PORTADA"
-                         Style="{StaticResource MaterialDesignFloatingHintTextBox}"
-                         FontFamily="Champagne &amp; Limousines" FontSize="16" />
+                         FontFamily="Champagne &amp; Limousines" FontSize="14" Height="95" />
             </StackPanel>
         </Grid>
         <Button x:Name="registrarPlaylistButton" Width="117" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                Margin="141,0,148,10" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="24" />
-        <Button x:Name="examinarButton" Width="82" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                Margin="281,0,43,70" Content="EXAMINAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="19"
-                FontSize="10" />
+                Margin="228,0,67,34" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="24" 
+                Click="OnClickRegistrarPlaylistButton"/>
+        <Button x:Name="cancelarPlaylistButton" Width="117" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+            Margin="73,0,222,34" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF" Height="24"
+                Click="OnClickCancelarPlaylistButton"/>
     </Grid>
 </Window>

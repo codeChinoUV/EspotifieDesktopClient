@@ -11,13 +11,13 @@
       d:DesignHeight="450" d:DesignWidth="800"
       Title="Artistas">
     <Page.Resources>
-        <BitmapImage x:Key="ArtistaDesconocidoImagen" UriSource="Resources/ArtistaDesconocido.png" />
+        <BitmapImage x:Key="ArtistaDesconocidoImagen" UriSource="Resources/Artista.png" />
         <BitmapImage UriSource="Resources/SinConexion.png" x:Key="SinConexion" x:Shared="False" />
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.08*" />
-            <RowDefinition Height="0.92*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Rectangle Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Rectangle.Fill>
@@ -41,6 +41,11 @@
                      Style="{StaticResource MaterialDesignTextBox}" FontFamily="Champagne &amp; Limousines"
                      FontSize="20" MaxLength="25" Foreground="White" CaretBrush="#FFFBFBFB" SelectionBrush="#FFF7F7F7"
                      BorderBrush="#89FFFFFF" Background="{x:Null}" KeyUp="BuscarCreadoresDeContenido" />
+            <StackPanel Grid.Column="3" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" >
+                <TextBlock  Text="Artistas" FontSize="30" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Right" 
+                       Margin="0,0,5,0" Foreground="White" />
+                <Image Source="{StaticResource ArtistaDesconocidoImagen}" Margin="5" />
+            </StackPanel>
         </Grid>
         <Grid Grid.Row="1" Visibility="Hidden" x:Name="SinConexionGrid">
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -48,36 +53,46 @@
                 <TextBlock Text="Sin conexión" FontSize="20" FontWeight="Black" Foreground="#49b1fe" />
             </StackPanel>
         </Grid>
-        <ScrollViewer Grid.Row="1" Margin="0,10" HorizontalAlignment="Stretch">
-            <StackPanel Margin="20,0">
-                <ListView x:Name="CreadoresDeContenidoListView" ItemsSource="{Binding CreadorDeContenido}"
-                          MouseLeftButtonUp="OnSelectedItem">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Border Height="170" Padding="0" Margin="10">
-                                <StackPanel>
-                                    <Border Height="125" Width="125" CornerRadius="5">
-                                        <Border.Effect>
-                                            <DropShadowEffect ShadowDepth="1" />
-                                        </Border.Effect>
-                                        <Border.Background>
-                                            <ImageBrush ImageSource="{Binding PortadaImagen}" />
-                                        </Border.Background>
-                                    </Border>
-                                    <TextBlock Text="{Binding nombre}" VerticalAlignment="Center"
+        <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Margin="20,0">
+            <StackPanel>
+                <StackPanel>
+                    <ItemsControl x:Name="CreadoresDeContenidoListView" ItemsSource="{Binding CreadorDeContenido}" >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="10" Width="150" Height="160" MouseLeftButtonUp="OnSelectedItem" Tag="{Binding id}">
+                                    <StackPanel>
+                                        <Border Width="100" Height="100" CornerRadius="5" Margin="5">
+                                            <Border.Effect>
+                                                <DropShadowEffect ShadowDepth="1"/>
+                                            </Border.Effect>
+                                            <Border.Background>
+                                                <ImageBrush ImageSource="{Binding PortadaImagen}" />
+                                            </Border.Background>
+                                        </Border>
+                                        <TextBlock Text="{Binding nombre}" VerticalAlignment="Center"
                                                HorizontalAlignment="Center" Foreground="Black" TextWrapping="Wrap"
                                                FontSize="17" Margin="0,10,0,0" FontFamily="Champagne &amp; Limousines"
-                                               FontWeight="Black" />
-                                </StackPanel>
-                            </Border>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <WrapPanel />
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                </ListView>
+                                               FontWeight="Bold" />
+                                        <StackPanel.Style>
+                                            <Style TargetType="{x:Type StackPanel}">
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="PaleTurquoise" />
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </StackPanel.Style>
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </Grid>

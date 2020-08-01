@@ -45,6 +45,13 @@ namespace Model
             }
         }
 
+        public string calificacion_promedio_string { 
+            get
+            {
+                return calificacion_promedio.ToString("0.0");
+            } 
+        }
+
         public Album album { get; set; }
     }
 }

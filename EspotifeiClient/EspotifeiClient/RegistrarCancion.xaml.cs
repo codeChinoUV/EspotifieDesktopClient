@@ -83,8 +83,11 @@ namespace EspotifeiClient
         {
             tituloTextBox.Content = "EDITAR CANCIÓN";
             nombreCancionTextbox.Text = _cancionAEditar.nombre;
-            var propioCreadorDeContenido = _cancionAEditar.creadores_de_contenido[0];
-            _cancionAEditar.creadores_de_contenido.Remove(propioCreadorDeContenido);
+            if (_cancionAEditar.creadores_de_contenido.Count > 0)
+            {
+                var propioCreadorDeContenido = _cancionAEditar.creadores_de_contenido[0];
+                _cancionAEditar.creadores_de_contenido.Remove(propioCreadorDeContenido);    
+            }
             LlenarListaDeCreadoresDeContenidoSeleccionadoConLosDeCancion(_cancionAEditar.creadores_de_contenido);
         }
 

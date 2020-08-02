@@ -89,7 +89,7 @@
                         <TextBlock Text="Playlists" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                     </StackPanel>
                 </ListViewItem>
-                <ListView  Foreground="#FF5C99D6"
+                <ListView Foreground="#FF5C99D6"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListViewItem Height="60" MouseLeftButtonUp="OnSelectedItemArtist">
                         <StackPanel Orientation="Horizontal">
@@ -208,19 +208,24 @@
                     <Button Grid.Column="0" Padding="0" Background="Transparent" Click="OnClickVolumenButton"
                             BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="VolumeHigh" Height="Auto" Width="Auto"
-                                                 HorizontalAlignment="Right" x:Name="VolumenImage" Foreground="#DDFFFFFF" />
+                                                 HorizontalAlignment="Right" x:Name="VolumenImage"
+                                                 Foreground="#DDFFFFFF" />
                     </Button>
                     <Slider Grid.Column="1" Orientation="Horizontal" Maximum="100" Minimum="0" x:Name="VolumenSlider"
                             Value="100" Width="Auto"
                             VerticalAlignment="Center" Foreground="White" ValueChanged="OnValueChangedVolumen" />
-                    <materialDesign:PopupBox Grid.Row="0" Grid.Column="2" StaysOpen="True" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                         Padding="0" Foreground="White" PopupMode="Click" PlacementMode="TopAndAlignRightEdges" >
+                    <materialDesign:PopupBox Grid.Row="0" Grid.Column="2" StaysOpen="True" VerticalAlignment="Center"
+                                             HorizontalAlignment="Center"
+                                             Padding="0" Foreground="White" PopupMode="Click"
+                                             PlacementMode="TopAndAlignRightEdges">
                         <StackPanel Width="auto">
                             <Button x:Name="botonCuenta" Content="cuenta" />
                         </StackPanel>
                     </materialDesign:PopupBox>
-                    <materialDesign:RatingBar Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" 
-                                              Foreground="#FFF9C000" ValueChanged="OnValueChangedCalificacion" x:Name="calificacionRatingBar" 
+                    <materialDesign:RatingBar Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center"
+                                              Grid.Row="1" VerticalAlignment="Center"
+                                              Foreground="#FFF9C000" ValueChanged="OnValueChangedCalificacion"
+                                              x:Name="calificacionRatingBar"
                                               Visibility="Collapsed" Margin="0,0,0,10" />
 
                 </Grid>

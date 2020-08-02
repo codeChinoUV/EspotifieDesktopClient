@@ -88,7 +88,7 @@ namespace EspotifeiClient
         /// <param name="e"></param>
         private void OnSelectedItem(object sender, MouseButtonEventArgs e)
         {
-            var idCreadorContenido = (int) ((Border)sender).Tag;
+            var idCreadorContenido = (int) ((Border) sender).Tag;
             var creadorDeContenido = _creadoresContenidos.Find(c => c.id == idCreadorContenido);
             if (creadorDeContenido != null) NavigationService?.Navigate(new ArtistaElementos(creadorDeContenido));
         }

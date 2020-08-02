@@ -165,7 +165,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Agrega la canción a la cola de reproduccion
+        ///     Agrega la canción a la cola de reproduccion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -173,10 +173,7 @@ namespace EspotifeiClient
         {
             var idCancion = (int) ((Button) sender).Tag;
             var cancion = _cancionesPersonales.Find(c => c.id == idCancion);
-            if (cancion != null)
-            {
-                Player.Player.GetPlayer().AñadirCancionPersonalAColaDeReproduccion(cancion);
-            }
+            if (cancion != null) Player.Player.GetPlayer().AñadirCancionPersonalAColaDeReproduccion(cancion);
         }
     }
 }

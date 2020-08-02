@@ -85,10 +85,12 @@
                                             HorizontalAlignment="Right">
                                         <materialDesign:PackIcon Kind="Delete" Height="25" Width="25" Foreground="Red" />
                                     </Button>
-                                    <materialDesign:PopupBox Grid.Column="4" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False"
-                                                Foreground="Gray">
+                                    <materialDesign:PopupBox Grid.Column="4" PlacementMode="BottomAndAlignRightEdges"
+                                                             StaysOpen="False"
+                                                             Foreground="Gray">
                                         <StackPanel Width="auto">
-                                            <Button Content="Agregar a la cola" Click="OnClickAgregarACola" Tag="{Binding id}"/>
+                                            <Button Content="Agregar a la cola" Click="OnClickAgregarACola"
+                                                    Tag="{Binding id}" />
                                         </StackPanel>
                                     </materialDesign:PopupBox>
                                 </StackPanel>

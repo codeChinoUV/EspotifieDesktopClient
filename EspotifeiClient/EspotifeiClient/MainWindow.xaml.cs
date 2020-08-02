@@ -20,10 +20,9 @@ namespace EspotifeiClient
     /// </summary>
     public partial class MainWindow
     {
+        private int _antiguaCalificacion;
+        private int _idCancionActual;
 
-        private int _antiguaCalificacion = 0;
-        private int _idCancionActual = 0;
-        
         public MainWindow()
         {
             InitializeComponent();
@@ -51,7 +50,7 @@ namespace EspotifeiClient
                 album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
             }
         }
-        
+
         private void RecibirCambioEstadoReproduccion(bool estaReproducciendo)
         {
             if (estaReproducciendo)
@@ -80,16 +79,13 @@ namespace EspotifeiClient
                 tiempoTotalTextBlock.Text = cancion.duracionString;
                 ObtenerCalificacion(cancion.id);
                 calificacionRatingBar.Visibility = Visibility.Visible;
-                if (cancion.album.PortadaImagen == null)
-                {
-                    await ColocarImagenAlbum(cancion.album, Calidad.Baja);
-                }
+                if (cancion.album.PortadaImagen == null) await ColocarImagenAlbum(cancion.album, Calidad.Baja);
                 coverImage.Source = cancion.album.PortadaImagen;
             }
         }
 
         /// <summary>
-        /// Coloca la calificación en estrellas de la cancion actual
+        ///     Coloca la calificación en estrellas de la cancion actual
         /// </summary>
         /// <param name="idCancion">El id de la cancion a recuperar su calificacion</param>
         private async void ObtenerCalificacion(int idCancion)
@@ -106,17 +102,13 @@ namespace EspotifeiClient
             catch (Exception ex)
             {
                 if (ex.Message == "NoCalificada")
-                {
                     _antiguaCalificacion = 0;
-                }else if (ex.Message == "AuntenticacionFallida")
-                {
-                    new MensajeEmergente().MostrarMensajeError("No se ha podido logear con las credenciales proporcionadas," +
-                                                               " si el error ocurre de nuevo, cierre y vuelva a iniciar sesion");
-                }
+                else if (ex.Message == "AuntenticacionFallida")
+                    new MensajeEmergente().MostrarMensajeError(
+                        "No se ha podido logear con las credenciales proporcionadas," +
+                        " si el error ocurre de nuevo, cierre y vuelva a iniciar sesion");
                 else
-                {
                     new MensajeEmergente().MostrarMensajeError(ex.Message);
-                }
             }
 
             calificacionRatingBar.Value = _antiguaCalificacion;
@@ -256,24 +248,20 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Actualiza o registra la calificacion de una cancion
+        ///     Actualiza o registra la calificacion de una cancion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
         private void OnValueChangedCalificacion(object sender, RoutedPropertyChangedEventArgs<int> e)
         {
-            var calificacion = ((RatingBar)sender).Value;
+            var calificacion = ((RatingBar) sender).Value;
             calificacionRatingBar.IsEnabled = false;
             try
             {
                 if (_antiguaCalificacion == 0)
-                {
                     CalificacionClient.AddCalificacion(_idCancionActual, calificacion);
-                }
                 else
-                {
                     CalificacionClient.EditCalificacion(_idCancionActual, calificacion);
-                }
                 _antiguaCalificacion = calificacion;
             }
             catch (HttpRequestException)
@@ -287,7 +275,6 @@ namespace EspotifeiClient
             }
 
             calificacionRatingBar.IsEnabled = true;
-            
         }
 
         private void OnClickCanciones(object sender, MouseButtonEventArgs e)

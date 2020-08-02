@@ -36,29 +36,28 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Método que recupera todas las listas de reproducción creadas por un usuario
+        ///     Método que recupera todas las listas de reproducción creadas por un usuario
         /// </summary>
         /// <returns>Una Task</returns>
         public static async Task<List<ListaReproduccion>> GetListaReproduccion()
         {
-            var path = $"/v1/listas-de-reproduccion";
-            using (HttpResponseMessage response = await ApiClient.GetApiClient().GetAsync(path))
+            var path = "/v1/listas-de-reproduccion";
+            using (var response = await ApiClient.GetApiClient().GetAsync(path))
             {
                 if (response.IsSuccessStatusCode)
                 {
                     var listasReproduccion = await response.Content.ReadAsAsync<List<ListaReproduccion>>();
                     return listasReproduccion;
-                } else
-                {
-                    ErrorGeneral error;
-                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
-                    throw new Exception(error.mensaje);
                 }
+
+                ErrorGeneral error;
+                error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                throw new Exception(error.mensaje);
             }
         }
 
         /// <summary>
-        /// Método que solicita al servidor eliminar una lista de reproducción
+        ///     Método que solicita al servidor eliminar una lista de reproducción
         /// </summary>
         /// <param name="idListaReproduccion">El identificador de la lista de reproducción a eliminar</param>
         /// <returns></returns>
@@ -73,13 +72,16 @@ namespace Api.Rest
                         var listaReproduccionDeleted = await response.Content.ReadAsAsync<ListaReproduccion>();
                         return listaReproduccionDeleted;
                     }
+
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         await ApiServiceLogin.GetServiceLogin().ReLogin();
-                    } else if (response.StatusCode == HttpStatusCode.NotFound)
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         throw new Exception("No existe la lista de reproducción que se desea eliminar");
-                    } else
+                    }
+                    else
                     {
                         ErrorGeneral error;
                         error = await response.Content.ReadAsAsync<ErrorGeneral>();
@@ -91,15 +93,14 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Método que solicita al servidor registrar una lista de reproducción
+        ///     Método que solicita al servidor registrar una lista de reproducción
         /// </summary>
         /// <param name="listaReproduccion">Instancia de ListaReproduccion</param>
         /// <returns>La lista de reproducción creada</returns>
         public static async Task<ListaReproduccion> RegisterListaReproduccion(ListaReproduccion listaReproduccion)
         {
             var path = "/v1/listas-de-reproduccion";
-            for (int i = 1; i <= CantidadIntentos; i++)
-            {
+            for (var i = 1; i <= CantidadIntentos; i++)
                 using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, listaReproduccion))
                 {
                     if (response.IsSuccessStatusCode)
@@ -107,22 +108,26 @@ namespace Api.Rest
                         var listaReproduccionRegistered = await response.Content.ReadAsAsync<ListaReproduccion>();
                         return listaReproduccionRegistered;
                     }
+
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         List<ErrorGeneral> errores;
                         errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
                         throw new Exception(errores[0].mensaje);
-                    } else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         await ApiServiceLogin.GetServiceLogin().ReLogin();
-                    } else
+                    }
+                    else
                     {
                         ErrorGeneral error;
                         error = await response.Content.ReadAsAsync<ErrorGeneral>();
                         throw new Exception(error.mensaje);
                     }
                 }
-            }
+
             throw new Exception("AuntenticacionFallida");
         }
     }

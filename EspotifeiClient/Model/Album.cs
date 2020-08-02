@@ -22,8 +22,19 @@ namespace Model
         {
             get
             {
-                var time = TimeSpan.FromSeconds(duracion_total);
-                return time.ToString("mm':'ss");
+                var duracionString = "00:00:00";
+                float duracionSegundos = 0;
+                if (canciones != null)
+                {
+                    foreach (var cancion in canciones)
+                    {
+                        duracionSegundos += cancion.duracion;
+                    }
+                    var time = TimeSpan.FromSeconds(duracionSegundos);
+                    duracionString = time.ToString("hh':'mm':'ss");
+                }
+
+                return duracionString;
             }
         }
     }

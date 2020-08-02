@@ -88,13 +88,9 @@ namespace Api.GrpcClients.Clients
                         }
 
                         if (response.Error == Error.TokenInvalido || response.Error == Error.TokenFaltante)
-                        {
                             await ApiServiceLogin.GetServiceLogin().ReLogin();
-                        }
                         else
-                        {
                             ManageErrorsUploadSong(response.Error);
-                        }
                     }
                 }
 
@@ -132,6 +128,7 @@ namespace Api.GrpcClients.Clients
                     {
                         while (await call.ResponseStream.MoveNext() && _getSong)
                         {
+                            
                             var response = call.ResponseStream.Current;
                             memoryStream.Write(response.Data.ToByteArray(), 0, response.Data.Length);
                             position += response.Data.Length;
@@ -141,6 +138,7 @@ namespace Api.GrpcClients.Clients
                                 OnInitialRecivedSong?.Invoke(response.Data.ToByteArray(),
                                     ConvertFormatAudioToExtension(formatAudio));
                             else if (position > ChunkSize) OnSongChunkRived?.Invoke(response.Data.ToByteArray());
+                            if (!_getSong) memoryStream.Dispose();
                         }
                     }
                 }
@@ -164,6 +162,7 @@ namespace Api.GrpcClients.Clients
                 }
                 else
                 {
+                    memoryStream.Dispose();
                     break;
                 }
             }

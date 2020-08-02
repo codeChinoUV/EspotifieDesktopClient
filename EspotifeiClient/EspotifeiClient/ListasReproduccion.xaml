@@ -35,11 +35,16 @@
                 <ColumnDefinition Width="0.25*" />
                 <ColumnDefinition Width="0.30*" />
             </Grid.ColumnDefinitions>
-            <materialDesign:PackIcon Grid.Column="0" Margin="5" Kind="Search" Height="Auto" Width="Auto" Foreground="White"/>
-            <TextBox Grid.Column="1" x:Name="buscarTextBox" Margin="5" materialDesign:HintAssist.Hint="Buscar"  Style="{StaticResource MaterialDesignTextBox}" FontFamily="Champagne &amp; Limousines" FontSize="20" MaxLength="25" Foreground="White" CaretBrush="#FFFBFBFB" SelectionBrush="#FFF7F7F7" BorderBrush="#89FFFFFF" Background="{x:Null}" KeyUp="BuscarListasReproduccion" />
+            <materialDesign:PackIcon Grid.Column="0" Margin="5" Kind="Search" Height="Auto" Width="Auto"
+                                     Foreground="White" />
+            <TextBox Grid.Column="1" x:Name="buscarTextBox" Margin="5" materialDesign:HintAssist.Hint="Buscar"
+                     Style="{StaticResource MaterialDesignTextBox}" FontFamily="Champagne &amp; Limousines"
+                     FontSize="20" MaxLength="25" Foreground="White" CaretBrush="#FFFBFBFB" SelectionBrush="#FFF7F7F7"
+                     BorderBrush="#89FFFFFF" Background="{x:Null}" KeyUp="BuscarListasReproduccion" />
             <Button Grid.Column="3" HorizontalAlignment="Stretch" Margin="0,5,46,1"
-                 Content="Ver Mis Playlists" Background="#FF16A210" BorderBrush="#FF16A210" VerticalContentAlignment="Center"
-                Click="OnClickVerMisPlaylists"/>
+                    Content="Ver Mis Playlists" Background="#FF16A210" BorderBrush="#FF16A210"
+                    VerticalContentAlignment="Center"
+                    Click="OnClickVerMisPlaylists" />
         </Grid>
         <ScrollViewer Grid.Row="1" Margin="0,10" HorizontalAlignment="Stretch">
             <StackPanel Margin="20,0">

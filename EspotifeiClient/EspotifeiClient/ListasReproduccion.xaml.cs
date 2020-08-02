@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Api.Rest;
-using System.Net.Http;
-using System.Windows;
 using Model;
 
 namespace EspotifeiClient
@@ -78,7 +77,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que permite acceder a la pantalla de las listas de reproducción del usuario
+        ///     Método que permite acceder a la pantalla de las listas de reproducción del usuario
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

@@ -289,5 +289,10 @@ namespace EspotifeiClient
             calificacionRatingBar.IsEnabled = true;
             
         }
+
+        private void OnClickCanciones(object sender, MouseButtonEventArgs e)
+        {
+            PantallaFrame.Navigate(new Canciones());
+        }
     }
 }

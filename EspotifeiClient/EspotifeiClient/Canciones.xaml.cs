@@ -1,0 +1,138 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media.Imaging;
+using Api.GrpcClients.Clients;
+using Api.Rest;
+using EspotifeiClient.Util;
+using ManejadorDeArchivos;
+using Model;
+
+namespace EspotifeiClient
+{
+    /// <summary>
+    /// Lógica de interacción para Canciones.xaml
+    /// </summary>
+    public partial class Canciones : Page
+    {
+
+        private List<Cancion> _canciones;
+        
+        public Canciones()
+        {
+            InitializeComponent();
+            InicializarCanciones();
+        }
+        
+        private async void InicializarCanciones()
+        {
+            var cantidadDeCancionesPorGeneros = 5;
+            _canciones = new List<Cancion>();
+            try
+            {
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                CancionesListView.Visibility = Visibility.Visible;
+                var generos = await GeneroClient.GetGeneros();
+                foreach (var genero in generos)
+                {
+                    var cancionDeGeneros =
+                        await GeneroClient.GetCancionesOfGenero(genero.id, cantidadDeCancionesPorGeneros);
+                    _canciones.AddRange(cancionDeGeneros);
+                }
+
+                CancionesListView.ItemsSource = _canciones;
+                ColocarImagenesCanciones();
+            }
+            catch (HttpRequestException)
+            {
+                SinConexionGrid.Visibility = Visibility.Visible;
+                CancionesListView.Visibility = Visibility.Hidden;
+            }
+            catch (Exception ex)
+            {
+                new MensajeEmergente().MostrarMensajeError(ex.Message);
+            }
+        }
+        
+        /// <summary>
+        ///     Recupera las imagenes de los artistas
+        /// </summary>
+        private async void ColocarImagenesCanciones()
+        {
+            CancionesListView.IsEnabled = false;
+            var clientePortadas = new CoversClient();
+            foreach (var cancion in _canciones)
+                try
+                {
+                    var bitmap = await clientePortadas.GetAlbumCover(cancion.album.id, Calidad.Baja);
+                    if (bitmap != null)
+                        cancion.album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
+                    else
+                        cancion.album.PortadaImagen = (BitmapImage) FindResource("Cancion");
+                    CancionesListView.ItemsSource = null;
+                    CancionesListView.ItemsSource = _canciones;
+                }
+                catch (Exception)
+                {
+                    cancion.album.PortadaImagen = (BitmapImage) FindResource("ArtistaDesconocidoImagen");
+                }
+
+            CancionesListView.IsEnabled = true;
+        }
+
+        private async void BuscarCancionTextBox(object sender, KeyEventArgs e)
+        {
+            var cadenaBusqueda = buscarTextBox.Text;
+            if (cadenaBusqueda != "")
+                try
+                {
+                    _canciones = await CancionClient.SearchCanciones(cadenaBusqueda);
+                    CancionesListView.ItemsSource = _canciones;
+                    SinConexionGrid.Visibility = Visibility.Hidden;
+                    CancionesListView.Visibility = Visibility.Visible;
+                    ColocarImagenesCanciones();
+                }
+                catch (HttpRequestException)
+                {
+                    CancionesListView.Visibility = Visibility.Hidden;
+                    SinConexionGrid.Visibility = Visibility.Visible;
+                }
+                catch (Exception ex)
+                {
+                    new MensajeEmergente().MostrarMensajeError(ex.Message);
+                }
+            else
+                _canciones = new List<Cancion>();
+        }
+
+        private void OnClickArtista(object sender, MouseButtonEventArgs e)
+        {
+            var idCancion = (int) ((TextBlock) sender).Tag;
+            var cancion = BuscarCancionPorId(idCancion);
+            if (cancion != null && cancion.creadores_de_contenido[0] != null)
+            {
+                NavigationService?.Navigate(new ArtistaElementos(cancion.creadores_de_contenido[0]));
+            }
+        }
+
+        private void OnClickPlay(object sender, RoutedEventArgs e)
+        {
+            var idCancion = (int) ((Button) sender).Tag;
+            var cancion = BuscarCancionPorId(idCancion);
+            if (cancion != null)
+            {
+                Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
+            }
+        }
+
+        private Cancion BuscarCancionPorId(int idCancion)
+        {
+            var cancion = _canciones.Find(c => c.id == idCancion);
+            return cancion;
+
+        }
+    }
+}

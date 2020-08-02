@@ -76,22 +76,22 @@
 
 
                 </Grid>
-                <ListViewItem x:Name="ItemPlaylist" Height="60">
+                <ListViewItem Height="60" MouseLeftButtonUp="OnClickCanciones">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Music" Height="25" Width="25" Margin="10" Foreground="White" />
                         <TextBlock Text="Canciones" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                     </StackPanel>
                 </ListViewItem>
-                <ListViewItem x:Name="ItemAlbums" Height="60" MouseLeftButtonUp="OnClickPlaylists">
+                <ListViewItem Height="60" MouseLeftButtonUp="OnClickPlaylists">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ImageAlbum" Height="25" Width="25" Margin="10"
                                                  Foreground="White" />
                         <TextBlock Text="Playlists" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                     </StackPanel>
                 </ListViewItem>
-                <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6"
+                <ListView  Foreground="#FF5C99D6"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem x:Name="ItemArtist" Height="60" MouseLeftButtonUp="OnSelectedItemArtist">
+                    <ListViewItem Height="60" MouseLeftButtonUp="OnSelectedItemArtist">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Artist" Height="25" Width="25" Margin="10"
                                                      Foreground="White" />

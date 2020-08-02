@@ -533,5 +533,35 @@ namespace Api.Rest
 
             throw new Exception("AuntenticacionFallida");
         }
+
+        /// <summary>
+        /// Obtiene las canciones que coincidan con el string de busqueda
+        /// </summary>
+        /// <param name="searchString">El string de busqueda</param>
+        /// <returns>Una lista de canciones</returns>
+        public static async Task<List<Cancion>> SearchCanciones(string searchString) 
+        {
+            var path = $"/v1/canciones/buscar/{searchString}?cantidad=20&pagina=1";
+            using (var response = await ApiClient.GetApiClient().GetAsync(path))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var canciones = await response.Content.ReadAsAsync<List<Cancion>>();
+                    return canciones;
+                }
+                else if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    throw new Exception("Ocurrio un error y no se pueden recuperar las canciones");
+                }
+                else
+                {
+                    ErrorGeneral error;
+                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                    throw new Exception(error.mensaje);
+                }
+            }
+        }
     }
+
+
 }

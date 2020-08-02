@@ -131,7 +131,7 @@ namespace EspotifeiClient.Player
         /// </summary>
         public void ReproducirCancionAnterior()
         {
-            if (_blockAlignedStream.CurrentTime.TotalSeconds <= 10)
+            if (_blockAlignedStream != null && _blockAlignedStream.CurrentTime.TotalSeconds <= 10)
             {
                 switch (_colaDeReproduccion.ObtenerTipoDeCancionAnterior())
                 {

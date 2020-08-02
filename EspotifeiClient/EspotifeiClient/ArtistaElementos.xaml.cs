@@ -44,16 +44,16 @@ namespace EspotifeiClient
             NombreTextBlock.Text = creadorContenido.nombre;
             Biografia.Text = creadorContenido.biografia;
             await RecuperarAlbums(creadorContenido.id);
-            await ObtenerCancionesDeAlbumes(creadorContenido.id);
-            await ColocarImagenesAlbumes();
-            await ColocarIamgenCreadorDeContenido();
+            ObtenerCancionesDeAlbumes(creadorContenido.id);
+            ColocarImagenesAlbumes();
+            ColocarIamgenCreadorDeContenido();
         }
 
         /// <summary>
         ///     Recupera la imagen del creador de contenido en calidad media y la colca en la portada del creador de
         ///     contenido
         /// </summary>
-        private async Task ColocarIamgenCreadorDeContenido()
+        private async void ColocarIamgenCreadorDeContenido()
         {
             var clientePortadas = new CoversClient();
             try
@@ -115,8 +115,7 @@ namespace EspotifeiClient
         ///     Obtiene las canciones de los albumes del creador de contenido
         /// </summary>
         /// <param name="idCreadorDeContenido">El id del creador de contenido al que pertenecen los albumes</param>
-        /// <returns>Una Task</returns>
-        private async Task ObtenerCancionesDeAlbumes(int idCreadorDeContenido)
+        private async void ObtenerCancionesDeAlbumes(int idCreadorDeContenido)
         {
             if (_albums != null)
             {
@@ -160,8 +159,7 @@ namespace EspotifeiClient
         /// <summary>
         ///     Recupera la imagen del Album y la coloca
         /// </summary>
-        /// <returns></returns>
-        private async Task ColocarImagenesAlbumes()
+        private async void ColocarImagenesAlbumes()
         {
             if (_albums != null)
             {
@@ -205,7 +203,7 @@ namespace EspotifeiClient
         {
             var idCancion = (int) ((Button) sender).Tag;
             var cancion = BuscarCancionEnAlbumes(idCancion);
-            var album = BuscarAlbumDeCancion(idCancion); 
+            var album = BuscarAlbumDeCancion(idCancion);
             cancion.album = album;
             if (album != null) Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
         }
@@ -220,9 +218,9 @@ namespace EspotifeiClient
             _creadorContenido.Albums = _albums;
             Player.Player.GetPlayer().AñadirCancionesDeCreadorDeContenidoACola(_creadorContenido);
         }
-        
+
         /// <summary>
-        /// Agrega la cancion a la cola de reproducción
+        ///     Agrega la cancion a la cola de reproducción
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -280,7 +278,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Manda a reproducir la radio de la cancion seleccionada
+        ///     Manda a reproducir la radio de la cancion seleccionada
         /// </summary>
         /// <param name="sender">El objeto que invoco el eventp</param>
         /// <param name="e">El evento invocado</param>
@@ -319,7 +317,6 @@ namespace EspotifeiClient
 
         private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
         {
-            
         }
     }
 }

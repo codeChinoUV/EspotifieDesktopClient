@@ -41,7 +41,7 @@ namespace EspotifeiClient
                 NombreTextBlock.Text = _creadorContenido.nombre;
                 Biografia.Text = _creadorContenido.biografia;
                 GenerosDataGrid.ItemsSource = _creadorContenido.generos;
-                await InicializarAlbumes();
+                InicializarAlbumes();
             }
         }
 
@@ -49,15 +49,13 @@ namespace EspotifeiClient
         ///     Recupera y muestra todos los elementos de los albumes
         /// </summary>
         /// <returns></returns>
-        private async Task InicializarAlbumes()
+        private async void InicializarAlbumes()
         {
-            await RecuperarAlbums(_creadorContenido.id);
-            AlbumsListView.ItemsSource = _albums;
-            await ObtenerCancionesDeAlbumes(_creadorContenido.id);
             AlbumsListView.ItemsSource = null;
-            AlbumsListView.ItemsSource = _albums;
-            await ColocarImagenesAlbumes();
-            await ColocarImagenCreadorDeContenido();
+            await RecuperarAlbums(_creadorContenido.id);
+            ObtenerCancionesDeAlbumes(_creadorContenido.id);
+            ColocarImagenesAlbumes();
+            ColocarImagenCreadorDeContenido();
         }
 
         /// <summary>
@@ -106,7 +104,7 @@ namespace EspotifeiClient
         ///     Recupera la imagen del creador de contenido en calidad media y la colca en la portada del creador de
         ///     contenido
         /// </summary>
-        private async Task ColocarImagenCreadorDeContenido()
+        private async void ColocarImagenCreadorDeContenido()
         {
             var clientePortadas = new CoversClient();
             try
@@ -166,8 +164,7 @@ namespace EspotifeiClient
         ///     Obtiene las canciones de los albumes del creador de contenido
         /// </summary>
         /// <param name="idCreadorDeContenido">El id del creador de contenido al que pertenecen los albumes</param>
-        /// <returns>Una Task</returns>
-        private async Task ObtenerCancionesDeAlbumes(int idCreadorDeContenido)
+        private async void ObtenerCancionesDeAlbumes(int idCreadorDeContenido)
         {
             if (_albums != null)
             {
@@ -201,6 +198,8 @@ namespace EspotifeiClient
                         }
                     }
 
+                AlbumsListView.ItemsSource = null;
+                AlbumsListView.ItemsSource = _albums;
                 if (ocurrioExcepcion)
                     new MensajeEmergente().MostrarMensajeAdvertencia("No se pudieron recuperar algunas canciones");
             }
@@ -209,8 +208,7 @@ namespace EspotifeiClient
         /// <summary>
         ///     Recupera la imagen dOnClikEditarAlbumoca
         /// </summary>
-        /// <returns></returns>
-        private async Task ColocarImagenesAlbumes()
+        private async void ColocarImagenesAlbumes()
         {
             if (_albums != null)
                 foreach (var album in _albums)
@@ -309,7 +307,7 @@ namespace EspotifeiClient
             {
                 var albumEditado = RegistrarAlbum.EditarAlbum(alalbumAEditar);
                 AlbumsListView.IsEnabled = true;
-                if (albumEditado != null) await InicializarAlbumes();
+                if (albumEditado != null) InicializarAlbumes();
             }
         }
 
@@ -318,11 +316,11 @@ namespace EspotifeiClient
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
-        private async void OnClickAgregarCancion(object sender, RoutedEventArgs e)
+        private void OnClickAgregarCancion(object sender, RoutedEventArgs e)
         {
             var idAlbum = (int) ((Button) sender).Tag;
             var cancionRegistrada = RegistrarCancion.MostrarRegistrarCancion(idAlbum);
-            if (cancionRegistrada != null) await InicializarAlbumes();
+            if (cancionRegistrada != null) InicializarAlbumes();
         }
 
         /// <summary>
@@ -343,7 +341,7 @@ namespace EspotifeiClient
                 try
                 {
                     await CancionClient.DeteleCancion(idCancion, album.id);
-                    await InicializarAlbumes();
+                    InicializarAlbumes();
                 }
                 catch (HttpRequestException)
                 {
@@ -368,7 +366,7 @@ namespace EspotifeiClient
             }
         }
 
-        private async void OnClickEditarCancion(object sender, RoutedEventArgs e)
+        private void OnClickEditarCancion(object sender, RoutedEventArgs e)
         {
             var idCancion = (int) ((Button) sender).Tag;
             var album = BuscarAlbumDeCancion(idCancion);
@@ -376,7 +374,7 @@ namespace EspotifeiClient
             if (album != null && cancion != null)
             {
                 var cancionEditada = RegistrarCancion.MostrarEditarCancion(cancion, album.id);
-                if (cancionEditada != null) await InicializarAlbumes();
+                if (cancionEditada != null) InicializarAlbumes();
             }
         }
 
@@ -434,7 +432,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Agrega la cancion a la cola de reproducción
+        ///     Agrega la cancion a la cola de reproducción
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -448,9 +446,9 @@ namespace EspotifeiClient
                 Player.Player.GetPlayer().AñadirCancionAColaDeReproduccion(cancion);
             }
         }
-        
+
         /// <summary>
-        /// Manda a reproducir la radio de la cancion seleccionada
+        ///     Manda a reproducir la radio de la cancion seleccionada
         /// </summary>
         /// <param name="sender">El objeto que invoco el eventp</param>
         /// <param name="e">El evento invocado</param>

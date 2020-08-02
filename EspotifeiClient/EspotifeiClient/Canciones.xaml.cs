@@ -14,19 +14,21 @@ using Model;
 namespace EspotifeiClient
 {
     /// <summary>
-    /// Lógica de interacción para Canciones.xaml
+    ///     Lógica de interacción para Canciones.xaml
     /// </summary>
-    public partial class Canciones : Page
+    public partial class Canciones
     {
-
         private List<Cancion> _canciones;
-        
+
         public Canciones()
         {
             InitializeComponent();
             InicializarCanciones();
         }
-        
+
+        /// <summary>
+        ///     Recupera los generos disponibles y las primeras 5 canciones de cada genero
+        /// </summary>
         private async void InicializarCanciones()
         {
             var cantidadDeCancionesPorGeneros = 5;
@@ -56,9 +58,9 @@ namespace EspotifeiClient
                 new MensajeEmergente().MostrarMensajeError(ex.Message);
             }
         }
-        
+
         /// <summary>
-        ///     Recupera las imagenes de los artistas
+        ///     Recupera las imagenes de las canciones
         /// </summary>
         private async void ColocarImagenesCanciones()
         {
@@ -83,6 +85,11 @@ namespace EspotifeiClient
             CancionesListView.IsEnabled = true;
         }
 
+        /// <summary>
+        ///     Busca las canciones que coincide con el texto introducido en el TextBox Buscar
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private async void BuscarCancionTextBox(object sender, KeyEventArgs e)
         {
             var cadenaBusqueda = buscarTextBox.Text;
@@ -108,31 +115,40 @@ namespace EspotifeiClient
                 _canciones = new List<Cancion>();
         }
 
+        /// <summary>
+        ///     Te dirige a la pantalla de ArtistaElementos del artista de la cancion seleccionada
+        /// </summary>
+        /// <param name="sender">El Objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void OnClickArtista(object sender, MouseButtonEventArgs e)
         {
             var idCancion = (int) ((TextBlock) sender).Tag;
             var cancion = BuscarCancionPorId(idCancion);
             if (cancion != null && cancion.creadores_de_contenido[0] != null)
-            {
                 NavigationService?.Navigate(new ArtistaElementos(cancion.creadores_de_contenido[0]));
-            }
         }
 
+        /// <summary>
+        ///     Reproduce la cancion seleccionada
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void OnClickPlay(object sender, RoutedEventArgs e)
         {
             var idCancion = (int) ((Button) sender).Tag;
             var cancion = BuscarCancionPorId(idCancion);
-            if (cancion != null)
-            {
-                Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
-            }
+            if (cancion != null) Player.Player.GetPlayer().EmpezarAReproducirCancion(cancion);
         }
 
+        /// <summary>
+        ///     Busca en la lista de canciones por el id de la cancion
+        /// </summary>
+        /// <param name="idCancion">El id de la cancion a buscar</param>
+        /// <returns>La cancion que coincide con el id</returns>
         private Cancion BuscarCancionPorId(int idCancion)
         {
             var cancion = _canciones.Find(c => c.id == idCancion);
             return cancion;
-
         }
     }
 }

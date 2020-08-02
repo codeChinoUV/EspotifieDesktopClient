@@ -9,7 +9,6 @@ namespace Api.Rest
 {
     public class GeneroClient
     {
-
         /// <summary>
         ///     Método del servidor que realiza la petición HTTP para consultar la lista de géneros existentes
         /// </summary>
@@ -33,7 +32,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Recupera las canciones un genero
+        ///     Recupera las canciones un genero
         /// </summary>
         /// <param name="idGenero">El id del genero a recuperar sus canciones</param>
         /// <param name="cantidad">La cantidad de canciones a recuperar</param>
@@ -48,16 +47,15 @@ namespace Api.Rest
                     var canciones = await response.Content.ReadAsAsync<List<Cancion>>();
                     return canciones;
                 }
-                else if (response.StatusCode == HttpStatusCode.InternalServerError)
+
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
                 {
                     throw new Exception("Ocurrio un error y no se pueden recuperar las canciones");
                 }
-                else
-                {
-                    ErrorGeneral error;
-                    error = await response.Content.ReadAsAsync<ErrorGeneral>();
-                    throw new Exception(error.mensaje);
-                }
+
+                ErrorGeneral error;
+                error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                throw new Exception(error.mensaje);
             }
         }
     }

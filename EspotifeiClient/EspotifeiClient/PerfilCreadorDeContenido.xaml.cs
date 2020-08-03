@@ -487,9 +487,21 @@ namespace EspotifeiClient
             }
         }
 
+        /// <summary>
+        /// Método que identifica el id de la canción y lo direcciona hacia la pantalla AgregarCancionAPlaylist.xaml.cs
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
         {
-            throw new NotImplementedException();
+            var idCancion = (int) ((Button) sender).Tag;
+            var cancion = BuscarCancionEnAlbumes(idCancion);
+            if (cancion != null)
+            {
+                cancion.album = BuscarAlbumDeCancion(idCancion);
+                new AgregarCancionAPlaylist(idCancion).Show();
+                
+            }
         }
     }
 }

@@ -53,7 +53,6 @@ namespace EspotifeiClient
         {
             AlbumsListView.ItemsSource = null;
             await RecuperarAlbums(_creadorContenido.id);
-            ObtenerCancionesDeAlbumes(_creadorContenido.id);
             ColocarImagenesAlbumes();
             ColocarImagenCreadorDeContenido();
         }
@@ -137,6 +136,7 @@ namespace EspotifeiClient
                 AlbumsListView.Visibility = Visibility.Visible;
                 if (_albums == null)
                     _albums = new List<Album>();
+                AlbumsListView.ItemsSource = _albums;
             }
             catch (HttpRequestException)
             {
@@ -159,52 +159,7 @@ namespace EspotifeiClient
                 }
             }
         }
-
-        /// <summary>
-        ///     Obtiene las canciones de los albumes del creador de contenido
-        /// </summary>
-        /// <param name="idCreadorDeContenido">El id del creador de contenido al que pertenecen los albumes</param>
-        private async void ObtenerCancionesDeAlbumes(int idCreadorDeContenido)
-        {
-            if (_albums != null)
-            {
-                var ocurrioExcepcion = false;
-                SinConexionGrid.Visibility = Visibility.Hidden;
-                AlbumsListView.Visibility = Visibility.Visible;
-                foreach (var album in _albums)
-                    try
-                    {
-                        album.canciones = await CancionClient.GetSongsFromAlbum(idCreadorDeContenido, album.id);
-                    }
-                    catch (HttpRequestException)
-                    {
-                        SinConexionGrid.Visibility = Visibility.Visible;
-                        AlbumsListView.Visibility = Visibility.Hidden;
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.Message == "AuntenticacionFallida")
-                        {
-                            new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
-                                                                       "proporcionadas, se cerrara la sesion");
-                            MainWindow.OcultarMenu();
-                            MainWindow.OcultarReproductor();
-                            NavigationService?.Navigate(new IniciarSesion());
-                        }
-                        else
-                        {
-                            ocurrioExcepcion = true;
-                        }
-                    }
-
-                AlbumsListView.ItemsSource = null;
-                AlbumsListView.ItemsSource = _albums;
-                if (ocurrioExcepcion)
-                    new MensajeEmergente().MostrarMensajeAdvertencia("No se pudieron recuperar algunas canciones");
-            }
-        }
-
+        
         /// <summary>
         ///     Recupera la imagen dOnClikEditarAlbumoca
         /// </summary>

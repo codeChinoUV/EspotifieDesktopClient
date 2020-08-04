@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -23,10 +24,10 @@ namespace EspotifeiClient
         public Canciones()
         {
             InitializeComponent();
+            InicializarCanciones();
             MainWindow.MostrarMenu();
             MainWindow.MostrarReproductor();
             MainWindow.MostrarElementoMiPerfil();
-            InicializarCanciones();
         }
 
         /// <summary>
@@ -34,6 +35,7 @@ namespace EspotifeiClient
         /// </summary>
         private async void InicializarCanciones()
         {
+            buscarTextBox.IsEnabled = false;
             var cantidadDeCancionesPorGeneros = 5;
             _canciones = new List<Cancion>();
             try
@@ -60,6 +62,8 @@ namespace EspotifeiClient
             {
                 new MensajeEmergente().MostrarMensajeError(ex.Message);
             }
+
+            buscarTextBox.IsEnabled = true;
         }
 
         /// <summary>

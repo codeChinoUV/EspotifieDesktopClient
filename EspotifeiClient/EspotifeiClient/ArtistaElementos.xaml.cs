@@ -44,7 +44,6 @@ namespace EspotifeiClient
             NombreTextBlock.Text = creadorContenido.nombre;
             Biografia.Text = creadorContenido.biografia;
             await RecuperarAlbums(creadorContenido.id);
-            ObtenerCancionesDeAlbumes(creadorContenido.id);
             ColocarImagenesAlbumes();
             ColocarIamgenCreadorDeContenido();
         }
@@ -84,10 +83,9 @@ namespace EspotifeiClient
                 _albums = await AlbumClient.GetAlbumsFromContentCreator(idCreadorContenido);
                 SinConexionGrid.Visibility = Visibility.Hidden;
                 AlbumsListView.Visibility = Visibility.Visible;
-                if (_albums != null)
-                    AlbumsListView.ItemsSource = _albums;
-                else
-                    AlbumsListView.ItemsSource = new List<Album>();
+                if (_albums == null)
+                   _albums = new List<Album>();
+                AlbumsListView.ItemsSource = _albums;
             }
             catch (HttpRequestException)
             {
@@ -112,51 +110,6 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        ///     Obtiene las canciones de los albumes del creador de contenido
-        /// </summary>
-        /// <param name="idCreadorDeContenido">El id del creador de contenido al que pertenecen los albumes</param>
-        private async void ObtenerCancionesDeAlbumes(int idCreadorDeContenido)
-        {
-            if (_albums != null)
-            {
-                var ocurrioExcepcion = false;
-                SinConexionGrid.Visibility = Visibility.Hidden;
-                AlbumsListView.Visibility = Visibility.Visible;
-                foreach (var album in _albums)
-                    try
-                    {
-                        album.canciones = await CancionClient.GetSongsFromAlbum(idCreadorDeContenido, album.id);
-                        AlbumsListView.ItemsSource = null;
-                        AlbumsListView.ItemsSource = _albums;
-                    }
-                    catch (HttpRequestException)
-                    {
-                        SinConexionGrid.Visibility = Visibility.Visible;
-                        AlbumsListView.Visibility = Visibility.Hidden;
-                        break;
-                    }
-                    catch (Exception ex)
-                    {
-                        if (ex.Message == "AuntenticacionFallida")
-                        {
-                            new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
-                                                                       "proporcionadas, se cerra la sesion");
-                            MainWindow.OcultarMenu();
-                            MainWindow.OcultarReproductor();
-                            NavigationService?.Navigate(new IniciarSesion());
-                        }
-                        else
-                        {
-                            ocurrioExcepcion = true;
-                        }
-                    }
-
-                if (ocurrioExcepcion)
-                    new MensajeEmergente().MostrarMensajeAdvertencia("No se pudieron recuperar algunas canciones");
-            }
-        }
-
-        /// <summary>
         ///     Recupera la imagen del Album y la coloca
         /// </summary>
         private async void ColocarImagenesAlbumes()
@@ -172,13 +125,13 @@ namespace EspotifeiClient
                             album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
                         else
                             album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                        AlbumsListView.ItemsSource = null;
-                        AlbumsListView.ItemsSource = _albums;
                     }
                     catch (Exception)
                     {
                         album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
                     }
+                AlbumsListView.ItemsSource = null;
+                AlbumsListView.ItemsSource = _albums;
             }
         }
 

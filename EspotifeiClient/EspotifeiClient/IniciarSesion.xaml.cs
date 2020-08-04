@@ -33,7 +33,7 @@ namespace EspotifeiClient
                 {
                     await ApiServiceLogin.GetServiceLogin().Login(login);
                     await UsuarioClient.GetUser();
-                    NavigationService?.Navigate(new MenuInicio());
+                    NavigationService?.Navigate(new Canciones());
                 }
                 catch (HttpRequestException)
                 {

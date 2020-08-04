@@ -82,8 +82,8 @@ namespace EspotifeiClient
                     {
                         new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
                                                                    "proporcionadas, se cerra la sesion");
-                        MenuInicio.OcultarMenu();
-                        MenuInicio.OcultarReproductor();
+                        MainWindow.OcultarMenu();
+                        MainWindow.OcultarReproductor();
                         NavigationService?.Navigate(new IniciarSesion());
                     }
                     else if (ex.Message == "SinCreadorDeContenido")
@@ -149,8 +149,8 @@ namespace EspotifeiClient
                 {
                     new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
                                                                "proporcionadas, se cerra la sesion");
-                    MenuInicio.OcultarMenu();
-                    MenuInicio.OcultarReproductor();
+                    MainWindow.OcultarMenu();
+                    MainWindow.OcultarReproductor();
                     NavigationService?.Navigate(new IniciarSesion());
                 }
                 else
@@ -188,8 +188,8 @@ namespace EspotifeiClient
                         {
                             new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
                                                                        "proporcionadas, se cerrara la sesion");
-                            MenuInicio.OcultarMenu();
-                            MenuInicio.OcultarReproductor();
+                            MainWindow.OcultarMenu();
+                            MainWindow.OcultarReproductor();
                             NavigationService?.Navigate(new IniciarSesion());
                         }
                         else
@@ -354,8 +354,8 @@ namespace EspotifeiClient
                     {
                         new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
                                                                    "proporcionadas, se cerrara la sesion");
-                        MenuInicio.OcultarMenu();
-                        MenuInicio.OcultarReproductor();
+                        MainWindow.OcultarMenu();
+                        MainWindow.OcultarReproductor();
                         NavigationService?.Navigate(new IniciarSesion());
                     }
                     else
@@ -474,8 +474,8 @@ namespace EspotifeiClient
                 {
                     new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
                                                                "proporcionadas, se cerra la sesion");
-                    MenuInicio.OcultarMenu();
-                    MenuInicio.OcultarReproductor();
+                    MainWindow.OcultarMenu();
+                    MainWindow.OcultarReproductor();
                     NavigationService?.Navigate(new IniciarSesion());
                 }
                 else

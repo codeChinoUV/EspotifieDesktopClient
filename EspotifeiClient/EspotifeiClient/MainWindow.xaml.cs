@@ -8,10 +8,12 @@ using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
 using Api.Rest;
+using Api.Rest.ApiLogin;
 using EspotifeiClient.Util;
 using ManejadorDeArchivos;
 using MaterialDesignThemes.Wpf;
 using Model;
+using Model.Enum;
 
 namespace EspotifeiClient
 {
@@ -20,13 +22,14 @@ namespace EspotifeiClient
     /// </summary>
     public partial class MainWindow
     {
+        private static MainWindow _mainWindow;
         private int _antiguaCalificacion;
         private int _idCancionActual;
 
         public MainWindow()
         {
             InitializeComponent();
-            MenuInicio.SetMainWindow(this);
+            SetMainWindow(this);
             PantallaFrame.NavigationService.Navigate(new IniciarSesion());
             Player.Player.GetPlayer().OnIniciaReproduccionCancion += ColocarElementosCancion;
             Player.Player.GetPlayer().OnIniciaReproduccionCancionPersonal += ColocarElementosCancionPersonal;
@@ -285,6 +288,42 @@ namespace EspotifeiClient
         private void OnClickColaReproduccion(object sender, RoutedEventArgs e)
         {
             PantallaFrame.Navigate(new ColaDeReproduccion());
+        }
+        
+        /// <summary>
+        ///     Muestra el item de mi perfil
+        /// </summary>
+        public static void MostrarElementoMiPerfil()
+        {
+            if (_mainWindow != null)
+                if (ApiServiceLogin.GetServiceLogin().Usuario != null)
+                    if (ApiServiceLogin.GetServiceLogin().Usuario.tipo_usuario == TipoUsuario.CreadorDeContenido)
+                        _mainWindow.MiPerfilItem.Visibility = Visibility.Visible;
+        }
+
+        public static void MostrarMenu()
+        {
+            if (_mainWindow != null) _mainWindow.GridMenu.Visibility = Visibility.Visible;
+        }
+
+        public static void OcultarMenu()
+        {
+            if (_mainWindow != null) _mainWindow.GridMenu.Visibility = Visibility.Collapsed;
+        }
+
+        public static void MostrarReproductor()
+        {
+            if (_mainWindow != null) _mainWindow.Reproductor.Visibility = Visibility.Visible;
+        }
+
+        public static void OcultarReproductor()
+        {
+            if (_mainWindow != null) _mainWindow.Reproductor.Visibility = Visibility.Collapsed;
+        }
+
+        public static void SetMainWindow(MainWindow mainWindow)
+        {
+            _mainWindow = mainWindow;
         }
     }
 }

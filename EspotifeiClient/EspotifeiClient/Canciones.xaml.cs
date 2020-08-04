@@ -23,6 +23,9 @@ namespace EspotifeiClient
         public Canciones()
         {
             InitializeComponent();
+            MainWindow.MostrarMenu();
+            MainWindow.MostrarReproductor();
+            MainWindow.MostrarElementoMiPerfil();
             InicializarCanciones();
         }
 

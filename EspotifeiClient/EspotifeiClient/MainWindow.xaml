@@ -151,7 +151,7 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,10,0,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <Button x:Name="anteriorCancion" Height="30" Width="30" Padding="0" Margin="10,0"
+                    <Button Height="30" Width="30" Padding="0" Margin="10,0"
                             Click="OnClickCancionAnterior"
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="SkipPrevious" Height="30" Width="30" />
@@ -160,7 +160,7 @@
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="PlayArrow" Height="30" Width="30" x:Name="playImage" />
                     </Button>
-                    <Button x:Name="siguienteCancion" Height="30" Width="30" Padding="0" Margin="10,0"
+                    <Button Height="30" Width="30" Padding="0" Margin="10,0"
                             Click="OnClickNextButton"
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="SkipNext" Height="30" Width="30" />
@@ -190,7 +190,7 @@
                     <ColumnDefinition Width="0.80*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button x:Name="colaReproduccionBoton" Height="30" Width="30" Padding="0"
+                    <Button Height="30" Width="30" Padding="0" Click="OnClickColaReproduccion"
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="ArrowBottomDropCircleOutline" Width="20" Height="20" />
                     </Button>

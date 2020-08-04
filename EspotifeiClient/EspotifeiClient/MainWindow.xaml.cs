@@ -281,5 +281,10 @@ namespace EspotifeiClient
         {
             PantallaFrame.Navigate(new Canciones());
         }
+
+        private void OnClickColaReproduccion(object sender, RoutedEventArgs e)
+        {
+            PantallaFrame.Navigate(new ColaDeReproduccion());
+        }
     }
 }

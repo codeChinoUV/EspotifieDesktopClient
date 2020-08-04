@@ -1,0 +1,120 @@
+<Page x:Class="EspotifeiClient.ColaDeReproduccion"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:EspotifeiClient" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d"
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="Cola De Reproduccion" >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.20*" />
+            <RowDefinition Height="0.80*" />
+        </Grid.RowDefinitions>
+        <Rectangle Grid.Row="0">
+            <Rectangle.Fill>
+                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                    <GradientStop Color="#FF2281D1" />
+                    <GradientStop Color="#FF34268A" Offset="1" />
+                    <GradientStop Color="#FF025EFF" Offset="0.546" />
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Grid Grid.Row="1" Margin="0,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.10*"/>
+                <RowDefinition Height="0.90*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" Background="LightGray">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="0.30*" />
+                    <ColumnDefinition Width="0.30*" />
+                    <ColumnDefinition Width="0.10*" />
+                    <ColumnDefinition Width="0.30*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="Nombre" FontSize="15" FontWeight="Bold" Foreground="Black"
+                    VerticalAlignment="Center" Margin="10,0" />
+                <TextBlock Grid.Column="1" Text="Artistas" FontSize="15" FontWeight="Bold" Foreground="Black"
+                    VerticalAlignment="Center" />
+                <TextBlock Grid.Column="2" Text="Duración" FontSize="15" FontWeight="Bold" Foreground="Black"
+                    VerticalAlignment="Center" />
+                <TextBlock Grid.Column="3" Text="Tipo de cancion" FontSize="15" FontWeight="Bold" Foreground="Black"
+                    VerticalAlignment="Center" Margin="10,0" />
+                <Border Grid.Column="0" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="0,0,0,2" />
+            </Grid>
+            <ScrollViewer Grid.Row="1" Margin="0,0,0,0">
+                <ItemsControl x:Name="ListViewColaReproduccion" ItemsSource="{Binding ElementoCola}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="4">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.30*" />
+                                    <ColumnDefinition Width="0.30*" />
+                                    <ColumnDefinition Width="0.10*" />
+                                    <ColumnDefinition Width="0.20*" />
+                                    <ColumnDefinition Width="0.10*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="{Binding Nombre}" Margin="10,0"
+                                           FontSize="15" Foreground="Black" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="1" Text="{Binding Artistas}" Margin="10,0"
+                                           FontSize="15" Foreground="Black" VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="2" Text="{Binding DuracionString}"
+                                           Margin="10,0" FontSize="15" Foreground="Black"
+                                           VerticalAlignment="Center" />
+                                <TextBlock Grid.Column="3" Text="{Binding TipoCancion}"
+                                           Margin="10,0" FontSize="15" Foreground="Black"
+                                           VerticalAlignment="Center" />
+                                <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Right">
+                                    <Button Background="{x:Null}" Width="30" Height="25" BorderBrush="Transparent"
+                                            Tag="{Binding Posicion}" Padding="0"
+                                            Click="OnClickEliminarCancion" VerticalAlignment="Center"
+                                            HorizontalAlignment="Right">
+                                        <materialDesign:PackIcon Kind="Close" Height="25" Width="25" Foreground="Red" />
+                                    </Button>
+                                </StackPanel>
+                                <Grid.Style>
+                                    <Style TargetType="{x:Type Grid}">
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="PaleTurquoise" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="0.90*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="0.40*" />
+                <RowDefinition Height="0.30*" />
+                <RowDefinition Height="0.30*" />
+            </Grid.RowDefinitions>
+            <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Source="Resources/ColaDeReproduccion.png" Margin="10" />
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="Cola De Reproducción" FontSize="30" TextWrapping="Wrap" Foreground="White" FontWeight="Bold" />
+            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Cantidad de canciones: " Foreground="White" FontSize="16" FontWeight="Bold" />
+                <TextBlock x:Name="CantidadCanciones" Text="0" Foreground="White" FontSize="16" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="Tiempo de reproduccion: " Foreground="White" FontSize="16" FontWeight="Bold" />
+                <TextBlock x:Name="TiempoReproduccion" Text="00:00:00" Foreground="White" FontSize="16" />
+            </StackPanel>
+            <Button Grid.Column="1" Grid.Row="0" Content="Limpiar cola de reproduccion" HorizontalAlignment="Right"
+                    Margin="10,00" Click="OnClickLimpiarCola"/>
+        </Grid>
+    </Grid>
+</Page>

@@ -11,6 +11,11 @@ namespace EspotifeiClient.Player
 {
     public class Player
     {
+
+        public delegate void ActualizacionColaReproduccion(List<ElementoCola> elementosCola);
+
+        public event ActualizacionColaReproduccion OnActualizacionCola;
+        
         public delegate void AvanzaCancion(double tiempoActual);
 
         public delegate void CambiaEstadoReproudccion(bool estaReproducciendo);
@@ -136,40 +141,46 @@ namespace EspotifeiClient.Player
         /// </summary>
         public void ReproducirCancionAnterior()
         {
-            if (_blockAlignedStream != null && _blockAlignedStream.CurrentTime.TotalSeconds <= 10)
+            try
             {
-                switch (_colaDeReproduccion.ObtenerTipoDeCancionAnterior())
+                if (_blockAlignedStream.CurrentTime.TotalSeconds <= 10)
                 {
-                    case Cola.TipoCancionAReproducir.Cancion:
-                        var cancionAnterior = _colaDeReproduccion.ObtenerCancion(true);
-                        if (cancionAnterior != null) EmpezarAReproducirCancion(cancionAnterior);
-                        break;
-                    case Cola.TipoCancionAReproducir.CancionPersonal:
-                        var cancionPersonalAnterior = _colaDeReproduccion.ObtenerCancionPersonal(true);
-                        if (cancionPersonalAnterior != null) EmpezarAReproducirCancionPersonal(cancionPersonalAnterior);
-                        break;
-                }
-            }
-            else
-            {
-                if (_blockAlignedStream != null)
-                {
-                    _blockAlignedStream.Seek(0, SeekOrigin.Begin);
-                    OnAvanceCancion?.Invoke(0);
-                    if (_estadoReproductor == EstadoReproductor.Detenido)
+                    switch (_colaDeReproduccion.ObtenerTipoDeCancionAnterior())
                     {
-                        _waveOutEvent.Play();
-                        if (_estadoReproductor == EstadoReproductor.Detenido ||
-                            _estadoReproductor == EstadoReproductor.Pausado)
+                        case Cola.TipoCancionAReproducir.Cancion:
+                            var cancionAnterior = _colaDeReproduccion.ObtenerCancion(true);
+                            if (cancionAnterior != null) EmpezarAReproducirCancion(cancionAnterior);
+                            break;
+                        case Cola.TipoCancionAReproducir.CancionPersonal:
+                            var cancionPersonalAnterior = _colaDeReproduccion.ObtenerCancionPersonal(true);
+                            if (cancionPersonalAnterior != null)
+                                EmpezarAReproducirCancionPersonal(cancionPersonalAnterior);
+                            break;
+                    }
+                }
+                else
+                {
+                    if (_blockAlignedStream != null)
+                    {
+                        _blockAlignedStream.Seek(0, SeekOrigin.Begin);
+                        OnAvanceCancion?.Invoke(0);
+                        if (_estadoReproductor == EstadoReproductor.Detenido)
                         {
-                            _seguidorDeEventosDelReproductor.Start();
-                            _estadoReproductor = EstadoReproductor.Reproduciendo;
-                        }
+                            _waveOutEvent.Play();
+                            if (_estadoReproductor == EstadoReproductor.Detenido ||
+                                _estadoReproductor == EstadoReproductor.Pausado)
+                            {
+                                _seguidorDeEventosDelReproductor.Start();
+                                _estadoReproductor = EstadoReproductor.Reproduciendo;
+                            }
 
-                        OnCambioEstadoReproduccion?.Invoke(true);
+                            OnCambioEstadoReproduccion?.Invoke(true);
+                        }
                     }
                 }
             }
+            catch (NullReferenceException){ }
+
         }
 
 
@@ -261,11 +272,31 @@ namespace EspotifeiClient.Player
         }
 
         /// <summary>
+        /// Recupera los proximos elementos en la cola
+        /// </summary>
+        /// <returns>Una lista de ElementoCola</returns>
+        public List<ElementoCola> RecuperarElementosRestantesEnCola()
+        {
+            return _colaDeReproduccion.ObtenerProximosElementosEnCola();
+        }
+
+        /// <summary>
+        /// Elimina un elemento de la cola de reproduccion
+        /// </summary>
+        /// <param name="posicion">La posicion del elemento a eliminar</param>
+        public void EliminarElementoDeColaReproduccion(int posicion)
+        {
+            _colaDeReproduccion.EliminarElementoDeCola(posicion);
+            OnActualizacionCola?.Invoke(_colaDeReproduccion.ObtenerProximosElementosEnCola());
+        }
+        
+        /// <summary>
         ///     Empieza la reproduccion de una cancion
         /// </summary>
         /// <param name="cancion">La cancion a reproducir</param>
         public void EmpezarAReproducirCancion(Cancion cancion)
         {
+            OnActualizacionCola?.Invoke(_colaDeReproduccion.ObtenerProximosElementosEnCola());
             OnIniciaReproduccionCancion?.Invoke(cancion);
             OnCambioEstadoReproduccion?.Invoke(true);
             _estadoReproductor = EstadoReproductor.Reproduciendo;
@@ -279,6 +310,7 @@ namespace EspotifeiClient.Player
         /// <param name="cancionPersonal">La cancion personal a reproducir</param>
         public void EmpezarAReproducirCancionPersonal(CancionPersonal cancionPersonal)
         {
+            OnActualizacionCola?.Invoke(_colaDeReproduccion.ObtenerProximosElementosEnCola());
             OnIniciaReproduccionCancionPersonal?.Invoke(cancionPersonal);
             OnCambioEstadoReproduccion?.Invoke(true);
             _estadoReproductor = EstadoReproductor.Reproduciendo;
@@ -434,6 +466,15 @@ namespace EspotifeiClient.Player
                 calidad = Calidad.Baja;
 
             return calidad;
+        }
+
+        /// <summary>
+        /// Limpia la cola de reproduccion
+        /// </summary>
+        public void LimpiarColaDeReproduccion()
+        {
+            _colaDeReproduccion.LimpiarCola();
+            OnActualizacionCola?.Invoke(_colaDeReproduccion.ObtenerProximosElementosEnCola());
         }
     }
 }

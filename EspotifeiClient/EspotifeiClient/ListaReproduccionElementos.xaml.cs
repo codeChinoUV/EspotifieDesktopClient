@@ -42,7 +42,6 @@ namespace EspotifeiClient
             DescripcionTextBlock.Text = listaReproduccion.descripcion;
             MinutosTextBlock.Text = "Duración en minutos: " + listaReproduccion.duracion_total;
             await ObtenerCancionesDeListasReproduccion(_listaReproduccion.id);
-            await ColocarImagenesAlbumes();
         }
 
         /// <summary>
@@ -70,33 +69,6 @@ namespace EspotifeiClient
 
             if (ocurrioExcepcion)
                 new MensajeEmergente().MostrarMensajeAdvertencia("No se pudieron recuperar algunas canciones");
-        }
-
-        /// <summary>
-        ///     Método que recupera las portadas del servidor y las asigna a su canción correspondiente
-        /// </summary>
-        /// <returns></returns>
-        private async Task ColocarImagenesAlbumes()
-        {
-            if (_listaReproduccion.canciones != null)
-            {
-                var clientePortadas = new CoversClient();
-                foreach (var playlist in _listaReproduccion.canciones)
-                    try
-                    {
-                        var bitmap = await clientePortadas.GetAlbumCover(playlist.album.id, Calidad.Baja);
-                        if (bitmap != null)
-                            playlist.album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
-                        else
-                            playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                        CancionesListView.ItemsSource = null;
-                        CancionesListView.ItemsSource = _listaReproduccion.canciones;
-                    }
-                    catch (Exception)
-                    {
-                        playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                    }
-            }
         }
 
         /// <summary>

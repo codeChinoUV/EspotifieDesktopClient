@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
 using Api.Rest;
 using Api.Rest.ApiLogin;
+using EspotifeiClient.ManejoUsuarios;
 using EspotifeiClient.Util;
 using Grpc.Core;
 using Microsoft.Win32;
@@ -160,7 +161,9 @@ namespace EspotifeiClient
                         User = usuario.nombre_usuario
                     };
                     await ApiServiceLogin.GetServiceLogin().Login(usuarioLogin);
-                    await UsuarioClient.GetUser();
+                    var usuarioLogeado = await UsuarioClient.GetUser();
+                    usuarioLogeado.login = usuarioLogin;
+                    ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().InicioSesionUsuario(usuarioLogeado);
                     if (_rutaImagen != "")
                     {
                         var clientePortadas = new CoversClient();

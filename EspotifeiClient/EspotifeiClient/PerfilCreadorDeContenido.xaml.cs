@@ -54,7 +54,6 @@ namespace EspotifeiClient
         {
             AlbumsListView.ItemsSource = null;
             await RecuperarAlbums(_creadorContenido.id);
-            ColocarImagenesAlbumes();
             ColocarImagenCreadorDeContenido();
         }
 
@@ -131,7 +130,7 @@ namespace EspotifeiClient
             var clientePortadas = new CoversClient();
             try
             {
-                var portada = await clientePortadas.GetContentCreatorCover(_creadorContenido.id, Calidad.Baja);
+                var portada = await clientePortadas.GetContentCreatorCover(_creadorContenido.id, Calidad.Media);
                 if (portada != null)
                 {
                     _creadorContenido.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(portada);
@@ -159,6 +158,7 @@ namespace EspotifeiClient
                 if (_albums == null)
                     _albums = new List<Album>();
                 AlbumsListView.ItemsSource = _albums;
+                ColocarImagenesAlbumes();
             }
             catch (HttpRequestException)
             {
@@ -479,11 +479,9 @@ namespace EspotifeiClient
         private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
         {
             var idCancion = (int) ((Button) sender).Tag;
-            var cancion = BuscarCancionEnAlbumes(idCancion);
-            if (cancion != null)
+            if (idCancion != 0)
             {
-                cancion.album = BuscarAlbumDeCancion(idCancion);
-                new AgregarCancionAPlaylist(idCancion).Show();
+                new AgregarCancionAPlaylist(idCancion).ShowDialog();
             }
         }
 

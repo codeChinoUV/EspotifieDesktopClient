@@ -30,7 +30,7 @@
                 <Label x:Name="tituloLabel" Content="REGISTRO DE CREADOR" HorizontalAlignment="Center"
                        VerticalAlignment="Top"
                        Foreground="Gray" FontSize="18" Width="203" />
-                <Button Background="{x:Null}" Width="100" Height="100"
+                <Button Background="{x:Null}" Width="100" Height="100" Padding="2"
                         BorderBrush="#FF2281D1" Click="OnClickAgregarImagenImage">
                     <Image x:Name="portadaCreadorImage" Source="Resources/Añadir.png" />
                 </Button>

@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Api.GrpcClients.Clients;
 using Api.Rest;
-using EspotifeiClient.Util;
-using ManejadorDeArchivos;
+using MaterialDesignThemes.Wpf;
 using Model;
 
 namespace EspotifeiClient
@@ -16,9 +14,8 @@ namespace EspotifeiClient
     /// <summary>
     ///     Lógica de interacción para ListasReproduccionUsuario.xaml
     /// </summary>
-    public partial class ListasReproduccionUsuario : Page
+    public partial class ListasReproduccionUsuario
     {
-        private readonly ListaReproduccion _listaReproduccion = new ListaReproduccion();
         private List<ListaReproduccion> _listasReproduccion;
 
         public ListasReproduccionUsuario()
@@ -26,15 +23,7 @@ namespace EspotifeiClient
             InitializeComponent();
             ObtenerListasReproduccion();
         }
-
-        /// <summary>
-        ///     Método que inicializa las listas de reproducción del usuario obteniendo sus canciones
-        /// </summary>
-        /// <returns>Una Task</returns>
-        private async Task InicializarListasReproduccion()
-        {
-            await ObtenerCancionesDeListasReproduccion();
-        }
+        
 
         /// <summary>
         ///     Método que obtiene las listas de reproducción que el usuario ha creado
@@ -43,14 +32,19 @@ namespace EspotifeiClient
         {
             try
             {
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                ListaReproduccionListView.Visibility = Visibility.Visible;
+                AgregarPlaylistButton.Visibility = Visibility.Visible;
                 _listasReproduccion = await ListaReproduccionClient.GetListaReproduccion();
                 ListaReproduccionListView.ItemsSource = _listasReproduccion;
                 ColocarImagenesListasReproduccion();
-                await InicializarListasReproduccion();
+                await ObtenerCancionesDeListasReproduccion();
             }
             catch (HttpRequestException)
             {
-                new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
+                SinConexionGrid.Visibility = Visibility.Visible;
+                ListaReproduccionListView.Visibility = Visibility.Hidden;
+                AgregarPlaylistButton.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
             {
@@ -85,16 +79,18 @@ namespace EspotifeiClient
                 foreach (var playlist in _listasReproduccion)
                     try
                     {
+                        SinConexionGrid.Visibility = Visibility.Hidden;
+                        ListaReproduccionListView.Visibility = Visibility.Visible;
+                        AgregarPlaylistButton.Visibility = Visibility.Visible;
                         playlist.canciones = await CancionClient.GetSongsFromPlaylist(playlist.id);
                         ListaReproduccionListView.ItemsSource = null;
                         ListaReproduccionListView.ItemsSource = _listasReproduccion;
-
-                        //_listaReproduccion = playlist;
                     }
                     catch (HttpRequestException)
                     {
+                        SinConexionGrid.Visibility = Visibility.Visible;
                         ListaReproduccionListView.Visibility = Visibility.Hidden;
-                        new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
+                        AgregarPlaylistButton.Visibility = Visibility.Hidden;
                         break;
                     }
                     catch (Exception ex)
@@ -105,33 +101,6 @@ namespace EspotifeiClient
 
                 if (ocurrioExcepcion)
                     new MensajeEmergente().MostrarMensajeAdvertencia("No se pudieron recuperar algunas canciones");
-            }
-        }
-
-        /// <summary>
-        ///     Método que recupera las portadas del servidor y las asigna a su canción correspondiente
-        /// </summary>
-        /// <returns></returns>
-        private async Task ColocarImagenesCanciones(ListaReproduccion listaReproduccion, Calidad calidad)
-        {
-            if (_listaReproduccion.canciones != null)
-            {
-                var clientePortadas = new CoversClient();
-                foreach (var playlist in listaReproduccion.canciones)
-                    try
-                    {
-                        var bitmap = await clientePortadas.GetAlbumCover(playlist.album.id, Calidad.Baja);
-                        if (bitmap != null)
-                            playlist.album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
-                        else
-                            playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                        ListaReproduccionListView.ItemsSource = null;
-                        ListaReproduccionListView.ItemsSource = listaReproduccion.canciones;
-                    }
-                    catch (Exception)
-                    {
-                        playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                    }
             }
         }
 
@@ -152,12 +121,17 @@ namespace EspotifeiClient
                 if (BuscarListaReproduccion(idListaReproduccion))
                     try
                     {
+                        SinConexionGrid.Visibility = Visibility.Hidden;
+                        ListaReproduccionListView.Visibility = Visibility.Visible;
+                        AgregarPlaylistButton.Visibility = Visibility.Visible;
                         await ListaReproduccionClient.DeteleListaReproduccion(idListaReproduccion);
                         ObtenerListasReproduccion();
                     }
                     catch (HttpRequestException)
                     {
+                        SinConexionGrid.Visibility = Visibility.Visible;
                         ListaReproduccionListView.Visibility = Visibility.Hidden;
+                        AgregarPlaylistButton.Visibility = Visibility.Hidden;
                     }
                     catch (Exception ex)
                     {
@@ -188,7 +162,9 @@ namespace EspotifeiClient
                 MensajeEmergente.MostrarMensajeConfirmacion("¿Seguro que desea eliminar la canción seleccionada?");
             if (confirmacion)
             {
+                SinConexionGrid.Visibility = Visibility.Hidden;
                 ListaReproduccionListView.Visibility = Visibility.Visible;
+                AgregarPlaylistButton.Visibility = Visibility.Visible;
                 var idCancion = (int) ((Button) sender).Tag;
                 var playlist = BuscarListaReproduccionDeCancion(idCancion);
                 try
@@ -198,7 +174,9 @@ namespace EspotifeiClient
                 }
                 catch (HttpRequestException)
                 {
+                    SinConexionGrid.Visibility = Visibility.Visible;
                     ListaReproduccionListView.Visibility = Visibility.Hidden;
+                    AgregarPlaylistButton.Visibility = Visibility.Hidden;
                 }
                 catch (Exception ex)
                 {
@@ -264,7 +242,8 @@ namespace EspotifeiClient
         /// <param name="e"></param>
         private void OnClickAgregarPlaylist(object sender, RoutedEventArgs e)
         {
-            new RegistrarPlaylist().Show();
+            new RegistrarPlaylist().ShowDialog();
+            ObtenerListasReproduccion();
         }
 
         /// <summary>

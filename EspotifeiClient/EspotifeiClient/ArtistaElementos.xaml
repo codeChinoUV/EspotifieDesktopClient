@@ -12,6 +12,7 @@
         <Image Source="Resources/Play.png" x:Key="PlayImage" x:Shared="False" />
         <BitmapImage UriSource="Resources/AlbumDesconocido.png" x:Key="AlbumDesconocido" x:Shared="False" />
         <BitmapImage UriSource="Resources/SinConexion.png" x:Key="SinConexion" x:Shared="False" />
+        <BitmapImage UriSource="Resources/Estrella.png" x:Key="Estrella" x:Shared="False" />
     </Page.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -90,8 +91,9 @@
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="Auto" />
                                                 <ColumnDefinition Width="0.60*" />
-                                                <ColumnDefinition Width="0.15*" />
-                                                <ColumnDefinition Width="0.15*" />
+                                                <ColumnDefinition Width="0.10*" />
+                                                <ColumnDefinition Width="0.10*" />
+                                                <ColumnDefinition Width="0.10*" />
                                                 <ColumnDefinition Width="0.05*" />
                                             </Grid.ColumnDefinitions>
                                             <Button Grid.Column="0" Grid.Row="2" VerticalAlignment="Top"
@@ -109,13 +111,26 @@
                                                        FontSize="15" Foreground="Black" VerticalAlignment="Center" />
                                             <TextBlock Grid.Column="3" Text="{Binding cantidad_de_reproducciones}"
                                                        Margin="10,0" FontSize="15" Foreground="Black"
-                                                       VerticalAlignment="Center" />
-                                            <materialDesign:PopupBox Grid.Column="4" PlacementMode="BottomAndAlignRightEdges" StaysOpen="False"
-                                                Foreground="Gray">
+                                                       VerticalAlignment="Center" HorizontalAlignment="Center" />
+                                            <StackPanel Orientation="Horizontal" Grid.Column="4"
+                                                        VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding calificacion_promedio_string}" FontSize="17"
+                                                           Margin="10,0" />
+                                                <Image Source="{StaticResource Estrella}" Width="15" Height="17" />
+                                            </StackPanel>
+                                            <materialDesign:PopupBox Grid.Column="5"
+                                                                     PlacementMode="BottomAndAlignRightEdges"
+                                                                     StaysOpen="False"
+                                                                     Foreground="Gray">
                                                 <StackPanel Width="auto">
-                                                    <Button Content="Agregar a la cola" Click="OnClickAgregarACola" Tag="{Binding id}"/>
-                                                    <Button Content="Empezar radio de cancion" Click="OnClickEmpezarRadio" Tag="{Binding id}" />
-                                                    <Button Content="Agregar a playlist" Click="OnClickAgregarAPlaylist" Tag="{Binding id}" />
+                                                    <Button Content="Agregar a la cola" Click="OnClickAgregarACola"
+                                                            Tag="{Binding id}" />
+                                                    <Button Content="Empezar radio de cancion"
+                                                            Click="OnClickEmpezarRadio" Tag="{Binding id}" />
+                                                    <Button Content="Agregar a playlist"
+                                                            Click="OnClickAgregarAPlaylist" Tag="{Binding id}" />
+                                                    <Button Content="Descargar"
+                                                            Click="OnClickDescargar" Tag="{Binding id}" />
                                                 </StackPanel>
                                             </materialDesign:PopupBox>
                                             <Grid.Style>

@@ -197,7 +197,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Método que solicita al servidor eliminar una canción de una palylist
+        ///     Método que solicita al servidor eliminar una canción de una palylist
         /// </summary>
         /// <param name="idListaReproduccion">El id de la lista de reproducción a la que pertenece la canción</param>
         /// <param name="idCancion">El id de la canción a eliminar</param>
@@ -213,13 +213,16 @@ namespace Api.Rest
                         var cancionDeleted = await response.Content.ReadAsAsync<Cancion>();
                         return cancionDeleted;
                     }
+
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         await ApiServiceLogin.GetServiceLogin().ReLogin();
-                    } else if (response.StatusCode == HttpStatusCode.NotFound)
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         throw new Exception("No existe la cancion que se desea eliminar");
-                    } else
+                    }
+                    else
                     {
                         ErrorGeneral error;
                         error = await response.Content.ReadAsAsync<ErrorGeneral>();
@@ -231,7 +234,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Agrega los nuevos generos a una cancion
+        ///     Agrega los nuevos generos a una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a la que se le agregaran los generos</param>
         /// <param name="idAlbum">El album al que pertenece la cancion</param>
@@ -470,7 +473,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Recupera las canciones de la playlist con el idPlaylist
+        ///     Recupera las canciones de la playlist con el idPlaylist
         /// </summary>
         /// <param name="idPlaylist">El id de la lista de reproduccion a recuperar sus canciones</param>
         /// <returns>Una lista de cnanciones</returns>
@@ -487,18 +490,16 @@ namespace Api.Rest
                 }
 
                 if (response.StatusCode == HttpStatusCode.NotFound)
-                {
                     throw new Exception("No existe la lista de reproducción indicada");
-                }
 
                 ErrorGeneral error;
                 error = await response.Content.ReadAsAsync<ErrorGeneral>();
                 throw new Exception(error.mensaje);
             }
         }
-        
+
         /// <summary>
-        /// Obtiene el radio de una cancion
+        ///     Obtiene el radio de una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion de la cual se quiere obtener la radio</param>
         /// <returns>Una lista de canciones</returns>
@@ -532,6 +533,33 @@ namespace Api.Rest
                 }
 
             throw new Exception("AuntenticacionFallida");
+        }
+
+        /// <summary>
+        ///     Obtiene las canciones que coincidan con el string de busqueda
+        /// </summary>
+        /// <param name="searchString">El string de busqueda</param>
+        /// <returns>Una lista de canciones</returns>
+        public static async Task<List<Cancion>> SearchCanciones(string searchString)
+        {
+            var path = $"/v1/canciones/buscar/{searchString}?cantidad=20&pagina=1";
+            using (var response = await ApiClient.GetApiClient().GetAsync(path))
+            {
+                if (response.IsSuccessStatusCode)
+                {
+                    var canciones = await response.Content.ReadAsAsync<List<Cancion>>();
+                    return canciones;
+                }
+
+                if (response.StatusCode == HttpStatusCode.InternalServerError)
+                {
+                    throw new Exception("Ocurrio un error y no se pueden recuperar las canciones");
+                }
+
+                ErrorGeneral error;
+                error = await response.Content.ReadAsAsync<ErrorGeneral>();
+                throw new Exception(error.mensaje);
+            }
         }
     }
 }

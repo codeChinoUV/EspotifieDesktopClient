@@ -1,17 +1,17 @@
-﻿using Api.Rest;
-using Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using Api.Rest;
+using Model;
 
 namespace EspotifeiClient
 {
     /// <summary>
-    /// Lógica de interacción para ListasReproduccionUsuario.xaml
+    ///     Lógica de interacción para ListasReproduccionUsuario.xaml
     /// </summary>
     public partial class ListasReproduccionUsuario : Page
     {
@@ -21,11 +21,10 @@ namespace EspotifeiClient
         {
             InitializeComponent();
             ObtenerListasReproduccion();
-            
         }
 
         /// <summary>
-        /// Método que inicializa las listas de reproducción del usuario obteniendo sus canciones
+        ///     Método que inicializa las listas de reproducción del usuario obteniendo sus canciones
         /// </summary>
         /// <returns>Una Task</returns>
         private async Task InicializarListasReproduccion()
@@ -34,7 +33,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que obtiene las listas de reproducción que el usuario ha creado
+        ///     Método que obtiene las listas de reproducción que el usuario ha creado
         /// </summary>
         private async void ObtenerListasReproduccion()
         {
@@ -44,25 +43,25 @@ namespace EspotifeiClient
                 ListaReproduccionListView.ItemsSource = _listasReproduccion;
                 ColocarImagenesListasReproduccion();
                 await InicializarListasReproduccion();
-            } catch (HttpRequestException)
+            }
+            catch (HttpRequestException)
             {
                 new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 new MensajeEmergente().MostrarMensajeError(ex.Message);
             }
         }
 
         /// <summary>
-        /// Método que coloca una imagen predefinida a las listas de reproducción del usuario
+        ///     Método que coloca una imagen predefinida a las listas de reproducción del usuario
         /// </summary>
         private void ColocarImagenesListasReproduccion()
         {
             ListaReproduccionListView.IsEnabled = false;
             foreach (var playlist in _listasReproduccion)
-            {
                 playlist.PortadaImagen = (BitmapImage) FindResource("ListaDesconocida");
-            }
 
             ListaReproduccionListView.ItemsSource = null;
             ListaReproduccionListView.ItemsSource = _listasReproduccion;
@@ -70,7 +69,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que obtiene las canciones pertenecientes a las listas de reproducción del usuario
+        ///     Método que obtiene las canciones pertenecientes a las listas de reproducción del usuario
         /// </summary>
         /// <returns></returns>
         private async Task ObtenerCancionesDeListasReproduccion()
@@ -85,16 +84,18 @@ namespace EspotifeiClient
                         playlist.canciones = await CancionClient.GetSongsFromPlaylist(playlist.id);
                         ListaReproduccionListView.ItemsSource = null;
                         ListaReproduccionListView.ItemsSource = _listasReproduccion;
-                    } catch (HttpRequestException)
+                    }
+                    catch (HttpRequestException)
                     {
                         ListaReproduccionListView.Visibility = Visibility.Hidden;
                         new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
                         break;
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         ocurrioExcepcion = true;
                         new MensajeEmergente().MostrarMensajeError(ex.Message);
-                    } 
+                    }
 
                 if (ocurrioExcepcion)
                     new MensajeEmergente().MostrarMensajeAdvertencia("No se pudieron recuperar algunas canciones");
@@ -102,47 +103,49 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que elimina la lista de reproducción seleccionada
+        ///     Método que elimina la lista de reproducción seleccionada
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private async void OnClickEliminarPlaylist(object sender, RoutedEventArgs e)
         {
             var confirmacion =
-                MensajeEmergente.MostrarMensajeConfirmacion("¿Seguro que desea eliminar la lista de reproducción seleccionada?");
+                MensajeEmergente.MostrarMensajeConfirmacion(
+                    "¿Seguro que desea eliminar la lista de reproducción seleccionada?");
             if (confirmacion)
             {
                 ListaReproduccionListView.Visibility = Visibility.Visible;
-                int idListaReproduccion = (int) ((Button) sender).Tag;
+                var idListaReproduccion = (int) ((Button) sender).Tag;
                 if (BuscarListaReproduccion(idListaReproduccion))
-                {
                     try
                     {
                         await ListaReproduccionClient.DeteleListaReproduccion(idListaReproduccion);
                         ObtenerListasReproduccion();
-                    } catch (HttpRequestException)
+                    }
+                    catch (HttpRequestException)
                     {
                         ListaReproduccionListView.Visibility = Visibility.Hidden;
-                    } catch (Exception ex)
+                    }
+                    catch (Exception ex)
                     {
                         if (ex.Message == "AuntenticacionFallida")
                         {
                             new MensajeEmergente().MostrarMensajeError("No se puede autenticar con las credenciales " +
                                                                        "proporcionadas, se cerrará la sesión");
-                            MenuInicio.OcultarMenu();
-                            MenuInicio.OcultarReproductor();
+                            MainWindow.OcultarMenu();
+                            MainWindow.OcultarReproductor();
                             NavigationService?.Navigate(new IniciarSesion());
-                        } else
+                        }
+                        else
                         {
                             new MensajeEmergente().MostrarMensajeError(ex.Message);
                         }
                     }
-                }
             }
         }
 
         /// <summary>
-        /// Método que elimina una canción seleccionada de la lista de reproducción en la que se encuentra el usuario
+        ///     Método que elimina una canción seleccionada de la lista de reproducción en la que se encuentra el usuario
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -153,25 +156,28 @@ namespace EspotifeiClient
             if (confirmacion)
             {
                 ListaReproduccionListView.Visibility = Visibility.Visible;
-                int idCancion = (int) ((Button) sender).Tag;
+                var idCancion = (int) ((Button) sender).Tag;
                 var playlist = BuscarListaReproduccionDeCancion(idCancion);
                 try
                 {
                     await CancionClient.DeteleCancionPlaylist(playlist.id, idCancion);
                     ObtenerListasReproduccion();
-                } catch (HttpRequestException)
+                }
+                catch (HttpRequestException)
                 {
                     ListaReproduccionListView.Visibility = Visibility.Hidden;
-                } catch (Exception ex)
+                }
+                catch (Exception ex)
                 {
                     if (ex.Message == "AuntenticacionFallida")
                     {
                         new MensajeEmergente().MostrarMensajeError("No se puede autenticar con las credenciales " +
                                                                    "proporcionadas, se cerrará la sesión");
-                        MenuInicio.OcultarMenu();
-                        MenuInicio.OcultarReproductor();
+                        MainWindow.OcultarMenu();
+                        MainWindow.OcultarReproductor();
                         NavigationService?.Navigate(new IniciarSesion());
-                    } else
+                    }
+                    else
                     {
                         new MensajeEmergente().MostrarMensajeError(ex.Message);
                     }
@@ -180,26 +186,25 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que verifica que la lista de reproducción exista para poder eliminarla
+        ///     Método que verifica que la lista de reproducción exista para poder eliminarla
         /// </summary>
         /// <param name="idListaReproduccion">id de la lista de reproducción a buscar</param>
         /// <returns>true si la encuentra</returns>
         private bool BuscarListaReproduccion(int idListaReproduccion)
         {
-            bool coincide = false;
+            var coincide = false;
             foreach (var playlist in _listasReproduccion)
-            {
                 if (playlist.id == idListaReproduccion)
                 {
                     coincide = true;
                     break;
                 }
-            }
+
             return coincide;
         }
 
         /// <summary>
-        /// Método que verifica que exista la canción seleccionada en la lista de reproducción
+        ///     Método que verifica que exista la canción seleccionada en la lista de reproducción
         /// </summary>
         /// <param name="idCancion">id de la canción a buscar</param>
         /// <returns>La instancia de ListaReproduccion con ese id</returns>
@@ -220,13 +225,13 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método de evento del botón que redirige a la pantalla RegistrarPlaylist.xaml
+        ///     Método de evento del botón que redirige a la pantalla RegistrarPlaylist.xaml
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnClickAgregarPlaylist(object sender, RoutedEventArgs e) {
+        private void OnClickAgregarPlaylist(object sender, RoutedEventArgs e)
+        {
             new RegistrarPlaylist().Show();
         }
-
     }
 }

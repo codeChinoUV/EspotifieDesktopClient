@@ -45,8 +45,8 @@ namespace EspotifeiClient
                 {
                     new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
                                                                "proporcionadas, se cerra la sesion");
-                    MenuInicio.OcultarMenu();
-                    MenuInicio.OcultarReproductor();
+                    MainWindow.OcultarMenu();
+                    MainWindow.OcultarReproductor();
                     NavigationService?.Navigate(new IniciarSesion());
                 }
                 else
@@ -120,8 +120,8 @@ namespace EspotifeiClient
                     {
                         new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
                                                                    "proporcionadas, se cerrara la sesion");
-                        MenuInicio.OcultarMenu();
-                        MenuInicio.OcultarReproductor();
+                        MainWindow.OcultarMenu();
+                        MainWindow.OcultarReproductor();
                         NavigationService?.Navigate(new IniciarSesion());
                     }
                     else
@@ -165,7 +165,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Agrega la canción a la cola de reproduccion
+        ///     Agrega la canción a la cola de reproduccion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -173,10 +173,7 @@ namespace EspotifeiClient
         {
             var idCancion = (int) ((Button) sender).Tag;
             var cancion = _cancionesPersonales.Find(c => c.id == idCancion);
-            if (cancion != null)
-            {
-                Player.Player.GetPlayer().AñadirCancionPersonalAColaDeReproduccion(cancion);
-            }
+            if (cancion != null) Player.Player.GetPlayer().AñadirCancionPersonalAColaDeReproduccion(cancion);
         }
     }
 }

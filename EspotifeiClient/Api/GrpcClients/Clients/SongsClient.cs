@@ -12,24 +12,20 @@ namespace Api.GrpcClients.Clients
     public class SongsClient
     {
         public delegate void ErrorRaised(string message);
-
+        public delegate void TerminatedRecivedSong();
         public delegate void OnChuckRecived(byte[] bytesSong);
-
         public delegate void OnRecivedSong(byte[] bytesSong, string extension);
-
         public delegate void PorcentegeUp(float porcentage);
-
         public delegate void UploadTerminated();
-
         private const int ChunkSize = 64 * 1000;
         private const int CounTrys = 2;
-
         private bool _getSong = true;
         public event ErrorRaised OnErrorRaised;
         public event PorcentegeUp OnPorcentageUp;
         public event UploadTerminated OnUploadTerminated;
         public event OnChuckRecived OnSongChunkRived;
         public event OnRecivedSong OnInitialRecivedSong;
+        public event TerminatedRecivedSong OnTerminatedRecivedSong;
 
         /// <summary>
         ///     Solicita al servidor subir una cancion
@@ -88,13 +84,9 @@ namespace Api.GrpcClients.Clients
                         }
 
                         if (response.Error == Error.TokenInvalido || response.Error == Error.TokenFaltante)
-                        {
                             await ApiServiceLogin.GetServiceLogin().ReLogin();
-                        }
                         else
-                        {
                             ManageErrorsUploadSong(response.Error);
-                        }
                     }
                 }
 
@@ -132,6 +124,7 @@ namespace Api.GrpcClients.Clients
                     {
                         while (await call.ResponseStream.MoveNext() && _getSong)
                         {
+                            
                             var response = call.ResponseStream.Current;
                             memoryStream.Write(response.Data.ToByteArray(), 0, response.Data.Length);
                             position += response.Data.Length;
@@ -141,6 +134,7 @@ namespace Api.GrpcClients.Clients
                                 OnInitialRecivedSong?.Invoke(response.Data.ToByteArray(),
                                     ConvertFormatAudioToExtension(formatAudio));
                             else if (position > ChunkSize) OnSongChunkRived?.Invoke(response.Data.ToByteArray());
+                            if (!_getSong) memoryStream.Dispose();
                         }
                     }
                 }
@@ -164,6 +158,8 @@ namespace Api.GrpcClients.Clients
                 }
                 else
                 {
+                    OnTerminatedRecivedSong?.Invoke();
+                    memoryStream.Dispose();
                     break;
                 }
             }

@@ -187,7 +187,7 @@ namespace EspotifeiClient
                     if (usuario.tipo_usuario == TipoUsuario.CreadorDeContenido)
                         NavigationService?.Navigate(new RegistrarCreadorContenido());
                     else
-                        NavigationService?.Navigate(new MenuInicio());
+                        NavigationService?.Navigate(new Canciones());
                 }
 
                 cancelarButton.IsEnabled = true;

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
@@ -87,7 +88,8 @@ namespace EspotifeiClient
         /// <param name="e"></param>
         private void OnSelectedItem(object sender, MouseButtonEventArgs e)
         {
-            var creadorDeContenido = (CreadorContenido) CreadoresDeContenidoListView.SelectedItem;
+            var idCreadorContenido = (int) ((Border) sender).Tag;
+            var creadorDeContenido = _creadoresContenidos.Find(c => c.id == idCreadorContenido);
             if (creadorDeContenido != null) NavigationService?.Navigate(new ArtistaElementos(creadorDeContenido));
         }
     }

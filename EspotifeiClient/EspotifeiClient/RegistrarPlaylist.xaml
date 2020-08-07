@@ -38,10 +38,10 @@
             </StackPanel>
         </Grid>
         <Button x:Name="registrarPlaylistButton" Width="117" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                Margin="228,0,67,34" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="24" 
-                Click="OnClickRegistrarPlaylistButton"/>
+                Margin="228,0,67,34" Content="REGISTRAR" Background="#FF16A210" BorderBrush="#FF16A210" Height="24"
+                Click="OnClickRegistrarPlaylistButton" />
         <Button x:Name="cancelarPlaylistButton" Width="117" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-            Margin="73,0,222,34" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF" Height="24"
-                Click="OnClickCancelarPlaylistButton"/>
+                Margin="73,0,222,34" Content="CANCELAR" Background="#FF025EFF" BorderBrush="#FF025EFF" Height="24"
+                Click="OnClickCancelarPlaylistButton" />
     </Grid>
 </Window>

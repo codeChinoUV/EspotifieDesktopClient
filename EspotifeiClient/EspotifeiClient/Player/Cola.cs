@@ -17,6 +17,7 @@ namespace EspotifeiClient.Player
         private int _posicionCola;
         private int _posicionReproduccion;
 
+
         /// <summary>
         ///     Agrega las canciones del album a la cola de reproduccion y borra la cola anterior
         /// </summary>
@@ -86,14 +87,17 @@ namespace EspotifeiClient.Player
         /// <param name="cancion">La cancion a agregar</param>
         public void AgregarCancionACola(Cancion cancion)
         {
-            _posicionCola += 1;
-            var elementoCola = new ElementoCola
+            if (!ValidarLaCancionSeEncuentraEnCola(cancion.id))
             {
-                Cancion = cancion,
-                YaSeReproducio = false,
-                Posicion = _posicionCola
-            };
-            _colaReproduccion.Add(elementoCola);
+                _posicionCola += 1;
+                var elementoCola = new ElementoCola
+                {
+                    Cancion = cancion,
+                    YaSeReproducio = false,
+                    Posicion = _posicionCola
+                };
+                _colaReproduccion.Add(elementoCola);
+            }
         }
 
         /// <summary>
@@ -102,14 +106,17 @@ namespace EspotifeiClient.Player
         /// <param name="cancionPersonal">La cancion perosnal a agregar</param>
         public void AgregarCancionPersonalACola(CancionPersonal cancionPersonal)
         {
-            _posicionCola += 1;
-            var elementoCola = new ElementoCola
+            if (!ValidarLaCancionPersonalSeEncuentraEnCola(cancionPersonal.id))
             {
-                CancionPersonal = cancionPersonal,
-                YaSeReproducio = false,
-                Posicion = _posicionCola
-            };
-            _colaReproduccion.Add(elementoCola);
+                _posicionCola += 1;
+                var elementoCola = new ElementoCola
+                {
+                    CancionPersonal = cancionPersonal,
+                    YaSeReproducio = false,
+                    Posicion = _posicionCola
+                };
+                _colaReproduccion.Add(elementoCola);
+            }
         }
 
         /// <summary>
@@ -192,13 +199,19 @@ namespace EspotifeiClient.Player
             {
                 _posicionReproduccion -= 1;
                 var cancionAnterior = _colaReproduccion.Find(ec => ec.Posicion == _posicionReproduccion);
-                if (cancionAnterior != null && cancionAnterior.Cancion != null) cancion = cancionAnterior.Cancion;
+                if (cancionAnterior != null && cancionAnterior.Cancion != null)
+                {
+                    cancion = cancionAnterior.Cancion;
+                }
             }
             else
             {
                 _posicionReproduccion += 1;
                 var proximaCancion = _colaReproduccion.Find(ec => ec.Posicion == _posicionReproduccion);
-                if (proximaCancion != null && proximaCancion.Cancion != null) cancion = proximaCancion.Cancion;
+                if (proximaCancion != null && proximaCancion.Cancion != null)
+                {
+                    cancion = proximaCancion.Cancion;
+                }
             }
 
             return cancion;
@@ -220,14 +233,18 @@ namespace EspotifeiClient.Player
                 _posicionReproduccion -= 1;
                 var cancionAnterior = _colaReproduccion.Find(ec => ec.Posicion == _posicionReproduccion);
                 if (cancionAnterior != null && cancionAnterior.CancionPersonal != null)
+                {
                     cancionPersonal = cancionAnterior.CancionPersonal;
+                }
             }
             else
             {
                 _posicionReproduccion += 1;
                 var proximaCancion = _colaReproduccion.Find(ec => ec.Posicion == _posicionReproduccion);
                 if (proximaCancion != null && proximaCancion.CancionPersonal != null)
+                {
                     cancionPersonal = proximaCancion.CancionPersonal;
+                }
             }
 
             return cancionPersonal;
@@ -271,5 +288,91 @@ namespace EspotifeiClient.Player
             _posicionCola = 0;
             _posicionReproduccion = 0;
         }
+        
+        /// <summary>
+        /// Valida si ya existe una cancion en la lista de reproduccion con el id indicado
+        /// </summary>
+        /// <param name="idCancion">El id de la cancion a buscar</param>
+        /// <returns>True si se encuentra, false si no</returns>
+        public bool ValidarLaCancionSeEncuentraEnCola(int idCancion)
+        {
+            var seEncuentra = false;
+            foreach (var elementoCola in _colaReproduccion)
+            {
+                if (elementoCola.Cancion != null)
+                {
+                    if (elementoCola.Cancion.id == idCancion)
+                    {
+                        seEncuentra = true;
+                        break;
+                    }
+                }
+            }
+
+            return seEncuentra;
+        }
+        
+        /// <summary>
+        /// Valida si ya existe una cancio personal en la lista de reproduccion con el id indicado
+        /// </summary>
+        /// <param name="idCancionPersonal">El id de la cancion personal a buscar</param>
+        /// <returns>True si se encuentra, false si no</returns>
+        public bool ValidarLaCancionPersonalSeEncuentraEnCola(int idCancionPersonal)
+        {
+            var seEncuentra = false;
+            foreach (var elementoCola in _colaReproduccion)
+            {
+                if (elementoCola.CancionPersonal != null)
+                {
+                    if (elementoCola.CancionPersonal.id == idCancionPersonal)
+                    {
+                        seEncuentra = true;
+                        break;
+                    }
+                }
+            }
+
+            return seEncuentra;
+        }
+
+        public void EliminarElementoDeCola(int posicion)
+        {
+            var elementoAElimiar = _colaReproduccion.Find(ec => ec.Posicion == posicion);
+            if (elementoAElimiar != null)
+            {
+                _colaReproduccion.Remove(elementoAElimiar);
+                _posicionCola -= 1;
+                ReordenarPosicionesColaReproduccion();
+            }
+        }
+
+        /// <summary>
+        /// Vuelve a ordenar el conteo de posicion de los elementos en la cola
+        /// </summary>
+        private void ReordenarPosicionesColaReproduccion()
+        {
+            var contador = 1;
+            foreach (var elementoCola in _colaReproduccion)
+            {
+                elementoCola.Posicion = contador;
+                contador += 1;
+            }
+        }
+
+        /// <summary>
+        /// Devuelve los elementos de la cola que quedan por reproducir
+        /// </summary>
+        /// <returns>Una Lista de elementos Cola</returns>
+        public List<ElementoCola> ObtenerProximosElementosEnCola()
+        {
+            var colaRestante = new List<ElementoCola>();
+            for (int i = _posicionReproduccion; i < _colaReproduccion.Count; i++)
+            {
+                colaRestante.Add(_colaReproduccion[i]);
+            }
+
+            return colaRestante;
+        }
+        
     }
 }

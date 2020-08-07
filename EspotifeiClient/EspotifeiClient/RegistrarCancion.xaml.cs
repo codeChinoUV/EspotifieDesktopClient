@@ -20,11 +20,11 @@ namespace EspotifeiClient
     public partial class RegistrarCancion
     {
         private readonly Cancion _cancionAEditar;
-        private Cancion _cancionRegistrada;
 
         private readonly List<CreadorContenido> _creadoresDeContenido = new List<CreadorContenido>();
         private readonly int _idAlbum;
         private readonly List<Genero> _listaGeneros = new List<Genero>();
+        private Cancion _cancionRegistrada;
 
         public RegistrarCancion(int idAlbum)
         {
@@ -83,8 +83,12 @@ namespace EspotifeiClient
         {
             tituloTextBox.Content = "EDITAR CANCIÓN";
             nombreCancionTextbox.Text = _cancionAEditar.nombre;
-            var propioCreadorDeContenido = _cancionAEditar.creadores_de_contenido[0];
-            _cancionAEditar.creadores_de_contenido.Remove(propioCreadorDeContenido);
+            if (_cancionAEditar.creadores_de_contenido.Count > 0)
+            {
+                var propioCreadorDeContenido = _cancionAEditar.creadores_de_contenido[0];
+                _cancionAEditar.creadores_de_contenido.Remove(propioCreadorDeContenido);
+            }
+
             LlenarListaDeCreadoresDeContenidoSeleccionadoConLosDeCancion(_cancionAEditar.creadores_de_contenido);
         }
 

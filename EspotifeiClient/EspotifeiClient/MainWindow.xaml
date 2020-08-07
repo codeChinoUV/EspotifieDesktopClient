@@ -76,22 +76,22 @@
 
 
                 </Grid>
-                <ListViewItem x:Name="ItemPlaylist" Height="60">
+                <ListViewItem Height="60" MouseLeftButtonUp="OnClickCanciones">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="Music" Height="25" Width="25" Margin="10" Foreground="White" />
                         <TextBlock Text="Canciones" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                     </StackPanel>
                 </ListViewItem>
-                <ListViewItem x:Name="ItemAlbums" Height="60" MouseLeftButtonUp="OnClickPlaylists">
+                <ListViewItem Height="60" MouseLeftButtonUp="OnClickPlaylists">
                     <StackPanel Orientation="Horizontal">
                         <materialDesign:PackIcon Kind="ImageAlbum" Height="25" Width="25" Margin="10"
                                                  Foreground="White" />
                         <TextBlock Text="Playlists" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                     </StackPanel>
                 </ListViewItem>
-                <ListView x:Name="ListViewMenu" Foreground="#FF5C99D6"
+                <ListView Foreground="#FF5C99D6"
                           ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListViewItem x:Name="ItemArtist" Height="60" MouseLeftButtonUp="OnSelectedItemArtist">
+                    <ListViewItem Height="60" MouseLeftButtonUp="OnSelectedItemArtist">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Artist" Height="25" Width="25" Margin="10"
                                                      Foreground="White" />
@@ -105,7 +105,7 @@
                             <TextBlock Text="Historial" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="60">
+                    <ListViewItem Height="60" MouseLeftButtonUp="OnClickCancionesDescargadas">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Download" Height="25" Width="25" Margin="10"
                                                      Foreground="White" />
@@ -151,7 +151,7 @@
             </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Vertical" HorizontalAlignment="Stretch" Margin="0,10,0,0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
-                    <Button x:Name="anteriorCancion" Height="30" Width="30" Padding="0" Margin="10,0"
+                    <Button Height="30" Width="30" Padding="0" Margin="10,0"
                             Click="OnClickCancionAnterior"
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="SkipPrevious" Height="30" Width="30" />
@@ -160,7 +160,7 @@
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="PlayArrow" Height="30" Width="30" x:Name="playImage" />
                     </Button>
-                    <Button x:Name="siguienteCancion" Height="30" Width="30" Padding="0" Margin="10,0"
+                    <Button Height="30" Width="30" Padding="0" Margin="10,0"
                             Click="OnClickNextButton"
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="SkipNext" Height="30" Width="30" />
@@ -190,7 +190,7 @@
                     <ColumnDefinition Width="0.80*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button x:Name="colaReproduccionBoton" Height="30" Width="30" Padding="0"
+                    <Button Height="30" Width="30" Padding="0" Click="OnClickColaReproduccion"
                             Background="Transparent" BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="ArrowBottomDropCircleOutline" Width="20" Height="20" />
                     </Button>
@@ -208,19 +208,28 @@
                     <Button Grid.Column="0" Padding="0" Background="Transparent" Click="OnClickVolumenButton"
                             BorderBrush="Transparent">
                         <materialDesign:PackIcon Kind="VolumeHigh" Height="Auto" Width="Auto"
-                                                 HorizontalAlignment="Right" x:Name="VolumenImage" Foreground="#DDFFFFFF" />
+                                                 HorizontalAlignment="Right" x:Name="VolumenImage"
+                                                 Foreground="#DDFFFFFF" />
                     </Button>
                     <Slider Grid.Column="1" Orientation="Horizontal" Maximum="100" Minimum="0" x:Name="VolumenSlider"
                             Value="100" Width="Auto"
                             VerticalAlignment="Center" Foreground="White" ValueChanged="OnValueChangedVolumen" />
-                    <materialDesign:PopupBox Grid.Row="0" Grid.Column="2" StaysOpen="True" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                         Padding="0" Foreground="White" PopupMode="Click" PlacementMode="TopAndAlignRightEdges" >
+                    <materialDesign:PopupBox Grid.Row="0" Grid.Column="2" StaysOpen="True" VerticalAlignment="Center"
+                                             HorizontalAlignment="Center"
+                                             Padding="0" Foreground="White" PopupMode="Click"
+                                             PlacementMode="TopAndAlignRightEdges">
                         <StackPanel Width="auto">
-                            <Button x:Name="botonCuenta" Content="cuenta" />
+                            <Button x:Name="InicarRadioButton" Content="Iniciar radio" Click="OnClickIniciarRadio" />
+                            <Button x:Name="AgregarAPlaylistButton" Content="Agregar a playlist" />
+                            <Button x:Name="DescargarButton" Content="Descargar" Click="OnClickDescargar" />
+                            <Button Content="Cerrar sesión" Click="OnClickCerrarSesion"/>
                         </StackPanel>
                     </materialDesign:PopupBox>
-                    <materialDesign:RatingBar Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" 
-                                              Foreground="#FFF9C000" ValueChanged="OnValueChangedCalificacion" x:Name="calificacionRatingBar" Visibility="Collapsed" />
+                    <materialDesign:RatingBar Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center"
+                                              Grid.Row="1" VerticalAlignment="Center"
+                                              Foreground="#FFF9C000" ValueChanged="OnValueChangedCalificacion"
+                                              x:Name="calificacionRatingBar"
+                                              Visibility="Collapsed" Margin="0,0,0,10" />
 
                 </Grid>
 

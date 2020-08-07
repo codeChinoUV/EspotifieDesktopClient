@@ -44,10 +44,13 @@ namespace EspotifeiClient
         private void ColocarElementosCreadorDeContenidoEditar()
         {
             tituloLabel.Content = "EDICIÓN DE CREADOR";
-            portadaCreadorImage.Source = _creadorContenidoAEditar.PortadaImagen;
-            nombreCreadorTextbox.Text = _creadorContenidoAEditar.nombre;
-            biografiaTextbox.Text = _creadorContenidoAEditar.biografia;
-            grupoCheckbox.IsChecked = _creadorContenidoAEditar.es_grupo;
+            if (_creadorContenidoAEditar != null)
+            {
+                portadaCreadorImage.Source = _creadorContenidoAEditar.PortadaImagen;
+                nombreCreadorTextbox.Text = _creadorContenidoAEditar.nombre;
+                biografiaTextbox.Text = _creadorContenidoAEditar.biografia;
+                grupoCheckbox.IsChecked = _creadorContenidoAEditar.es_grupo;
+            }
         }
 
         /// <summary>
@@ -144,8 +147,8 @@ namespace EspotifeiClient
                     {
                         new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
                                                                    "proporcionadas, se cerrara la sesion");
-                        MenuInicio.OcultarMenu();
-                        MenuInicio.OcultarReproductor();
+                        MainWindow.OcultarMenu();
+                        MainWindow.OcultarReproductor();
                         NavigationService?.Navigate(new IniciarSesion());
                     }
                     else
@@ -159,7 +162,7 @@ namespace EspotifeiClient
                     if (_regresarAPerfilCreador)
                         NavigationService?.Navigate(new PerfilCreadorDeContenido());
                     else
-                        NavigationService?.Navigate(new MenuInicio());
+                        NavigationService?.Navigate(new Canciones());
                 }
 
                 cancelarButton.IsEnabled = true;
@@ -205,8 +208,8 @@ namespace EspotifeiClient
                     {
                         new MensajeEmergente().MostrarMensajeError("No se puede autentican con las credenciales " +
                                                                    "proporcionadas, se cerrara la sesion");
-                        MenuInicio.OcultarMenu();
-                        MenuInicio.OcultarReproductor();
+                        MainWindow.OcultarMenu();
+                        MainWindow.OcultarReproductor();
                         NavigationService?.Navigate(new IniciarSesion());
                     }
                     else
@@ -350,7 +353,7 @@ namespace EspotifeiClient
         /// <param name="e">El evento invocado</param>
         private void OnClickCancelarButton(object sender, RoutedEventArgs e)
         {
-            NavigationService?.Navigate(new MenuInicio());
+            NavigationService?.Navigate(new Canciones());
         }
     }
 }

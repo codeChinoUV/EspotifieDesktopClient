@@ -133,9 +133,6 @@
                         <ComboBoxItem Tag="10" IsSelected="True">10</ComboBoxItem>
                         <ComboBoxItem Tag="20">20</ComboBoxItem>
                         <ComboBoxItem Tag="30">30</ComboBoxItem>
-                        <ComboBoxItem Tag="50">50</ComboBoxItem>
-                        <ComboBoxItem Tag="80">80</ComboBoxItem>
-                        <ComboBoxItem Tag="100">100</ComboBoxItem>
                     </ComboBox>
                 </StackPanel>
             </Grid>

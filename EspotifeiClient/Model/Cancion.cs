@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Model
 {
+    [JsonObject]
+    [Serializable]
     public class Cancion
     {
         public int id { get; set; }
@@ -44,6 +47,8 @@ namespace Model
                 return time.ToString("mm':'ss");
             }
         }
+
+        public string calificacion_promedio_string => calificacion_promedio.ToString("0.0");
 
         public Album album { get; set; }
     }

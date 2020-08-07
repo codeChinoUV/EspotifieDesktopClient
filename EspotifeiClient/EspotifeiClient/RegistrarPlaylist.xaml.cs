@@ -1,11 +1,9 @@
-﻿using Api.Rest;
-using EspotifeiClient.Util;
-using Grpc.Core;
-using Model;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Windows;
-using System.Windows.Controls;
+using Api.Rest;
+using EspotifeiClient.Util;
+using Model;
 
 namespace EspotifeiClient
 {
@@ -22,7 +20,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Valida si la longitud del campo nombre tiene la longitud adecuada
+        ///     Valida si la longitud del campo nombre tiene la longitud adecuada
         /// </summary>
         /// <returns>True si es valida o False si no</returns>
         private bool ValidarTamañoNombre()
@@ -31,34 +29,31 @@ namespace EspotifeiClient
             var tamañoMaximo = 70;
             var esValido = ValidacionDeCadenas.ValidarTamañoDeCadena(nombreTextbox.Text, tamañoMinimo, tamañoMaximo);
             if (!esValido)
-            {
-                new MensajeEmergente().MostrarMensajeAdvertencia($"El campo de Nombre debe de tener más de " +
+                new MensajeEmergente().MostrarMensajeAdvertencia("El campo de Nombre debe de tener más de " +
                                                                  $"{tamañoMinimo} y menos de {tamañoMaximo} caracteres");
-            }
 
             return esValido;
         }
 
         /// <summary>
-        /// Valida si la longitud del campo descripcion tiene la longitud adecuada
+        ///     Valida si la longitud del campo descripcion tiene la longitud adecuada
         /// </summary>
         /// <returns>True si es valida o False si no</returns>
         private bool ValidarTamañoDescripcion()
         {
             var tamañoMinimo = 5;
             var tamañoMaximo = 300;
-            var esValido = ValidacionDeCadenas.ValidarTamañoDeCadena(descripcionTextbox.Text, tamañoMinimo, tamañoMaximo);
+            var esValido =
+                ValidacionDeCadenas.ValidarTamañoDeCadena(descripcionTextbox.Text, tamañoMinimo, tamañoMaximo);
             if (!esValido)
-            {
-                new MensajeEmergente().MostrarMensajeAdvertencia($"El campo de Descripción debe de tener más de " +
+                new MensajeEmergente().MostrarMensajeAdvertencia("El campo de Descripción debe de tener más de " +
                                                                  $"{tamañoMinimo} y menos de {tamañoMaximo} caracteres");
-            }
 
             return esValido;
         }
 
         /// <summary>
-        /// Crea una lista de reproducción a partir de la informacion de los campos
+        ///     Crea una lista de reproducción a partir de la informacion de los campos
         /// </summary>
         /// <returns>Un Album</returns>
         private ListaReproduccion CrearListaReproduccion()
@@ -72,7 +67,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que contiene el evento de botón para registrar una lista de reproducción
+        ///     Método que contiene el evento de botón para registrar una lista de reproducción
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -82,7 +77,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que contiene el evento de botón para cerrar la ventana
+        ///     Método que contiene el evento de botón para cerrar la ventana
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -92,7 +87,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Registra la informacion de una ListaReproduccion
+        ///     Registra la informacion de una ListaReproduccion
         /// </summary>
         private async void RegistrarNuevaListaReproduccion()
         {
@@ -104,12 +99,15 @@ namespace EspotifeiClient
                 var listaReproduccionRegistrada = false;
                 try
                 {
-                    _listaReproduccionRegistrada = await ListaReproduccionClient.RegisterListaReproduccion(listaReproduccion);
+                    _listaReproduccionRegistrada =
+                        await ListaReproduccionClient.RegisterListaReproduccion(listaReproduccion);
                     listaReproduccionRegistrada = true;
-                } catch (HttpRequestException)
+                }
+                catch (HttpRequestException)
                 {
                     new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
-                }  catch (Exception exception)
+                }
+                catch (Exception exception)
                 {
                     if (exception.Message == "AuntenticacionFallida")
                     {
@@ -117,17 +115,14 @@ namespace EspotifeiClient
                                                                    "con las que se inició sesión ");
                         Close();
                     }
+
                     new MensajeEmergente().MostrarMensajeAdvertencia(exception.Message);
                 }
-                if (listaReproduccionRegistrada)
-                {
-                    Close();
-                }
+
+                if (listaReproduccionRegistrada) Close();
                 cancelarPlaylistButton.IsEnabled = true;
                 registrarPlaylistButton.IsEnabled = true;
             }
         }
-
-
     }
 }

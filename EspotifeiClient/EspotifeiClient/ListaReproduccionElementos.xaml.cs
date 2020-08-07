@@ -1,11 +1,9 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
-using Model;
-using Api.Rest;
-using System.Net.Http;
-using System.Windows;
 using Api.GrpcClients.Clients;
 using Api.Rest;
 using EspotifeiClient.Util;
@@ -102,12 +100,12 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que añade las canciones del creador de contenido a la cola de reproduccion
+        ///     Método que añade las canciones del creador de contenido a la cola de reproduccion
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnClickPlayListaReproduccionButton(object sender, RoutedEventArgs e)
-        {    
+        {
             Player.Player.GetPlayer().AñadirCancionesDeListaDeReproduccionACola(_listaReproduccion);
         }
     }

@@ -9,11 +9,10 @@ namespace Api.Rest
 {
     public class CalificacionClient
     {
-
         public static int CantidadIntentos = 2;
-        
+
         /// <summary>
-        /// Califica una cancion
+        ///     Califica una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a calificar</param>
         /// <param name="calificacionEstrellas">La calificacion</param>
@@ -53,9 +52,9 @@ namespace Api.Rest
 
             throw new Exception("AuntenticacionFallida");
         }
-        
+
         /// <summary>
-        /// Recupera la calificacion de una cancion
+        ///     Recupera la calificacion de una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a recuperar su calificacion</param>
         /// <returns>La calificacion de la cancion</returns>
@@ -76,7 +75,7 @@ namespace Api.Rest
                     {
                         await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
-                    else if (response.StatusCode == HttpStatusCode.NotFound || response.StatusCode == HttpStatusCode.InternalServerError)
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         throw new Exception("NoCalificada");
                     }
@@ -92,7 +91,7 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Edita la calificacion de una cancion
+        ///     Edita la calificacion de una cancion
         /// </summary>
         /// <param name="idCancion">El id de la cancion a editar su calificacion</param>
         /// <param name="cantidadEstrellas">La cantidad de estrellas con la que se calificara la cancion</param>

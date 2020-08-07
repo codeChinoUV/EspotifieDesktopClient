@@ -50,12 +50,15 @@ namespace EspotifeiClient
             var ocurrioExcepcion = false;
             try
             {
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                CancionesListView.Visibility = Visibility.Visible;
                 _listaReproduccion.canciones = await CancionClient.GetSongsFromPlaylist(idListaReproduccion);
                 CancionesListView.ItemsSource = _listaReproduccion.canciones;
             }
             catch (HttpRequestException)
             {
-                new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
+                SinConexionGrid.Visibility = Visibility.Visible;
+                CancionesListView.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
             {

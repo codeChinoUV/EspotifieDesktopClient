@@ -5,10 +5,8 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
-using Api.Rest;
 using EspotifeiClient.Util;
 using ManejadorDeArchivos;
-using Model;
 
 namespace EspotifeiClient
 {
@@ -42,7 +40,6 @@ namespace EspotifeiClient
             DescripcionTextBlock.Text = listaReproduccion.descripcion;
             MinutosTextBlock.Text = "Duración en minutos: " + listaReproduccion.duracion_total;
             await ObtenerCancionesDeListasReproduccion(_listaReproduccion.id);
-            await ColocarImagenesAlbumes();
         }
 
         /// <summary>
@@ -73,34 +70,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        ///     Método que recupera las portadas del servidor y las asigna a su canción correspondiente
-        /// </summary>
-        /// <returns></returns>
-        private async Task ColocarImagenesAlbumes()
-        {
-            if (_listaReproduccion.canciones != null)
-            {
-                var clientePortadas = new CoversClient();
-                foreach (var playlist in _listaReproduccion.canciones)
-                    try
-                    {
-                        var bitmap = await clientePortadas.GetAlbumCover(playlist.album.id, Calidad.Baja);
-                        if (bitmap != null)
-                            playlist.album.PortadaImagen = ImagenUtil.CrearBitmapDeMemory(bitmap);
-                        else
-                            playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                        CancionesListView.ItemsSource = null;
-                        CancionesListView.ItemsSource = _listaReproduccion.canciones;
-                    }
-                    catch (Exception)
-                    {
-                        playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
-                    }
-            }
-        }
-
-        /// <summary>
-        ///     Método que añade las canciones del creador de contenido a la cola de reproduccion
+        /// Método que añade las canciones del creador de contenido a la cola de reproduccion
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

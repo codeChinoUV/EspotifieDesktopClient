@@ -44,29 +44,26 @@
                                     <DataTemplate>
                                         <Grid Margin="4">
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="0.50*" />
+                                                <ColumnDefinition Width="0.30*" />
+                                                <ColumnDefinition Width="0.20*" />
+                                                <ColumnDefinition Width="0.20*" />
+                                                <ColumnDefinition Width="0.20*" />
                                                 <ColumnDefinition Width="0.10*" />
-                                                <ColumnDefinition Width="0.10*" />
-                                                <ColumnDefinition Width="0.10*" />
-
                                             </Grid.ColumnDefinitions>
 
-
-                                            <TextBlock Grid.Column="1" Text="{Binding nombre}" Margin="10,0"
+                                            <TextBlock Grid.Column="0" Text="{Binding nombre}" Margin="10,0"
                                                        FontSize="15" Foreground="Black" VerticalAlignment="Center" />
-                                            <TextBlock Grid.Column="2" Text="{Binding duracion}" Margin="10,0"
+                                            <TextBlock Grid.Column="1" Text="{Binding creadores_de_contenido_nombres}" Margin="10,0"
                                                        FontSize="15" Foreground="Black" VerticalAlignment="Center" />
-                                            <TextBlock Grid.Column="3" Text="{Binding cantidad_de_reproducciones}"
+                                            <TextBlock Grid.Column="2" Text="{Binding album.nombre}"
                                                        Margin="10,0" FontSize="15" Foreground="Black"
                                                        VerticalAlignment="Center" />
-                                            <StackPanel Grid.Column="5" Orientation="Horizontal">
-                                                <Button Background="{x:Null}" Width="30" Height="25" Margin="5,0"
-                                                        BorderBrush="Transparent" Tag="{Binding id}" Padding="0"
-                                                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                        Click="OnClickEliminarCancionPlaylist">
-                                                    <materialDesign:PackIcon Kind="Delete" Height="25" Width="25"
-                                                                             Foreground="Red" />
+                                            <TextBlock Grid.Column="3" Text="{Binding duracionString}" Margin="10,0"
+                                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
+                                            <StackPanel Grid.Column="4" Orientation="Horizontal" >
+                                                <Button Background="{x:Null}" Width="30" Height="25" Margin="5,0" BorderBrush="Transparent" Tag="{Binding id}" Padding="0"
+                                                VerticalAlignment="Center" HorizontalAlignment="Center" Click="OnClickEliminarCancionPlaylist">
+                                                    <materialDesign:PackIcon Kind="Delete" Height="25" Width="25" Foreground="Red"/>
                                                 </Button>
                                             </StackPanel>
                                             <Grid.Style>
@@ -128,7 +125,8 @@
                                         HorizontalAlignment="Right"
                                         Style="{StaticResource MaterialDesignFloatingActionButton}"
                                         Background="#FF025EFF" BorderBrush="Transparent"
-                                        Height="45" Width="45" Padding="0" Margin="0,0,20,-50" Tag="{Binding id}">
+                                        Height="45" Width="45" Padding="0" Margin="0,0,20,-50" Tag="{Binding id}"
+                                        Click="OnClickPlayListaReproduccionButton">
                                     <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow"
                                                              Height="40" Width="40" />
                                 </Button>
@@ -165,11 +163,6 @@
                         VerticalContentAlignment="Center"
                         Click="OnClickAgregarPlaylist" />
             </StackPanel>
-            <Button Grid.Column="3" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right"
-                    Style="{StaticResource MaterialDesignFloatingActionButton}"
-                    Height="60" Width="60" Padding="0" Margin="0,-30,30,-30">
-                <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow" Height="50" Width="50" />
-            </Button>
         </Grid>
         <Grid Grid.Row="1" Visibility="Hidden" x:Name="SinConexionGrid">
             <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">

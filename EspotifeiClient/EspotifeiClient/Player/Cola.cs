@@ -288,9 +288,9 @@ namespace EspotifeiClient.Player
             _posicionCola = 0;
             _posicionReproduccion = 0;
         }
-        
+
         /// <summary>
-        /// Valida si ya existe una cancion en la lista de reproduccion con el id indicado
+        ///     Valida si ya existe una cancion en la lista de reproduccion con el id indicado
         /// </summary>
         /// <param name="idCancion">El id de la cancion a buscar</param>
         /// <returns>True si se encuentra, false si no</returns>
@@ -311,9 +311,9 @@ namespace EspotifeiClient.Player
 
             return seEncuentra;
         }
-        
+
         /// <summary>
-        /// Valida si ya existe una cancio personal en la lista de reproduccion con el id indicado
+        ///     Valida si ya existe una cancio personal en la lista de reproduccion con el id indicado
         /// </summary>
         /// <param name="idCancionPersonal">El id de la cancion personal a buscar</param>
         /// <returns>True si se encuentra, false si no</returns>
@@ -347,7 +347,7 @@ namespace EspotifeiClient.Player
         }
 
         /// <summary>
-        /// Vuelve a ordenar el conteo de posicion de los elementos en la cola
+        ///     Vuelve a ordenar el conteo de posicion de los elementos en la cola
         /// </summary>
         private void ReordenarPosicionesColaReproduccion()
         {
@@ -360,19 +360,18 @@ namespace EspotifeiClient.Player
         }
 
         /// <summary>
-        /// Devuelve los elementos de la cola que quedan por reproducir
+        ///     Devuelve los elementos de la cola que quedan por reproducir
         /// </summary>
         /// <returns>Una Lista de elementos Cola</returns>
         public List<ElementoCola> ObtenerProximosElementosEnCola()
         {
             var colaRestante = new List<ElementoCola>();
-            for (int i = _posicionReproduccion; i < _colaReproduccion.Count; i++)
+            for (var i = _posicionReproduccion; i < _colaReproduccion.Count; i++)
             {
                 colaRestante.Add(_colaReproduccion[i]);
             }
 
             return colaRestante;
         }
-        
     }
 }

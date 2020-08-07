@@ -1,16 +1,14 @@
-﻿using Api.GrpcClients.Clients;
-using Api.Rest;
-using EspotifeiClient.Util;
-using ManejadorDeArchivos;
-using Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
+using Api.GrpcClients.Clients;
 using Api.Rest;
+using EspotifeiClient.Util;
+using ManejadorDeArchivos;
 using Model;
 
 namespace EspotifeiClient
@@ -20,14 +18,13 @@ namespace EspotifeiClient
     /// </summary>
     public partial class ListasReproduccionUsuario : Page
     {
+        private readonly ListaReproduccion _listaReproduccion = new ListaReproduccion();
         private List<ListaReproduccion> _listasReproduccion;
-        private ListaReproduccion _listaReproduccion = new ListaReproduccion();
 
         public ListasReproduccionUsuario()
         {
             InitializeComponent();
             ObtenerListasReproduccion();
-
         }
 
         /// <summary>
@@ -91,10 +88,10 @@ namespace EspotifeiClient
                         playlist.canciones = await CancionClient.GetSongsFromPlaylist(playlist.id);
                         ListaReproduccionListView.ItemsSource = null;
                         ListaReproduccionListView.ItemsSource = _listasReproduccion;
-                        
-                        //_listaReproduccion = playlist;
 
-                    } catch (HttpRequestException)
+                        //_listaReproduccion = playlist;
+                    }
+                    catch (HttpRequestException)
                     {
                         ListaReproduccionListView.Visibility = Visibility.Hidden;
                         new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
@@ -130,7 +127,8 @@ namespace EspotifeiClient
                             playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
                         ListaReproduccionListView.ItemsSource = null;
                         ListaReproduccionListView.ItemsSource = listaReproduccion.canciones;
-                    } catch (Exception)
+                    }
+                    catch (Exception)
                     {
                         playlist.album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
                     }
@@ -138,7 +136,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que elimina la lista de reproducción seleccionada
+        ///     Método que elimina la lista de reproducción seleccionada
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -270,7 +268,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que añade y reproduce las canciones de una determinada playlist
+        ///     Método que añade y reproduce las canciones de una determinada playlist
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -278,7 +276,8 @@ namespace EspotifeiClient
         {
             var idListaReproduccion = (int) ((Button) sender).Tag;
             var listaReproduccion = _listasReproduccion.Find(a => a.id == idListaReproduccion);
-            if (listaReproduccion != null) Player.Player.GetPlayer().AñadirCancionesDeListaDeReproduccionACola(listaReproduccion);
+            if (listaReproduccion != null)
+                Player.Player.GetPlayer().AñadirCancionesDeListaDeReproduccionACola(listaReproduccion);
         }
     }
 }

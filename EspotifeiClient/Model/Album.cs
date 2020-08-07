@@ -14,9 +14,8 @@ namespace Model
         public string nombre { get; set; }
 
         public string anio_lanzamiento { get; set; }
-        
-        [field: NonSerialized]
-        public BitmapImage PortadaImagen { get; set; }
+
+        [field: NonSerialized] public BitmapImage PortadaImagen { get; set; }
 
         public float duracion_total { get; set; }
 
@@ -34,6 +33,7 @@ namespace Model
                     {
                         duracionSegundos += cancion.duracion;
                     }
+
                     var time = TimeSpan.FromSeconds(duracionSegundos);
                     duracionString = time.ToString("hh':'mm':'ss");
                 }

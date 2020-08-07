@@ -26,8 +26,8 @@ namespace EspotifeiClient
     {
         private static MainWindow _mainWindow;
         private int _antiguaCalificacion;
-        private int _idCancionActual;
         private Cancion _cancionActual;
+        private int _idCancionActual;
 
         public MainWindow()
         {
@@ -49,7 +49,7 @@ namespace EspotifeiClient
             AgregarAPlaylistButton.Visibility = Visibility.Collapsed;
             DescargarButton.Visibility = Visibility.Collapsed;
         }
-        
+
         private void MostrarElementosSinConexion()
         {
             calificacionRatingBar.Visibility = Visibility.Visible;
@@ -59,22 +59,20 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Revisa si el manejador de archivos no esta almancenando una cancion y guarda la informacion de los usuarios
+        ///     Revisa si el manejador de archivos no esta almancenando una cancion y guarda la informacion de los usuarios
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
         private void OnClose(object sender, EventArgs e)
         {
             while (!ManejadorCancionesSinConexion.GetManejadorDeCancionesSinConexion().SePuedeCerrarLaApp())
-            {
                 Thread.Sleep(1000);
-            }
             ManejadorCancionesSinConexion.GetManejadorDeCancionesSinConexion().TerminarDeDescargarCanciones();
             ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().GuardarInformacionUsuarios();
         }
 
         /// <summary>
-        /// Recupera la portada del album de la cancion que se va a reproducir y se lo coloca
+        ///     Recupera la portada del album de la cancion que se va a reproducir y se lo coloca
         /// </summary>
         /// <param name="album">El album a colocar la imagen</param>
         /// <param name="calidad">La calidad de la iamgen a recuperar</param>
@@ -99,7 +97,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Coloca la imagen del reproductor en pausa o play dependiendo del estado del reproductor
+        ///     Coloca la imagen del reproductor en pausa o play dependiendo del estado del reproductor
         /// </summary>
         /// <param name="estaReproducciendo">Indica si el reproductor se encuentra reproduciendo</param>
         private void RecibirCambioEstadoReproduccion(bool estaReproducciendo)
@@ -111,7 +109,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Actualiza la posicion del slider de reproduccion
+        ///     Actualiza la posicion del slider de reproduccion
         /// </summary>
         /// <param name="tiempoactual">El tiempo actual de reproduccion</param>
         private void RecibirAvanceCancion(double tiempoactual)
@@ -122,7 +120,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Coloca en el reproduccion la informacion de la cancion que se encuentra reproduciendo
+        ///     Coloca en el reproduccion la informacion de la cancion que se encuentra reproduciendo
         /// </summary>
         /// <param name="cancion">La cancion a colocar su informacion</param>
         private async void ColocarElementosCancion(Cancion cancion)
@@ -178,7 +176,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Coloca la informacion de una cancion personal en los elementos del reproductor
+        ///     Coloca la informacion de una cancion personal en los elementos del reproductor
         /// </summary>
         /// <param name="cancionPersonal">La cancion personal a colocar su informacion</param>
         private void ColocarElementosCancionPersonal(CancionPersonal cancionPersonal)
@@ -199,7 +197,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Crea unn string con los nombres de los creadores de contenido de la cancion
+        ///     Crea unn string con los nombres de los creadores de contenido de la cancion
         /// </summary>
         /// <param name="creadoresContenido">Los creadores de contenido de los cuales se creara el string</param>
         /// <returns>Un string con los nombres de los creadores de contenido</returns>
@@ -216,9 +214,9 @@ namespace EspotifeiClient
 
             return creadoresDeContenido;
         }
-        
+
         /// <summary>
-        /// Pausa o reanuda la reproduccion de la cancion actual
+        ///     Pausa o reanuda la reproduccion de la cancion actual
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -228,7 +226,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Reproduce la siguiente cancion
+        ///     Reproduce la siguiente cancion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -238,7 +236,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Reproduce la cancion anterior
+        ///     Reproduce la cancion anterior
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -283,7 +281,7 @@ namespace EspotifeiClient
                 VolumenSlider.Value = 0;
             }
         }
-        
+
         /// <summary>
         ///     Actualiza o registra la calificacion de una cancion
         /// </summary>
@@ -313,7 +311,7 @@ namespace EspotifeiClient
 
             calificacionRatingBar.IsEnabled = true;
         }
-        
+
         private async void OnClickIniciarRadio(object sender, RoutedEventArgs e)
         {
             if (_cancionActual != null)
@@ -345,15 +343,14 @@ namespace EspotifeiClient
                 }
             }
         }
-        
+
         private void OnClickDescargar(object sender, RoutedEventArgs e)
         {
             if (_cancionActual != null)
-            {
-                ManejadorCancionesSinConexion.GetManejadorDeCancionesSinConexion().AgregarCancionSinConexion(_cancionActual);
-            }
+                ManejadorCancionesSinConexion.GetManejadorDeCancionesSinConexion()
+                    .AgregarCancionSinConexion(_cancionActual);
         }
-        
+
         public void OnClickCerrarSesion(object sender, RoutedEventArgs routedEventArgs)
         {
             LimpiarReproductor();
@@ -363,7 +360,7 @@ namespace EspotifeiClient
             OcultarReproductor();
             PantallaFrame.Navigate(new IniciarSesion());
         }
-        
+
         private void LimpiarReproductor()
         {
             _antiguaCalificacion = 0;
@@ -383,9 +380,9 @@ namespace EspotifeiClient
             calificacionRatingBar.Visibility = Visibility.Collapsed;
             coverImage.Source = null;
         }
-        
+
         /// <summary>
-        /// Despliega el menu
+        ///     Despliega el menu
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -396,7 +393,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cierra el menu
+        ///     Cierra el menu
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -407,7 +404,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cambia la pagina a la de artistas
+        ///     Cambia la pagina a la de artistas
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -417,7 +414,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cambia a la pagina de perfil creador de contenido
+        ///     Cambia a la pagina de perfil creador de contenido
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -427,7 +424,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cambia a la pagina de listas de reproduccion
+        ///     Cambia a la pagina de listas de reproduccion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -437,7 +434,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cambia a la pagina de biblioteca personal
+        ///     Cambia a la pagina de biblioteca personal
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -447,7 +444,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cambia a la pagina de historial
+        ///     Cambia a la pagina de historial
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -457,7 +454,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cambia a la pagina de canciones
+        ///     Cambia a la pagina de canciones
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -467,7 +464,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cambia a la pagina de cola de reproduccion
+        ///     Cambia a la pagina de cola de reproduccion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -475,9 +472,9 @@ namespace EspotifeiClient
         {
             PantallaFrame.Navigate(new ColaDeReproduccion());
         }
-        
+
         /// <summary>
-        /// Cambia a la pagina de canciones sin conexion
+        ///     Cambia a la pagina de canciones sin conexion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -485,7 +482,7 @@ namespace EspotifeiClient
         {
             PantallaFrame.Navigate(new CancionesSinConexion());
         }
-        
+
         /// <summary>
         ///     Muestra el item de mi perfil
         /// </summary>
@@ -493,13 +490,13 @@ namespace EspotifeiClient
         {
             if (_mainWindow != null)
                 if (ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().ObtenerUsuarioLogeado() != null)
-                    if (ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().ObtenerUsuarioLogeado().
-                        tipo_usuario == TipoUsuario.CreadorDeContenido)
+                    if (ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().ObtenerUsuarioLogeado()
+                        .tipo_usuario == TipoUsuario.CreadorDeContenido)
                         _mainWindow.MiPerfilItem.Visibility = Visibility.Visible;
         }
 
         /// <summary>
-        /// Muestra el menu
+        ///     Muestra el menu
         /// </summary>
         public static void MostrarMenu()
         {
@@ -507,7 +504,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Oculta el menu
+        ///     Oculta el menu
         /// </summary>
         public static void OcultarMenu()
         {
@@ -515,7 +512,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Muestra el reproductor
+        ///     Muestra el reproductor
         /// </summary>
         public static void MostrarReproductor()
         {
@@ -523,7 +520,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Oculta el reproductor
+        ///     Oculta el reproductor
         /// </summary>
         public static void OcultarReproductor()
         {
@@ -546,13 +543,12 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Establece la pantalla principal
+        ///     Establece la pantalla principal
         /// </summary>
         /// <param name="mainWindow"></param>
         public static void SetMainWindow(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
         }
-        
     }
 }

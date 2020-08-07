@@ -18,11 +18,11 @@ namespace Model
         public string correo_electronico { get; set; }
 
         public TipoUsuario tipo_usuario { get; set; }
-        
+
         public Login login { get; set; }
-        
+
         public bool sesion_iniciada { get; set; }
-        
+
         public List<CancionSinConexion> canciones_sin_conexion { get; set; } = new List<CancionSinConexion>();
         public List<CancionSinConexion> canciones_pendientes_descarga { get; set; } = new List<CancionSinConexion>();
     }

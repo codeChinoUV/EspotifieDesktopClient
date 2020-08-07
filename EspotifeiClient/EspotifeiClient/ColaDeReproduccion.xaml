@@ -3,10 +3,11 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:local="clr-namespace:EspotifeiClient" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:EspotifeiClient"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="Cola De Reproduccion" >
+      Title="Cola De Reproduccion">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0.20*" />
@@ -23,7 +24,7 @@
         </Rectangle>
         <Grid Grid.Row="1" Margin="0,0,0,0">
             <Grid.RowDefinitions>
-                <RowDefinition Height="0.10*"/>
+                <RowDefinition Height="0.10*" />
                 <RowDefinition Height="0.90*" />
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" Background="LightGray">
@@ -34,13 +35,13 @@
                     <ColumnDefinition Width="0.30*" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Nombre" FontSize="15" FontWeight="Bold" Foreground="Black"
-                    VerticalAlignment="Center" Margin="10,0" />
+                           VerticalAlignment="Center" Margin="10,0" />
                 <TextBlock Grid.Column="1" Text="Artistas" FontSize="15" FontWeight="Bold" Foreground="Black"
-                    VerticalAlignment="Center" />
+                           VerticalAlignment="Center" />
                 <TextBlock Grid.Column="2" Text="Duración" FontSize="15" FontWeight="Bold" Foreground="Black"
-                    VerticalAlignment="Center" />
+                           VerticalAlignment="Center" />
                 <TextBlock Grid.Column="3" Text="Tipo de cancion" FontSize="15" FontWeight="Bold" Foreground="Black"
-                    VerticalAlignment="Center" Margin="10,0" />
+                           VerticalAlignment="Center" Margin="10,0" />
                 <Border Grid.Column="0" Grid.ColumnSpan="4" BorderBrush="Black" BorderThickness="0,0,0,2" />
             </Grid>
             <ScrollViewer Grid.Row="1" Margin="0,0,0,0">
@@ -104,7 +105,8 @@
                 <RowDefinition Height="0.30*" />
             </Grid.RowDefinitions>
             <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Source="Resources/ColaDeReproduccion.png" Margin="10" />
-            <TextBlock Grid.Column="1" Grid.Row="0" Text="Cola De Reproducción" FontSize="30" TextWrapping="Wrap" Foreground="White" FontWeight="Bold" />
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="Cola De Reproducción" FontSize="30" TextWrapping="Wrap"
+                       Foreground="White" FontWeight="Bold" />
             <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" VerticalAlignment="Center">
                 <TextBlock Text="Cantidad de canciones: " Foreground="White" FontSize="16" FontWeight="Bold" />
                 <TextBlock x:Name="CantidadCanciones" Text="0" Foreground="White" FontSize="16" />
@@ -114,7 +116,7 @@
                 <TextBlock x:Name="TiempoReproduccion" Text="00:00:00" Foreground="White" FontSize="16" />
             </StackPanel>
             <Button Grid.Column="1" Grid.Row="0" Content="Limpiar cola de reproduccion" HorizontalAlignment="Right"
-                    Margin="10,00" Click="OnClickLimpiarCola"/>
+                    Margin="10,00" Click="OnClickLimpiarCola" />
         </Grid>
     </Grid>
 </Page>

@@ -1,5 +1,5 @@
-using Model;
 using System;
+using Model;
 
 namespace EspotifeiClient.Player
 {
@@ -15,7 +15,8 @@ namespace EspotifeiClient.Player
 
         public bool YaSeReproducio { get; set; }
 
-        public float Duracion { 
+        public float Duracion
+        {
             get
             {
                 var duracion = 0.0f;
@@ -26,10 +27,11 @@ namespace EspotifeiClient.Player
                 else if (CancionSinConexion != null)
                     duracion = CancionSinConexion.duracion;
                 return duracion;
-            } 
+            }
         }
 
-        public string DuracionString { 
+        public string DuracionString
+        {
             get
             {
                 var time = TimeSpan.FromSeconds(Duracion);
@@ -37,7 +39,8 @@ namespace EspotifeiClient.Player
             }
         }
 
-        public string Nombre { 
+        public string Nombre
+        {
             get
             {
                 var nombre = "";
@@ -67,7 +70,9 @@ namespace EspotifeiClient.Player
                     }
                 }
                 else if (CancionPersonal != null)
+                {
                     artistas = CancionPersonal.artistas;
+                }
                 else if (CancionSinConexion != null)
                 {
                     if (CancionSinConexion.creadores_de_contenido != null)
@@ -78,12 +83,13 @@ namespace EspotifeiClient.Player
                             artistas = artistas.Substring(0, artistas.Length - 2);
                     }
                 }
+
                 return artistas;
             }
         }
 
-        public string TipoCancion 
-        { 
+        public string TipoCancion
+        {
             get
             {
                 var tipoCancion = "";

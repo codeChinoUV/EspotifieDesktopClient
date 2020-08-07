@@ -1,30 +1,21 @@
-﻿using Api.Rest;
-using Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Api.Rest;
+using Model;
 
 namespace EspotifeiClient
 {
     /// <summary>
-    /// Lógica de interacción para AgregarCancionAPlaylist.xaml
+    ///     Lógica de interacción para AgregarCancionAPlaylist.xaml
     /// </summary>
     public partial class AgregarCancionAPlaylist : Window
     {
+        private readonly Cancion _cancion = new Cancion();
         private List<ListaReproduccion> _listasReproduccion;
-        private Cancion _cancion= new Cancion();
 
         public AgregarCancionAPlaylist()
         {
@@ -39,7 +30,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que obtiene las listas de reproducción que el usuario ha creado
+        ///     Método que obtiene las listas de reproducción que el usuario ha creado
         /// </summary>
         private async void ObtenerListasReproduccion()
         {
@@ -48,25 +39,25 @@ namespace EspotifeiClient
                 _listasReproduccion = await ListaReproduccionClient.GetListaReproduccion();
                 ListaReproduccionListView.ItemsSource = _listasReproduccion;
                 ColocarImagenesListasReproduccion();
-            } catch (HttpRequestException)
+            }
+            catch (HttpRequestException)
             {
                 new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 new MensajeEmergente().MostrarMensajeError(ex.Message);
             }
         }
 
         /// <summary>
-        /// Método que coloca una imagen predefinida a las listas de reproducción del usuario
+        ///     Método que coloca una imagen predefinida a las listas de reproducción del usuario
         /// </summary>
         private void ColocarImagenesListasReproduccion()
         {
             ListaReproduccionListView.IsEnabled = false;
             foreach (var playlist in _listasReproduccion)
-            {
                 playlist.PortadaImagen = (BitmapImage) FindResource("ListaDesconocida");
-            }
 
             ListaReproduccionListView.ItemsSource = null;
             ListaReproduccionListView.ItemsSource = _listasReproduccion;
@@ -74,7 +65,6 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -85,10 +75,12 @@ namespace EspotifeiClient
             {
                 var cancion = await ListaReproduccionClient.RegisterCancionAListaReproduccion(idPlaylist, _cancion.id);
                 MessageBox.Show("Canción agregada a la playlist");
-            } catch (HttpRequestException)
+            }
+            catch (HttpRequestException)
             {
                 new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 new MensajeEmergente().MostrarMensajeError(ex.Message);
             }

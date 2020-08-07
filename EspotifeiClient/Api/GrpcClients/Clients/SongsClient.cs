@@ -12,11 +12,17 @@ namespace Api.GrpcClients.Clients
     public class SongsClient
     {
         public delegate void ErrorRaised(string message);
-        public delegate void TerminatedRecivedSong();
+
         public delegate void OnChuckRecived(byte[] bytesSong);
+
         public delegate void OnRecivedSong(byte[] bytesSong, string extension);
+
         public delegate void PorcentegeUp(float porcentage);
+
+        public delegate void TerminatedRecivedSong();
+
         public delegate void UploadTerminated();
+
         private const int ChunkSize = 64 * 1000;
         private const int CounTrys = 2;
         private bool _getSong = true;
@@ -124,7 +130,6 @@ namespace Api.GrpcClients.Clients
                     {
                         while (await call.ResponseStream.MoveNext() && _getSong)
                         {
-                            
                             var response = call.ResponseStream.Current;
                             memoryStream.Write(response.Data.ToByteArray(), 0, response.Data.Length);
                             position += response.Data.Length;

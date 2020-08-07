@@ -60,6 +60,7 @@ namespace Api.Rest
                         var usuario = await response.Content.ReadAsAsync<Usuario>();
                         return usuario;
                     }
+
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         await ApiServiceLogin.GetServiceLogin().ReLogin();
@@ -71,6 +72,7 @@ namespace Api.Rest
                         throw new Exception(error.mensaje);
                     }
                 }
+
             throw new Exception("AuntenticacionFallida");
         }
 

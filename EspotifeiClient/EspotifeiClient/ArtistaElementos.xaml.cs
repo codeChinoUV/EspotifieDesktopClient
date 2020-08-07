@@ -85,7 +85,7 @@ namespace EspotifeiClient
                 SinConexionGrid.Visibility = Visibility.Hidden;
                 AlbumsListView.Visibility = Visibility.Visible;
                 if (_albums == null)
-                   _albums = new List<Album>();
+                    _albums = new List<Album>();
                 AlbumsListView.ItemsSource = _albums;
             }
             catch (HttpRequestException)
@@ -131,6 +131,7 @@ namespace EspotifeiClient
                     {
                         album.PortadaImagen = (BitmapImage) FindResource("AlbumDesconocido");
                     }
+
                 AlbumsListView.ItemsSource = null;
                 AlbumsListView.ItemsSource = _albums;
             }
@@ -274,7 +275,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Coloca una cancion a la cola de descargas
+        ///     Coloca una cancion a la cola de descargas
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>

@@ -8,9 +8,8 @@ namespace EspotifeiClient
 {
     public partial class ColaDeReproduccion
     {
-
         private List<ElementoCola> _colaReproduccion;
-        
+
         public ColaDeReproduccion()
         {
             InitializeComponent();
@@ -18,7 +17,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Recupera los elementos de la cola de reproduccion y coloca su informacion en los elementos de la intefaz grafica
+        ///     Recupera los elementos de la cola de reproduccion y coloca su informacion en los elementos de la intefaz grafica
         /// </summary>
         private void InicializarInformacionCancion()
         {
@@ -30,23 +29,20 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cacula el tiempo total de reproduccion
+        ///     Cacula el tiempo total de reproduccion
         /// </summary>
         /// <param name="cola">La cola de reproduccion de donde tomara las canciones para calcular su tiempo total</param>
         /// <returns>El tiempo total en string </returns>
         private string CalcularTiempoTotalReproduccion(List<ElementoCola> cola)
         {
             var tiempoTotal = 0.0f;
-            foreach (var elementoCola in cola)
-            {
-                tiempoTotal += elementoCola.Duracion;
-            }
+            foreach (var elementoCola in cola) tiempoTotal += elementoCola.Duracion;
             var time = TimeSpan.FromSeconds(tiempoTotal);
             return time.ToString("hh':'mm':'ss");
         }
-        
+
         /// <summary>
-        /// Actualiza los elementos en pantalla cuando recibe el evento
+        ///     Actualiza los elementos en pantalla cuando recibe el evento
         /// </summary>
         /// <param name="elementosCola">Los elementos en la cola de reproduccion actualizados</param>
         private void ActualizacionCola(List<ElementoCola> elementosCola)
@@ -59,7 +55,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Solicita al reproductor eliminar una cancion de la cola de reproduccion
+        ///     Solicita al reproductor eliminar una cancion de la cola de reproduccion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -70,7 +66,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Solicita al reproductor limpiar la cola de reproduccion
+        ///     Solicita al reproductor limpiar la cola de reproduccion
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>

@@ -101,7 +101,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Esconde todos los elementos con los que no se pueden interartuar sin conexion
+        ///     Esconde todos los elementos con los que no se pueden interartuar sin conexion
         /// </summary>
         private void ActivarModoSinConexion()
         {
@@ -112,7 +112,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Muestra todos los elementos con los que no se pueden interartuar con conexion
+        ///     Muestra todos los elementos con los que no se pueden interartuar con conexion
         /// </summary>
         private void DesactivarModoSinConexion()
         {
@@ -121,7 +121,7 @@ namespace EspotifeiClient
             AgregarAlbumButton.Visibility = Visibility.Visible;
             EditarPerfilButton.Visibility = Visibility.Visible;
         }
-        
+
         /// <summary>
         ///     Recupera la imagen del creador de contenido en calidad media y la colca en la portada del creador de
         ///     contenido
@@ -182,7 +182,7 @@ namespace EspotifeiClient
                 }
             }
         }
-        
+
         /// <summary>
         ///     Recupera la imagen dOnClikEditarAlbumoca
         /// </summary>
@@ -345,7 +345,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Muestra la ventana para editar una cancion
+        ///     Muestra la ventana para editar una cancion
         /// </summary>
         /// <param name="sender">El obejto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -472,7 +472,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que identifica el id de la canción y lo direcciona hacia la pantalla AgregarCancionAPlaylist.xaml.cs
+        ///     Método que identifica el id de la canción y lo direcciona hacia la pantalla AgregarCancionAPlaylist.xaml.cs
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -484,12 +484,11 @@ namespace EspotifeiClient
             {
                 cancion.album = BuscarAlbumDeCancion(idCancion);
                 new AgregarCancionAPlaylist(idCancion).Show();
-                
             }
         }
 
         /// <summary>
-        /// Coloca una cancion a la cola de descargas
+        ///     Coloca una cancion a la cola de descargas
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>

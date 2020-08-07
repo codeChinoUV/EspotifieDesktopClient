@@ -49,9 +49,7 @@ namespace Api.Rest
                 }
 
                 if (response.StatusCode == HttpStatusCode.InternalServerError)
-                {
                     throw new Exception("Ocurrio un error y no se pueden recuperar las canciones");
-                }
 
                 ErrorGeneral error;
                 error = await response.Content.ReadAsAsync<ErrorGeneral>();

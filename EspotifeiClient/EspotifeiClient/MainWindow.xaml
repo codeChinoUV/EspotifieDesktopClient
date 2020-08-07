@@ -222,7 +222,7 @@
                             <Button x:Name="InicarRadioButton" Content="Iniciar radio" Click="OnClickIniciarRadio" />
                             <Button x:Name="AgregarAPlaylistButton" Content="Agregar a playlist" />
                             <Button x:Name="DescargarButton" Content="Descargar" Click="OnClickDescargar" />
-                            <Button Content="Cerrar sesión" Click="OnClickCerrarSesion"/>
+                            <Button Content="Cerrar sesión" Click="OnClickCerrarSesion" />
                         </StackPanel>
                     </materialDesign:PopupBox>
                     <materialDesign:RatingBar Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center"

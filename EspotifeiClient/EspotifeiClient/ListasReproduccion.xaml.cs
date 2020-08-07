@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using Api.Rest;
-using System.Windows;
 using Model;
 
 namespace EspotifeiClient

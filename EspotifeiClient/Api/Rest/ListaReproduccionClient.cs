@@ -132,17 +132,16 @@ namespace Api.Rest
         }
 
         /// <summary>
-        /// Método que solicita al servidor agregar una canción a una lista de reproducción
+        ///     Método que solicita al servidor agregar una canción a una lista de reproducción
         /// </summary>
         /// <param name="listaReproduccion">Instancia de ListaReproduccion</param>
         /// <returns>La lista de reproducción creada</returns>
         public static async Task<Cancion> RegisterCancionAListaReproduccion(int idListaReproduccion, int idCancion)
         {
-            Cancion cancion = new Cancion();
+            var cancion = new Cancion();
             cancion.id = idCancion;
             var path = $"/v1/listas-de-reproduccion/{idListaReproduccion}/canciones";
-            for (int i = 1; i <= CantidadIntentos; i++)
-            {
+            for (var i = 1; i <= CantidadIntentos; i++)
                 using (var response = await ApiClient.GetApiClient().PostAsJsonAsync(path, cancion))
                 {
                     if (response.IsSuccessStatusCode)
@@ -150,22 +149,26 @@ namespace Api.Rest
                         var cancionRegistered = await response.Content.ReadAsAsync<Cancion>();
                         return cancionRegistered;
                     }
+
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                     {
                         List<ErrorGeneral> errores;
                         errores = await response.Content.ReadAsAsync<List<ErrorGeneral>>();
                         throw new Exception(errores[0].mensaje);
-                    } else if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         await ApiServiceLogin.GetServiceLogin().ReLogin();
-                    } else
+                    }
+                    else
                     {
                         ErrorGeneral error;
                         error = await response.Content.ReadAsAsync<ErrorGeneral>();
                         throw new Exception(error.mensaje);
                     }
                 }
-            }
+
             throw new Exception("AuntenticacionFallida");
         }
     }

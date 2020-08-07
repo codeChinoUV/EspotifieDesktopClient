@@ -22,39 +22,35 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Verifica si existe un usuario almacenado e inicia sesion con el usuario
+        ///     Verifica si existe un usuario almacenado e inicia sesion con el usuario
         /// </summary>
         private async void IniciarSesionLocal()
         {
             var usuarioLogeado = ObtenerUsuarioLogeado();
-            if (usuarioLogeado != null)
-            {
-                await InciarSesion(usuarioLogeado, true);
-            }
+            if (usuarioLogeado != null) await InciarSesion(usuarioLogeado, true);
         }
 
         /// <summary>
-        /// Obtiene el usuario que tiene la sesion inciada
+        ///     Obtiene el usuario que tiene la sesion inciada
         /// </summary>
         /// <returns>El objeto para logearse con el usuario que tiene la sesion iniciada</returns>
         private Login ObtenerUsuarioLogeado()
         {
-            Login loginUsuario = null; 
+            Login loginUsuario = null;
             var usuarioLogeado = ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().ObtenerUsuarioLogeado();
-            if (usuarioLogeado != null)
-            {
-                loginUsuario = usuarioLogeado.login;
-            }
+            if (usuarioLogeado != null) loginUsuario = usuarioLogeado.login;
 
             return loginUsuario;
         }
 
         /// <summary>
-        /// Inicia sesion con las credenciales indicadas
+        ///     Inicia sesion con las credenciales indicadas
         /// </summary>
         /// <param name="login">El objeto que contiene las credenciales del usuario</param>
-        /// <param name="desdeLocal">Inidica si se iniciara sesion con las credenciales proporcionadas por el usuario
-        /// o con credenciales almacenadas</param>
+        /// <param name="desdeLocal">
+        ///     Inidica si se iniciara sesion con las credenciales proporcionadas por el usuario
+        ///     o con credenciales almacenadas
+        /// </param>
         /// <returns>Task</returns>
         private async Task InciarSesion(Login login, bool desdeLocal)
         {
@@ -69,12 +65,9 @@ namespace EspotifeiClient
             catch (HttpRequestException)
             {
                 if (!desdeLocal)
-                {
                     new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
-                }else
-                {
+                else
                     NavigationService?.Navigate(new Canciones());
-                }
             }
             catch (Exception exception)
             {
@@ -85,7 +78,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Recupera las credenciales del usuario, verifica que sean validas e inicia sesion con ellas
+        ///     Recupera las credenciales del usuario, verifica que sean validas e inicia sesion con ellas
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>
@@ -110,7 +103,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Cambia la pagina a la de registrar
+        ///     Cambia la pagina a la de registrar
         /// </summary>
         /// <param name="sender">El objeto que invoco el evento</param>
         /// <param name="e">El evento invocado</param>

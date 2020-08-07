@@ -8,18 +8,11 @@ namespace EspotifeiClient.ManejoUsuarios
 {
     public class ManejadorDeUsuariosLogeados
     {
-        private List<Usuario> _usuariosLogeados;
-        private static ManejadorDeUsuariosLogeados _manejadorDeUsuariosLogeados = new ManejadorDeUsuariosLogeados();
+        private static readonly ManejadorDeUsuariosLogeados _manejadorDeUsuariosLogeados =
+            new ManejadorDeUsuariosLogeados();
 
-        /// <summary>
-        /// Devuelve la instancia del singleton
-        /// </summary>
-        /// <returns>La instancia del singleton</returns>
-        public static ManejadorDeUsuariosLogeados GetManejadorDeUsuariosLogeados()
-        {
-            return _manejadorDeUsuariosLogeados;
-        }
-        
+        private readonly List<Usuario> _usuariosLogeados;
+
         private ManejadorDeUsuariosLogeados()
         {
             var fileName = Path.Combine(Environment.GetFolderPath(
@@ -38,30 +31,36 @@ namespace EspotifeiClient.ManejoUsuarios
             {
                 _usuariosLogeados = new List<Usuario>();
             }
-            
         }
-        
+
         /// <summary>
-        /// Devuelve al usuario que tiene la sesion iniciada
+        ///     Devuelve la instancia del singleton
+        /// </summary>
+        /// <returns>La instancia del singleton</returns>
+        public static ManejadorDeUsuariosLogeados GetManejadorDeUsuariosLogeados()
+        {
+            return _manejadorDeUsuariosLogeados;
+        }
+
+        /// <summary>
+        ///     Devuelve al usuario que tiene la sesion iniciada
         /// </summary>
         /// <returns>El usuario logeado</returns>
         public Usuario ObtenerUsuarioLogeado()
         {
             Usuario usuarioLogeado = null;
             foreach (var usuario in _usuariosLogeados)
-            {
                 if (usuario.sesion_iniciada)
                 {
                     usuarioLogeado = usuario;
                     break;
                 }
-            }
 
             return usuarioLogeado;
         }
 
         /// <summary>
-        /// Agrega a la lista de usuarios un usuario que se haya logeado
+        ///     Agrega a la lista de usuarios un usuario que se haya logeado
         /// </summary>
         /// <param name="usuario">El usuario a agregar</param>
         public void InicioSesionUsuario(Usuario usuario)
@@ -83,7 +82,7 @@ namespace EspotifeiClient.ManejoUsuarios
         }
 
         /// <summary>
-        /// Cierra la sesion de un usuario con la sesion abierta
+        ///     Cierra la sesion de un usuario con la sesion abierta
         /// </summary>
         public void CerrarSesionUsuario()
         {
@@ -92,7 +91,7 @@ namespace EspotifeiClient.ManejoUsuarios
         }
 
         /// <summary>
-        /// Serializa la informacion de los usuarios en un archivo
+        ///     Serializa la informacion de los usuarios en un archivo
         /// </summary>
         public void GuardarInformacionUsuarios()
         {
@@ -112,7 +111,5 @@ namespace EspotifeiClient.ManejoUsuarios
                 //No hacer nada
             }
         }
-        
     }
-    
 }

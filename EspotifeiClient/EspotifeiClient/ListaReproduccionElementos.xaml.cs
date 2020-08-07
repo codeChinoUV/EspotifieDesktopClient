@@ -3,17 +3,15 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
-using Api.GrpcClients.Clients;
-using EspotifeiClient.Util;
-using ManejadorDeArchivos;
+using Api.Rest;
+using Model;
 
 namespace EspotifeiClient
 {
     /// <summary>
     ///     Lógica de interacción para ListaReproduccionElementos.xaml
     /// </summary>
-    public partial class ListaReproduccionElementos : Page
+    public partial class ListaReproduccionElementos
     {
         private ListaReproduccion _listaReproduccion;
 
@@ -70,7 +68,7 @@ namespace EspotifeiClient
         }
 
         /// <summary>
-        /// Método que añade las canciones del creador de contenido a la cola de reproduccion
+        ///     Método que añade las canciones del creador de contenido a la cola de reproduccion
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

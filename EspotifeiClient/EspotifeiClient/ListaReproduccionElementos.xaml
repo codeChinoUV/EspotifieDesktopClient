@@ -43,14 +43,14 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="{Binding nombre}" Margin="10,0"
-                                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
+                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
                             <TextBlock Grid.Column="1" Text="{Binding creadores_de_contenido_nombres}" Margin="10,0"
-                                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
+                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
                             <TextBlock Grid.Column="2" Text="{Binding album.nombre}"
-                                                       Margin="10,0" FontSize="15" Foreground="Black"
-                                                       VerticalAlignment="Center" />
+                                       Margin="10,0" FontSize="15" Foreground="Black"
+                                       VerticalAlignment="Center" />
                             <TextBlock Grid.Column="3" Text="{Binding duracionString}" Margin="10,0"
-                                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
+                                       FontSize="15" Foreground="Black" VerticalAlignment="Center" />
                             <Grid.Style>
                                 <Style TargetType="{x:Type Grid}">
                                     <Style.Triggers>

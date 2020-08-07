@@ -117,6 +117,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AgregarCancionAPlaylist.xaml.cs">
+      <DependentUpon>AgregarCancionAPlaylist.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ArtistaElementos.xaml.cs">
       <DependentUpon>ArtistaElementos.xaml</DependentUpon>
     </Compile>
@@ -183,6 +186,10 @@
     <Compile Include="Util\ManejadorDePaginas\UIPage.cs" />
     <Compile Include="Util\ManejadorDePaginas\UIWindow.cs" />
     <Compile Include="Util\ValidacionDeCadenas.cs" />
+    <Page Include="AgregarCancionAPlaylist.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ArtistaElementos.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

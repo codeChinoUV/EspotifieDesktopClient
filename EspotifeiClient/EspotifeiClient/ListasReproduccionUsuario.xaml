@@ -53,17 +53,21 @@
 
                                             <TextBlock Grid.Column="0" Text="{Binding nombre}" Margin="10,0"
                                                        FontSize="15" Foreground="Black" VerticalAlignment="Center" />
-                                            <TextBlock Grid.Column="1" Text="{Binding creadores_de_contenido_nombres}" Margin="10,0"
+                                            <TextBlock Grid.Column="1" Text="{Binding creadores_de_contenido_nombres}"
+                                                       Margin="10,0"
                                                        FontSize="15" Foreground="Black" VerticalAlignment="Center" />
                                             <TextBlock Grid.Column="2" Text="{Binding album.nombre}"
                                                        Margin="10,0" FontSize="15" Foreground="Black"
                                                        VerticalAlignment="Center" />
                                             <TextBlock Grid.Column="3" Text="{Binding duracionString}" Margin="10,0"
                                                        FontSize="15" Foreground="Black" VerticalAlignment="Center" />
-                                            <StackPanel Grid.Column="4" Orientation="Horizontal" >
-                                                <Button Background="{x:Null}" Width="30" Height="25" Margin="5,0" BorderBrush="Transparent" Tag="{Binding id}" Padding="0"
-                                                VerticalAlignment="Center" HorizontalAlignment="Center" Click="OnClickEliminarCancionPlaylist">
-                                                    <materialDesign:PackIcon Kind="Delete" Height="25" Width="25" Foreground="Red"/>
+                                            <StackPanel Grid.Column="4" Orientation="Horizontal">
+                                                <Button Background="{x:Null}" Width="30" Height="25" Margin="5,0"
+                                                        BorderBrush="Transparent" Tag="{Binding id}" Padding="0"
+                                                        VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                        Click="OnClickEliminarCancionPlaylist">
+                                                    <materialDesign:PackIcon Kind="Delete" Height="25" Width="25"
+                                                                             Foreground="Red" />
                                                 </Button>
                                             </StackPanel>
                                             <Grid.Style>

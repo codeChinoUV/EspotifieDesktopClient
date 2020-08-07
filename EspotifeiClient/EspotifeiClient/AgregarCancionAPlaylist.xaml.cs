@@ -12,7 +12,7 @@ namespace EspotifeiClient
     /// <summary>
     ///     Lógica de interacción para AgregarCancionAPlaylist.xaml
     /// </summary>
-    public partial class AgregarCancionAPlaylist : Window
+    public partial class AgregarCancionAPlaylist
     {
         private readonly Cancion _cancion = new Cancion();
         private List<ListaReproduccion> _listasReproduccion;
@@ -70,11 +70,12 @@ namespace EspotifeiClient
         /// <param name="e"></param>
         private async void OnClickAgregarCancionAPlaylist(object sender, RoutedEventArgs e)
         {
+            var boton = (Button) sender;
             var idPlaylist = (int) ((Button) sender).Tag;
             try
             {
                 var cancion = await ListaReproduccionClient.RegisterCancionAListaReproduccion(idPlaylist, _cancion.id);
-                MessageBox.Show("Canción agregada a la playlist");
+                boton.IsEnabled = false;
             }
             catch (HttpRequestException)
             {

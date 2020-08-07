@@ -270,8 +270,18 @@ namespace EspotifeiClient
             }
         }
 
+        /// <summary>
+        /// Agrega una cancion a una lista de reproduccion
+        /// </summary>
+        /// <param name="sender">EL objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
         {
+            var idCancion = (int) ((Button) sender).Tag;
+            if (idCancion != 0)
+            {
+                new AgregarCancionAPlaylist(idCancion).ShowDialog();
+            }
         }
 
         /// <summary>

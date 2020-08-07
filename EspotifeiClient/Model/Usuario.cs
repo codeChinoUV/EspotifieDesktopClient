@@ -19,11 +19,15 @@ namespace Model
 
         public TipoUsuario tipo_usuario { get; set; }
 
+        [JsonIgnore]
         public Login login { get; set; }
 
+        [JsonIgnore]
         public bool sesion_iniciada { get; set; }
 
+        [JsonIgnore]
         public List<CancionSinConexion> canciones_sin_conexion { get; set; } = new List<CancionSinConexion>();
+        [JsonIgnore]
         public List<CancionSinConexion> canciones_pendientes_descarga { get; set; } = new List<CancionSinConexion>();
     }
 }

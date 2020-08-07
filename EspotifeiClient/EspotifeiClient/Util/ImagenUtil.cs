@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Windows.Media.Imaging;
 
@@ -13,18 +14,24 @@ namespace EspotifeiClient.Util
         public static BitmapImage CrearBitmapDeMemory(MemoryStream imagen)
         {
             var bitmapImage = new BitmapImage();
-            using (imagen)
+            try
             {
-                imagen.Position = 0;
-                bitmapImage.BeginInit();
-                bitmapImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.UriSource = null;
-                bitmapImage.StreamSource = imagen;
-                bitmapImage.EndInit();
+                using (imagen)
+                {
+                    imagen.Position = 0;
+                    bitmapImage.BeginInit();
+                    bitmapImage.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                    bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapImage.UriSource = null;
+                    bitmapImage.StreamSource = imagen;
+                    bitmapImage.EndInit();
+                    bitmapImage.Freeze();
+                }
             }
-
-            bitmapImage.Freeze();
+            catch (Exception)
+            {
+                bitmapImage = new BitmapImage();
+            }
             return bitmapImage;
         }
     }

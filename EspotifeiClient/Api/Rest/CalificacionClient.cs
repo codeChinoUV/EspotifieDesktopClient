@@ -75,8 +75,7 @@ namespace Api.Rest
                     {
                         await ApiServiceLogin.GetServiceLogin().ReLogin();
                     }
-                    else if (response.StatusCode == HttpStatusCode.NotFound ||
-                             response.StatusCode == HttpStatusCode.InternalServerError)
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
                     {
                         throw new Exception("NoCalificada");
                     }

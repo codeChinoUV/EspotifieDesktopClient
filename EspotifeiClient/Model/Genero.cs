@@ -1,5 +1,10 @@
-﻿namespace Model
+﻿using System;
+using Newtonsoft.Json;
+
+namespace Model
 {
+    [JsonObject]
+    [Serializable]
     public class Genero
     {
         public int id { get; set; }

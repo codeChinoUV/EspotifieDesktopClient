@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
 
 namespace Model
 {
+    [JsonObject]
+    [Serializable]
     public class Album
     {
         public int id { get; set; }
@@ -11,7 +14,8 @@ namespace Model
         public string nombre { get; set; }
 
         public string anio_lanzamiento { get; set; }
-
+        
+        [field: NonSerialized]
         public BitmapImage PortadaImagen { get; set; }
 
         public float duracion_total { get; set; }

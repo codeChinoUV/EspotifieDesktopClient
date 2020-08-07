@@ -12,24 +12,20 @@ namespace Api.GrpcClients.Clients
     public class SongsClient
     {
         public delegate void ErrorRaised(string message);
-
+        public delegate void TerminatedRecivedSong();
         public delegate void OnChuckRecived(byte[] bytesSong);
-
         public delegate void OnRecivedSong(byte[] bytesSong, string extension);
-
         public delegate void PorcentegeUp(float porcentage);
-
         public delegate void UploadTerminated();
-
         private const int ChunkSize = 64 * 1000;
         private const int CounTrys = 2;
-
         private bool _getSong = true;
         public event ErrorRaised OnErrorRaised;
         public event PorcentegeUp OnPorcentageUp;
         public event UploadTerminated OnUploadTerminated;
         public event OnChuckRecived OnSongChunkRived;
         public event OnRecivedSong OnInitialRecivedSong;
+        public event TerminatedRecivedSong OnTerminatedRecivedSong;
 
         /// <summary>
         ///     Solicita al servidor subir una cancion
@@ -162,6 +158,7 @@ namespace Api.GrpcClients.Clients
                 }
                 else
                 {
+                    OnTerminatedRecivedSong?.Invoke();
                     memoryStream.Dispose();
                     break;
                 }

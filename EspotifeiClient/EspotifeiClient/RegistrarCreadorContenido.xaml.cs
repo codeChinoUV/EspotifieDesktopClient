@@ -44,10 +44,13 @@ namespace EspotifeiClient
         private void ColocarElementosCreadorDeContenidoEditar()
         {
             tituloLabel.Content = "EDICIÓN DE CREADOR";
-            portadaCreadorImage.Source = _creadorContenidoAEditar.PortadaImagen;
-            nombreCreadorTextbox.Text = _creadorContenidoAEditar.nombre;
-            biografiaTextbox.Text = _creadorContenidoAEditar.biografia;
-            grupoCheckbox.IsChecked = _creadorContenidoAEditar.es_grupo;
+            if (_creadorContenidoAEditar != null)
+            {
+                portadaCreadorImage.Source = _creadorContenidoAEditar.PortadaImagen;
+                nombreCreadorTextbox.Text = _creadorContenidoAEditar.nombre;
+                biografiaTextbox.Text = _creadorContenidoAEditar.biografia;
+                grupoCheckbox.IsChecked = _creadorContenidoAEditar.es_grupo;
+            }
         }
 
         /// <summary>

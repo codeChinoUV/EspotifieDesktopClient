@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Model
 {
+    [JsonObject]
+    [Serializable]
     public class Cancion
     {
         public int id { get; set; }

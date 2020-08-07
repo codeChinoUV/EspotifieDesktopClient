@@ -100,6 +100,8 @@
                                                                 Click="OnClickEmpezarRadio" Tag="{Binding id}" />
                                                         <Button Content="Agregar a playlist"
                                                                 Click="OnClickAgregarAPlaylist" Tag="{Binding id}" />
+                                                        <Button Content="Descargar"
+                                                                Click="OnClickDescargar" Tag="{Binding id}" />
                                                     </StackPanel>
                                                 </materialDesign:PopupBox>
                                             </StackPanel>
@@ -228,12 +230,12 @@
                 </DataGrid.Resources>
             </DataGrid>
             <StackPanel Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10">
-                <Button HorizontalAlignment="Stretch" Margin="4,0"
+                <Button HorizontalAlignment="Stretch" Margin="4,0" x:Name="AgregarAlbumButton"
                         Content="Agregar Album" Background="#FF16A210" BorderBrush="#FF16A210"
                         VerticalContentAlignment="Center"
                         Click="OnClickAgregarAlbumButton" />
                 <Button
-                    Content="Editar perfil" Background="#FF16A210" BorderBrush="#FF16A210"
+                    Content="Editar perfil" Background="#FF16A210" BorderBrush="#FF16A210" x:Name="EditarPerfilButton"
                     VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                     Click="OnClickEditarPerfilButton" Margin="4,10" />
             </StackPanel>

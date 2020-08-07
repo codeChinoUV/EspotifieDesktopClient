@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -86,7 +85,7 @@ namespace EspotifeiClient
                 }
                 catch (Exception)
                 {
-                    cancion.album.PortadaImagen = (BitmapImage) FindResource("ArtistaDesconocidoImagen");
+                    cancion.album.PortadaImagen = (BitmapImage) FindResource("Cancion");
                 }
 
             CancionesListView.IsEnabled = true;

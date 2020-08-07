@@ -129,6 +129,8 @@
                                                             Click="OnClickEmpezarRadio" Tag="{Binding id}" />
                                                     <Button Content="Agregar a playlist"
                                                             Click="OnClickAgregarAPlaylist" Tag="{Binding id}" />
+                                                    <Button Content="Descargar"
+                                                            Click="OnClickDescargar" Tag="{Binding id}" />
                                                 </StackPanel>
                                             </materialDesign:PopupBox>
                                             <Grid.Style>

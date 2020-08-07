@@ -24,7 +24,7 @@ namespace EspotifeiClient.Player
                 else if (CancionPersonal != null)
                     duracion = CancionPersonal.duracion;
                 else if (CancionSinConexion != null)
-                    duracion = 0.0f;
+                    duracion = CancionSinConexion.duracion;
                 return duracion;
             } 
         }
@@ -46,7 +46,7 @@ namespace EspotifeiClient.Player
                 else if (CancionPersonal != null)
                     nombre = CancionPersonal.nombre;
                 else if (CancionSinConexion != null)
-                    nombre = "";
+                    nombre = CancionSinConexion.nombre;
                 return nombre;
             }
         }
@@ -69,7 +69,15 @@ namespace EspotifeiClient.Player
                 else if (CancionPersonal != null)
                     artistas = CancionPersonal.artistas;
                 else if (CancionSinConexion != null)
-                    artistas = "";
+                {
+                    if (CancionSinConexion.creadores_de_contenido != null)
+                    {
+                        foreach (var creadorContenido in CancionSinConexion.creadores_de_contenido)
+                            artistas += $"{creadorContenido.nombre}, ";
+                        if (artistas != "")
+                            artistas = artistas.Substring(0, artistas.Length - 2);
+                    }
+                }
                 return artistas;
             }
         }
@@ -84,7 +92,7 @@ namespace EspotifeiClient.Player
                 else if (CancionPersonal != null)
                     tipoCancion = "Cancion De Biblioteca Personal";
                 else if (CancionSinConexion != null)
-                    tipoCancion = "Cancion Sin Conexión";
+                    tipoCancion = "Cancion Sin ConexiÃ³n";
                 return tipoCancion;
             }
         }

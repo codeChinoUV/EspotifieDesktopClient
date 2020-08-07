@@ -9,6 +9,7 @@
         <PackageReference Include="Google.Protobuf" Version="3.12.3" />
         <PackageReference Include="Grpc" Version="2.30.0" />
         <PackageReference Include="Grpc.Tools" Version="2.30.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="6.0.4" />
         <PackageReference Include="SHA3.Net" Version="1.2.3" />
     </ItemGroup>
 

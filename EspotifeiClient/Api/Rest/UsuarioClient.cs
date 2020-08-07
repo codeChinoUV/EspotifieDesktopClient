@@ -49,21 +49,17 @@ namespace Api.Rest
         /// <summary>
         ///     Recupera el usuario logeado y lo asigna a la variable de Usuario
         /// </summary>
-        public static async Task GetUser()
+        public static async Task<Usuario> GetUser()
         {
             var path = "/v1/usuario";
-            var isSuccessfully = false;
             for (var i = 1; i <= TotalTryes; i++)
                 using (var response = await ApiClient.GetApiClient().GetAsync(path))
                 {
                     if (response.IsSuccessStatusCode)
                     {
                         var usuario = await response.Content.ReadAsAsync<Usuario>();
-                        ApiServiceLogin.GetServiceLogin().Usuario = usuario;
-                        isSuccessfully = true;
-                        break;
+                        return usuario;
                     }
-
                     if (response.StatusCode == HttpStatusCode.Unauthorized)
                     {
                         await ApiServiceLogin.GetServiceLogin().ReLogin();
@@ -75,8 +71,7 @@ namespace Api.Rest
                         throw new Exception(error.mensaje);
                     }
                 }
-
-            if (!isSuccessfully) throw new Exception("AuntenticacionFallida");
+            throw new Exception("AuntenticacionFallida");
         }
 
         /// <summary>

@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
 using Api.Rest;
+using EspotifeiClient.ManejadorDeCancionesSinConexion;
 using EspotifeiClient.Util;
 using Grpc.Core;
 using ManejadorDeArchivos;
@@ -270,6 +271,22 @@ namespace EspotifeiClient
 
         private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
         {
+        }
+
+        /// <summary>
+        /// Coloca una cancion a la cola de descargas
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private void OnClickDescargar(object sender, RoutedEventArgs e)
+        {
+            var idCancion = (int) ((Button) sender).Tag;
+            var cancion = BuscarCancionEnAlbumes(idCancion);
+            if (cancion != null)
+            {
+                cancion.album = BuscarAlbumDeCancion(idCancion);
+                ManejadorCancionesSinConexion.GetManejadorDeCancionesSinConexion().AgregarCancionSinConexion(cancion);
+            }
         }
     }
 }

@@ -19,8 +19,7 @@ namespace Api.Rest.ApiLogin
         private ApiServiceLogin()
         {
         }
-
-        public Usuario Usuario { get; set; }
+        
 
         /// <summary>
         ///     Devuelve el token de autenticacion del usuario actual

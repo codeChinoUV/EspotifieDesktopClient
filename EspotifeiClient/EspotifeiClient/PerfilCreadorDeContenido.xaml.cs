@@ -7,7 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Api.GrpcClients.Clients;
 using Api.Rest;
-using Api.Rest.ApiLogin;
+using EspotifeiClient.ManejadorDeCancionesSinConexion;
+using EspotifeiClient.ManejoUsuarios;
 using EspotifeiClient.Util;
 using Grpc.Core;
 using ManejadorDeArchivos;
@@ -63,17 +64,15 @@ namespace EspotifeiClient
         /// <returns>Task</returns>
         private async Task RecuperarCreadorDeContenido()
         {
-            if (ApiServiceLogin.GetServiceLogin().Usuario != null)
+            if (ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().ObtenerUsuarioLogeado() != null)
                 try
                 {
                     _creadorContenido = await CreadorContenidoClient.GetCreadorContenidoFromActualUser();
-                    SinConexionGrid.Visibility = Visibility.Hidden;
-                    AlbumsListView.Visibility = Visibility.Visible;
+                    DesactivarModoSinConexion();
                 }
                 catch (HttpRequestException)
                 {
-                    SinConexionGrid.Visibility = Visibility.Visible;
-                    AlbumsListView.Visibility = Visibility.Hidden;
+                    ActivarModoSinConexion();
                 }
                 catch (Exception ex)
                 {
@@ -83,6 +82,8 @@ namespace EspotifeiClient
                                                                    "proporcionadas, se cerra la sesion");
                         MainWindow.OcultarMenu();
                         MainWindow.OcultarReproductor();
+                        Player.Player.GetPlayer().LimpiarReproductor();
+                        ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().CerrarSesionUsuario();
                         NavigationService?.Navigate(new IniciarSesion());
                     }
                     else if (ex.Message == "SinCreadorDeContenido")
@@ -99,6 +100,28 @@ namespace EspotifeiClient
                 }
         }
 
+        /// <summary>
+        /// Esconde todos los elementos con los que no se pueden interartuar sin conexion
+        /// </summary>
+        private void ActivarModoSinConexion()
+        {
+            SinConexionGrid.Visibility = Visibility.Visible;
+            AlbumsListView.Visibility = Visibility.Hidden;
+            AgregarAlbumButton.Visibility = Visibility.Hidden;
+            EditarPerfilButton.Visibility = Visibility.Hidden;
+        }
+
+        /// <summary>
+        /// Muestra todos los elementos con los que no se pueden interartuar con conexion
+        /// </summary>
+        private void DesactivarModoSinConexion()
+        {
+            SinConexionGrid.Visibility = Visibility.Hidden;
+            AlbumsListView.Visibility = Visibility.Visible;
+            AgregarAlbumButton.Visibility = Visibility.Visible;
+            EditarPerfilButton.Visibility = Visibility.Visible;
+        }
+        
         /// <summary>
         ///     Recupera la imagen del creador de contenido en calidad media y la colca en la portada del creador de
         ///     contenido
@@ -131,17 +154,15 @@ namespace EspotifeiClient
         {
             try
             {
+                DesactivarModoSinConexion();
                 _albums = await AlbumClient.GetAlbumsFromContentCreator(idCreadorContenido);
-                SinConexionGrid.Visibility = Visibility.Hidden;
-                AlbumsListView.Visibility = Visibility.Visible;
                 if (_albums == null)
                     _albums = new List<Album>();
                 AlbumsListView.ItemsSource = _albums;
             }
             catch (HttpRequestException)
             {
-                SinConexionGrid.Visibility = Visibility.Visible;
-                AlbumsListView.Visibility = Visibility.Hidden;
+                ActivarModoSinConexion();
             }
             catch (Exception ex)
             {
@@ -151,6 +172,8 @@ namespace EspotifeiClient
                                                                "proporcionadas, se cerra la sesion");
                     MainWindow.OcultarMenu();
                     MainWindow.OcultarReproductor();
+                    Player.Player.GetPlayer().LimpiarReproductor();
+                    ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().CerrarSesionUsuario();
                     NavigationService?.Navigate(new IniciarSesion());
                 }
                 else
@@ -289,8 +312,7 @@ namespace EspotifeiClient
                 MensajeEmergente.MostrarMensajeConfirmacion("¿Seguro que desea eliminar la cancion seleccionada?");
             if (confirmacion)
             {
-                SinConexionGrid.Visibility = Visibility.Hidden;
-                AlbumsListView.Visibility = Visibility.Visible;
+                DesactivarModoSinConexion();
                 var idCancion = (int) ((Button) sender).Tag;
                 var album = BuscarAlbumDeCancion(idCancion);
                 try
@@ -300,8 +322,7 @@ namespace EspotifeiClient
                 }
                 catch (HttpRequestException)
                 {
-                    SinConexionGrid.Visibility = Visibility.Visible;
-                    AlbumsListView.Visibility = Visibility.Hidden;
+                    ActivarModoSinConexion();
                 }
                 catch (Exception ex)
                 {
@@ -311,6 +332,8 @@ namespace EspotifeiClient
                                                                    "proporcionadas, se cerrara la sesion");
                         MainWindow.OcultarMenu();
                         MainWindow.OcultarReproductor();
+                        Player.Player.GetPlayer().LimpiarReproductor();
+                        ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().CerrarSesionUsuario();
                         NavigationService?.Navigate(new IniciarSesion());
                     }
                     else
@@ -321,6 +344,11 @@ namespace EspotifeiClient
             }
         }
 
+        /// <summary>
+        /// Muestra la ventana para editar una cancion
+        /// </summary>
+        /// <param name="sender">El obejto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
         private void OnClickEditarCancion(object sender, RoutedEventArgs e)
         {
             var idCancion = (int) ((Button) sender).Tag;
@@ -382,8 +410,11 @@ namespace EspotifeiClient
         /// <param name="e"></param>
         private void OnClickPlayCreadorDeContenido(object sender, RoutedEventArgs e)
         {
-            _creadorContenido.Albums = _albums;
-            Player.Player.GetPlayer().AñadirCancionesDeCreadorDeContenidoACola(_creadorContenido);
+            if (_albums != null)
+            {
+                _creadorContenido.Albums = _albums;
+                Player.Player.GetPlayer().AñadirCancionesDeCreadorDeContenidoACola(_creadorContenido);
+            }
         }
 
         /// <summary>
@@ -413,15 +444,13 @@ namespace EspotifeiClient
             List<Cancion> radio;
             try
             {
+                DesactivarModoSinConexion();
                 radio = await CancionClient.GetRadioFromSong(idCancion);
-                SinConexionGrid.Visibility = Visibility.Hidden;
-                AlbumsListView.Visibility = Visibility.Visible;
                 Player.Player.GetPlayer().AñadirRadioAListaDeReproduccion(radio);
             }
             catch (HttpRequestException)
             {
-                SinConexionGrid.Visibility = Visibility.Visible;
-                AlbumsListView.Visibility = Visibility.Hidden;
+                ActivarModoSinConexion();
             }
             catch (Exception ex)
             {
@@ -431,6 +460,8 @@ namespace EspotifeiClient
                                                                "proporcionadas, se cerra la sesion");
                     MainWindow.OcultarMenu();
                     MainWindow.OcultarReproductor();
+                    Player.Player.GetPlayer().LimpiarReproductor();
+                    ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().CerrarSesionUsuario();
                     NavigationService?.Navigate(new IniciarSesion());
                 }
                 else
@@ -443,6 +474,22 @@ namespace EspotifeiClient
         private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Coloca una cancion a la cola de descargas
+        /// </summary>
+        /// <param name="sender">El objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private void OnClickDescargar(object sender, RoutedEventArgs e)
+        {
+            var idCancion = (int) ((Button) sender).Tag;
+            var cancion = BuscarCancionEnAlbumes(idCancion);
+            if (cancion != null)
+            {
+                cancion.album = BuscarAlbumDeCancion(idCancion);
+                ManejadorCancionesSinConexion.GetManejadorDeCancionesSinConexion().AgregarCancionSinConexion(cancion);
+            }
         }
     }
 }

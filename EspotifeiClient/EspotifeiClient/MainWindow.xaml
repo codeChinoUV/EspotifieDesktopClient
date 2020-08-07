@@ -105,7 +105,7 @@
                             <TextBlock Text="Historial" VerticalAlignment="Center" Margin="10 10" Foreground="White" />
                         </StackPanel>
                     </ListViewItem>
-                    <ListViewItem Height="60">
+                    <ListViewItem Height="60" MouseLeftButtonUp="OnClickCancionesDescargadas">
                         <StackPanel Orientation="Horizontal">
                             <materialDesign:PackIcon Kind="Download" Height="25" Width="25" Margin="10"
                                                      Foreground="White" />
@@ -219,7 +219,10 @@
                                              Padding="0" Foreground="White" PopupMode="Click"
                                              PlacementMode="TopAndAlignRightEdges">
                         <StackPanel Width="auto">
-                            <Button x:Name="botonCuenta" Content="cuenta" />
+                            <Button x:Name="InicarRadioButton" Content="Iniciar radio" Click="OnClickIniciarRadio" />
+                            <Button x:Name="AgregarAPlaylistButton" Content="Agregar a playlist" />
+                            <Button x:Name="DescargarButton" Content="Descargar" Click="OnClickDescargar" />
+                            <Button Content="Cerrar sesión" Click="OnClickCerrarSesion"/>
                         </StackPanel>
                     </materialDesign:PopupBox>
                     <materialDesign:RatingBar Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center"

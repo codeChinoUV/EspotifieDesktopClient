@@ -220,7 +220,7 @@
                                              PlacementMode="TopAndAlignRightEdges">
                         <StackPanel Width="auto">
                             <Button x:Name="InicarRadioButton" Content="Iniciar radio" Click="OnClickIniciarRadio" />
-                            <Button x:Name="AgregarAPlaylistButton" Content="Agregar a playlist" />
+                            <Button x:Name="AgregarAPlaylistButton" Content="Agregar a playlist" Click="OnClickAgregarAPlaylist" />
                             <Button x:Name="DescargarButton" Content="Descargar" Click="OnClickDescargar" />
                             <Button Content="Cerrar sesión" Click="OnClickCerrarSesion" />
                         </StackPanel>

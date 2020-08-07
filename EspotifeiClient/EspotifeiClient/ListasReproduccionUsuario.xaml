@@ -114,7 +114,7 @@
                                            Foreground="Black" Margin="10,0" />
                                 <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Margin="10,0">
                                     <TextBlock Text="Duración total: " FontSize="12" Foreground="Black" />
-                                    <TextBlock Text="{Binding duracion_total}" FontSize="12" Foreground="Black" />
+                                    <TextBlock Text="{Binding duracion}" FontSize="12" Foreground="Black" />
                                 </StackPanel>
                                 <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="0,0,0,2"
                                         BorderBrush="Black" HorizontalAlignment="Stretch" />
@@ -158,13 +158,13 @@
                 <RowDefinition Height="0.60*" />
             </Grid.RowDefinitions>
             <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="Resources/ListaReproduccion.png" Margin="10" />
-            <TextBlock Grid.Column="1" Grid.Row="0" x:Name="NombreTextBlock" Text="Mis listas de reproducción"
+            <TextBlock Grid.Column="1" Grid.Row="0" Text="Mis listas de reproducción"
                        FontSize="25" FontWeight="Black"
                        Foreground="White" VerticalAlignment="Center" />
             <StackPanel Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10">
                 <Button HorizontalAlignment="Stretch" Margin="-21,0,4,0"
                         Content="Agregar Playlist" Background="#FF16A210" BorderBrush="#FF16A210"
-                        VerticalContentAlignment="Center"
+                        VerticalContentAlignment="Center" x:Name="AgregarPlaylistButton"
                         Click="OnClickAgregarPlaylist" />
             </StackPanel>
         </Grid>

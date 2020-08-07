@@ -11,6 +11,7 @@
     <Page.Resources>
         <Image Source="Resources/Play.png" x:Key="PlayImage" x:Shared="False" />
         <BitmapImage UriSource="Resources/AlbumDesconocido.png" x:Key="AlbumDesconocido" x:Shared="False" />
+        <BitmapImage UriSource="Resources/SinConexion.png" x:Key="SinConexion" x:Shared="False" />
     </Page.Resources>
 
     <Grid>
@@ -27,10 +28,8 @@
                 </LinearGradientBrush>
             </Rectangle.Fill>
         </Rectangle>
-
-
         <ScrollViewer Grid.Row="1">
-            <ItemsControl Grid.Row="2" x:Name="CancionesListView" ItemsSource="{Binding Cancion}">
+            <ItemsControl x:Name="CancionesListView" ItemsSource="{Binding Cancion}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Grid Margin="4">
@@ -70,6 +69,12 @@
                 </ItemsControl.ItemsPanel>
             </ItemsControl>
         </ScrollViewer>
+        <Grid Grid.Row="1" Visibility="Hidden" x:Name="SinConexionGrid">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Image Source="{StaticResource SinConexion}" Width="100" Height="100" />
+                <TextBlock Text="Sin conexión" Foreground="#49b1fe" FontSize="20" FontWeight="Black" />
+            </StackPanel>
+        </Grid>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -89,7 +94,7 @@
             <Button Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right"
                     Style="{StaticResource MaterialDesignFloatingActionButton}"
                     Height="60" Width="60" Padding="0" Margin="0,-30,30,-30" Click="OnClickPlayListaReproduccionButton">
-                <materialDesign:PackIcon x:Name="icon_playPause_button" Kind="PlayArrow" Height="60" Width="60" />
+                <materialDesign:PackIcon Kind="PlayArrow" Height="60" Width="60" />
             </Button>
         </Grid>
     </Grid>

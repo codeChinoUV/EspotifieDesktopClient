@@ -13,7 +13,7 @@ namespace EspotifeiClient
     /// <summary>
     ///     Lógica de interacción para ListasReproduccion.xaml
     /// </summary>
-    public partial class ListasReproduccion : Page
+    public partial class ListasReproduccion
     {
         private List<ListaReproduccion> _listasReproduccion;
 
@@ -33,13 +33,18 @@ namespace EspotifeiClient
             if (cadenaBusqueda != "")
                 try
                 {
+                    SinConexionGrid.Visibility = Visibility.Hidden;
+                    ListasReproduccionListView.Visibility = Visibility.Visible;
+                    VerMisPlaylistButton.Visibility = Visibility.Visible;
                     _listasReproduccion = await ListaReproduccionClient.SearchListaReproduccion(cadenaBusqueda);
                     ListasReproduccionListView.ItemsSource = _listasReproduccion;
                     ColocarImagenesListasReproduccion();
                 }
                 catch (HttpRequestException)
                 {
-                    new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
+                    SinConexionGrid.Visibility = Visibility.Visible;
+                    ListasReproduccionListView.Visibility = Visibility.Hidden;
+                    VerMisPlaylistButton.Visibility = Visibility.Hidden;
                 }
                 catch (Exception ex)
                 {
@@ -71,7 +76,8 @@ namespace EspotifeiClient
         /// <param name="e"></param>
         private void OnSelectedItem(object sender, MouseButtonEventArgs e)
         {
-            var listaReproduccion = (ListaReproduccion) ListasReproduccionListView.SelectedItem;
+            var idListaReproduccion = (int)((Border)sender).Tag;
+            var listaReproduccion = _listasReproduccion.Find(lr => lr.id == idListaReproduccion);
             if (listaReproduccion != null)
                 NavigationService?.Navigate(new ListaReproduccionElementos(listaReproduccion));
         }
@@ -83,7 +89,7 @@ namespace EspotifeiClient
         /// <param name="e"></param>
         private void OnClickVerMisPlaylists(object sender, RoutedEventArgs e)
         {
-            NavigationService.Navigate(new ListasReproduccionUsuario());
+            NavigationService?.Navigate(new ListasReproduccionUsuario());
         }
     }
 }

@@ -355,6 +355,11 @@ namespace EspotifeiClient
         {
             LimpiarReproductor();
             LimpiarElementosReproductor();
+            while (!ManejadorCancionesSinConexion.GetManejadorDeCancionesSinConexion().SePuedeCerrarLaApp())
+            {
+                Thread.Sleep(1000);
+            }
+            ManejadorCancionesSinConexion.GetManejadorDeCancionesSinConexion().TerminarDeDescargarCanciones();
             ManejadorDeUsuariosLogeados.GetManejadorDeUsuariosLogeados().CerrarSesionUsuario();
             OcultarMenu();
             OcultarReproductor();
@@ -549,6 +554,19 @@ namespace EspotifeiClient
         public static void SetMainWindow(MainWindow mainWindow)
         {
             _mainWindow = mainWindow;
+        }
+
+        /// <summary>
+        /// Agrega una cancion a una lista de reproduccion
+        /// </summary>
+        /// <param name="sender">EL objeto que invoco el evento</param>
+        /// <param name="e">El evento invocado</param>
+        private void OnClickAgregarAPlaylist(object sender, RoutedEventArgs e)
+        {
+            if (_idCancionActual != 0)
+            {
+                new AgregarCancionAPlaylist(_idCancionActual).ShowDialog();
+            }
         }
     }
 }

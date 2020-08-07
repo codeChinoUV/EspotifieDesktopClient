@@ -36,7 +36,7 @@ namespace EspotifeiClient
             PortadaImagen.Source = listaReproduccion.PortadaImagen;
             NombreTextBlock.Text = listaReproduccion.nombre;
             DescripcionTextBlock.Text = listaReproduccion.descripcion;
-            MinutosTextBlock.Text = "Duración en minutos: " + listaReproduccion.duracion_total;
+            MinutosTextBlock.Text = "Duración: " + listaReproduccion.duracion;
             await ObtenerCancionesDeListasReproduccion(_listaReproduccion.id);
         }
 
@@ -50,12 +50,15 @@ namespace EspotifeiClient
             var ocurrioExcepcion = false;
             try
             {
+                SinConexionGrid.Visibility = Visibility.Hidden;
+                CancionesListView.Visibility = Visibility.Visible;
                 _listaReproduccion.canciones = await CancionClient.GetSongsFromPlaylist(idListaReproduccion);
                 CancionesListView.ItemsSource = _listaReproduccion.canciones;
             }
             catch (HttpRequestException)
             {
-                new MensajeEmergente().MostrarMensajeError("No se puede conectar al servidor");
+                SinConexionGrid.Visibility = Visibility.Visible;
+                CancionesListView.Visibility = Visibility.Hidden;
             }
             catch (Exception ex)
             {

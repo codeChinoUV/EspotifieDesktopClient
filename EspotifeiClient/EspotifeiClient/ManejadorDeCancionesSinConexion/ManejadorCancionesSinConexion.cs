@@ -25,7 +25,7 @@ namespace EspotifeiClient.ManejadorDeCancionesSinConexion
         private EstadoManjadorDeCanciones _estadoManjadorDeCanciones = EstadoManjadorDeCanciones.Detenido;
         private string _extensionCancion;
         private CancionSinConexion _seEncuentraDescargando;
-        private readonly SongsClient _songsClient = new SongsClient();
+        private SongsClient _songsClient = new SongsClient();
 
         private ManejadorCancionesSinConexion()
         {
@@ -247,9 +247,9 @@ namespace EspotifeiClient.ManejadorDeCancionesSinConexion
         /// <summary>
         ///     Coloca la siguiente cancion en la cola a descargar
         /// </summary>
-        private void IniciarDescarga()
+        protected void IniciarDescarga()
         {
-            if (_colaCancionesSinConexion.Count > 0)
+            if (_colaCancionesSinConexion.Count > 0 && _seEncuentraDescargando == null)
             {
                 _seEncuentraDescargando = _colaCancionesSinConexion.Dequeue();
                 _seEncuentraDescargando.estado_descarga = CancionSinConexion.EstadoDescarga.Descargando;
@@ -283,6 +283,17 @@ namespace EspotifeiClient.ManejadorDeCancionesSinConexion
             {
                 if (_seEncuentraDescargando != null) _colaCancionesSinConexion.Enqueue(_seEncuentraDescargando);
                 usuario.canciones_pendientes_descarga = _colaCancionesSinConexion.ToList();
+                if (_songsClient != null)
+                {
+                    _songsClient.OnInitialRecivedSong -= RecibirCancion;
+                    _songsClient.OnSongChunkRived -= RecibirChunk;
+                    _songsClient.OnTerminatedRecivedSong -= TerminarDeRecibirCancion;
+                    _songsClient = new SongsClient();
+                }
+                _extensionCancion = "";
+                _estadoManjadorDeCanciones = EstadoManjadorDeCanciones.Detenido;
+                _colaCancionesSinConexion.Clear();
+                _seEncuentraDescargando = null;
             }
         }
 

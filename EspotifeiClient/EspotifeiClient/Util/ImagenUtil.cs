@@ -30,7 +30,7 @@ namespace EspotifeiClient.Util
             }
             catch (Exception)
             {
-                bitmapImage = new BitmapImage();
+                bitmapImage = null;
             }
             return bitmapImage;
         }

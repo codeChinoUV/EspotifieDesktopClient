@@ -41,9 +41,8 @@ namespace Api.Rest
                     }
                     else
                     {
-                        ErrorGeneral error;
-                        error = await response.Content.ReadAsAsync<ErrorGeneral>();
-                        throw new Exception(error.mensaje);
+                        throw new Exception("Ocurrio un error en el servidor y no se pude recuperar" +
+                                            " el historial");
                     }
                 }
 

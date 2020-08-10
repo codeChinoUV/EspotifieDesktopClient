@@ -79,8 +79,8 @@ namespace EspotifeiClient.Player
         private void SeguidorDeTiempoReproduccion(object sender, EventArgs e)
         {
             OnAvanceCancion?.Invoke(_blockAlignedStream.CurrentTime.TotalSeconds);
-            if ((int) _blockAlignedStream.CurrentTime.TotalSeconds + 2 >=
-                (int) _duracionTotalDeCancionEnReproduccion + 2)
+            if ((int)Math.Ceiling(_blockAlignedStream.CurrentTime.TotalSeconds)  >=
+                (int)Math.Ceiling(_duracionTotalDeCancionEnReproduccion))
             {
                 _seguidorDeEventosDelReproductor.Stop();
                 _waveOutEvent.Stop();

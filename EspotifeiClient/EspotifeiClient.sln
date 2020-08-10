@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Espotifei", "EspotifeiClient\Espotifei.csproj", "{393C5804-2258-4458-8E32-3E89BD236E56}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Model", "Model\Model.csproj", "{CA9B68A1-7601-49F3-9D26-DA3F032E6363}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api", "Api\Api.csproj", "{79694B93-9DDC-4C0F-97A8-7C922C40BDB7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{393C5804-2258-4458-8E32-3E89BD236E56}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{393C5804-2258-4458-8E32-3E89BD236E56}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{393C5804-2258-4458-8E32-3E89BD236E56}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{393C5804-2258-4458-8E32-3E89BD236E56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA9B68A1-7601-49F3-9D26-DA3F032E6363}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA9B68A1-7601-49F3-9D26-DA3F032E6363}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA9B68A1-7601-49F3-9D26-DA3F032E6363}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA9B68A1-7601-49F3-9D26-DA3F032E6363}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79694B93-9DDC-4C0F-97A8-7C922C40BDB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79694B93-9DDC-4C0F-97A8-7C922C40BDB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79694B93-9DDC-4C0F-97A8-7C922C40BDB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79694B93-9DDC-4C0F-97A8-7C922C40BDB7}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {87D297B2-63D8-42F6-8371-A4B8A0575B07}
+	EndGlobalSection
+EndGlobal

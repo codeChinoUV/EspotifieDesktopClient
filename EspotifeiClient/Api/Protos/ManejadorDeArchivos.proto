@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package manejador_de_archivos;
+
+enum Error {
+  NINGUNO = 0;
+  HASH_NO_COINCIDE = 1;
+  TOKEN_INVALIDO = 2;
+  TOKEN_FALTANTE = 3;
+  USUARIO_NO_ES_DUENO_DEL_RECURSO = 4;
+  OPERACION_NO_PERMITIDA = 5;
+  USUARIO_NO_TIENE_REGISTRADO_CREADOR_DE_CONTENIDO = 6;
+  CANCION_INEXISTENTE = 7;
+  CANCION_PERSONAL_INEXISTENTE = 8;
+  PORTADA_USUARIO_INEXISTENTE = 9;
+  PORTADA_CREADOR_DE_CONTENIDO_INEXISTENTE = 10;
+  PORTADA_ALBUM_INEXISTENTE = 11;
+  ALBUM_INEXISTENTE = 12;
+  CANCION_NO_DISPONIBLE = 13;
+  CANCION_PERSONAL_NO_DISPONIBLE = 14;
+  PORTADA_USUARIO_NO_DISPONIBLE = 15;
+  PORTADA_CREADOR_DE_CONTENIDO_NO_DISPONIBLE = 16;
+  PORTADA_ALBUM_NO_DISPONIBLE = 17;
+  DESCONOCIDO = 18;
+}
+
+enum Calidad {
+  ALTA = 0;
+  MEDIA = 1;
+  BAJA = 2;
+}
+
+enum FormatoAudio {
+  MP3 = 0;
+  M4A = 1;
+  FLAC = 2;
+}
+
+enum FormatoImagen {
+  JPG = 0;
+  PNG = 1;
+}
+
+message InformacionCancion {
+  int32 idCancion = 1;
+  FormatoAudio formatoCancion = 3;
+}
+
+message SolicitudSubirCancion {
+  string token_autenticacion = 1;
+  InformacionCancion informacionCancion = 2;
+  bytes data = 3;
+}
+
+message RespuestaSolicitudSubirArchivo {
+  Error error = 1;
+}
+
+message InformacionPortada {
+  int32 idElementoDePortada = 1;
+  FormatoImagen formatoImagen = 3;
+}
+
+message SolicitudSubirPortada{
+  string token_autenticacion = 1;
+  InformacionPortada informacionPortada = 2;
+  bytes data = 3;
+}
+
+message SolicitudObtenerCancion {
+  string token_autenticacion = 1;
+  int32 idCancion = 2;
+  Calidad calidadCancionARecuperar = 3;
+}
+
+message SolicitudObtenerPortada {
+  string token_autenticacion = 1;
+  int32 idElementoDePortada = 2;
+  Calidad calidadPortadaARecuperar = 3;
+}
+
+message RespuestaObtenerCancion {
+  Error error = 1;
+  bytes data = 2;
+  FormatoAudio formatoCancion = 3;
+}
+
+message RespuestaObtenerPortada {
+  Error error = 1;
+  bytes data = 2;
+  FormatoImagen formatoPortada = 3;
+}
+
+service Canciones {
+  rpc SubirCancionPersonal(stream SolicitudSubirCancion) returns (RespuestaSolicitudSubirArchivo) {}
+  rpc SubirCancion(stream SolicitudSubirCancion) returns (RespuestaSolicitudSubirArchivo) {}
+  rpc ObtenerCancion(SolicitudObtenerCancion) returns (stream RespuestaObtenerCancion) {}
+  rpc ObtenerCancionPersonal(SolicitudObtenerCancion) returns (stream RespuestaObtenerCancion) {}
+}
+
+service Portadas {
+  rpc SubirPortadaAlbum(stream SolicitudSubirPortada) returns (RespuestaSolicitudSubirArchivo) {}
+  rpc SubirPortadaCreadorDeContenido(stream SolicitudSubirPortada) returns (RespuestaSolicitudSubirArchivo) {}
+  rpc SubirPortadaUsuario(stream SolicitudSubirPortada) returns (RespuestaSolicitudSubirArchivo) {}
+  rpc ObtenerPortadaAlbum(SolicitudObtenerPortada) returns (stream RespuestaObtenerPortada) {}
+  rpc ObtenerPortadaCreadorDeContenido(SolicitudObtenerPortada) returns (stream RespuestaObtenerPortada) {}
+  rpc ObtenerPortadaUsuario(SolicitudObtenerPortada) returns (stream RespuestaObtenerPortada) {}
+}

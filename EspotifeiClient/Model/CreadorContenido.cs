@@ -19,8 +19,8 @@ namespace Model
 
         public bool es_grupo { get; set; }
 
-        [field: NonSerialized] public BitmapImage PortadaImagen { get; set; }
+        [field: NonSerialized] public BitmapImage portada { get; set; }
 
-        public List<Album> Albums { get; set; }
+        public List<Album> albums { get; set; }
     }
 }

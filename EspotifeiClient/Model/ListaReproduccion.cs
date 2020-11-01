@@ -25,7 +25,7 @@ namespace Model
             }
         }
 
-        public BitmapImage PortadaImagen { get; set; }
+        public BitmapImage portada { get; set; }
 
         public List<Cancion> canciones { get; set; }
     }

@@ -14,7 +14,7 @@ namespace Model
 
         public string album { get; set; }
 
-        public string duracion_string
+        public string duracion_formateada
         {
             get
             {

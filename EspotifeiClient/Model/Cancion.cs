@@ -22,7 +22,7 @@ namespace Model
 
         public List<CreadorContenido> creadores_de_contenido { get; set; }
 
-        public string creadores_de_contenido_nombres
+        public string artistas
         {
             get
             {
@@ -39,7 +39,7 @@ namespace Model
             }
         }
 
-        public string duracionString
+        public string duracion_formateada
         {
             get
             {
@@ -48,7 +48,7 @@ namespace Model
             }
         }
 
-        public string calificacion_promedio_string => calificacion_promedio.ToString("0.0");
+        public string calificacion_promedio_formateada => calificacion_promedio.ToString("0.0");
 
         public Album album { get; set; }
     }

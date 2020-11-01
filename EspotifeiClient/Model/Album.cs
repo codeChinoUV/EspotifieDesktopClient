@@ -15,13 +15,13 @@ namespace Model
 
         public string anio_lanzamiento { get; set; }
 
-        [field: NonSerialized] public BitmapImage PortadaImagen { get; set; }
+        [field: NonSerialized] public BitmapImage portada { get; set; }
 
         public float duracion_total { get; set; }
 
         public List<Cancion> canciones { get; set; }
 
-        public string duracion
+        public string duracion_formateada
         {
             get
             {

@@ -10,42 +10,43 @@
                            Title="Iniciar sesion"
                            FontFamily="Segoe UI Emoji">
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FF2281D1" />
+                <GradientStop Color="#FF025EFF" Offset="0.25" />
+                <GradientStop Color="#FF34268A" Offset="0.5" />
+                <GradientStop Color="White" Offset="0.52" />
+                <GradientStop Color="White" Offset="1" />
+            </LinearGradientBrush>
+        </Grid.Background>
 
-        <Rectangle Height="280" VerticalAlignment="Top">
-            <Rectangle.Fill>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="#FF2281D1" />
-                    <GradientStop Color="#FF34268A" Offset="1" />
-                    <GradientStop Color="#FF025EFF" Offset="0.546" />
-                </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
-
-        <Rectangle Width="300" Height="300" VerticalAlignment="Center" Margin="0,80" RadiusY="10" RadiusX="10"
-                   Fill="White">
-            <Rectangle.Effect>
-                <DropShadowEffect BlurRadius="15" Direction="0" RenderingBias="Quality" ShadowDepth="1"
-                                  Color="#FFBBBBBB" />
-            </Rectangle.Effect>
-        </Rectangle>
-        <Grid VerticalAlignment="Center" Margin="35,80" Height="380" Width="300" HorizontalAlignment="center">
-            <Label Content="INICIA SESIÓN EN ESPOTIFEI" HorizontalAlignment="Center" VerticalAlignment="Top"
-                   Margin="10,50" Foreground="Gray" FontSize="18" />
-            <StackPanel VerticalAlignment="Center" Margin="15,45,15,0">
-                <TextBox x:Name="usuarioTextbox" Margin="0,10" materialDesign:HintAssist.Hint="USUARIO"
+        
+        <Grid VerticalAlignment="Center" Height="380" Width="300" HorizontalAlignment="center">
+            <Border CornerRadius="20" Background="white" Opacity="1" >
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="25" ShadowDepth="5" />
+                </Border.Effect>
+            </Border>
+            <Image HorizontalAlignment="Center" Height="125" Margin="0,-62.5,0,0" VerticalAlignment="Top" Width="125"
+               Source="Resources/EspotifeiMusic.png" />
+            
+            <StackPanel VerticalAlignment="Stretch"  Margin="20">
+                <Label Content="INICIO DE SESIÓN" HorizontalAlignment="Center" Margin="0,40" FontSize="20" />
+                <TextBox x:Name="usuarioTextbox" materialDesign:HintAssist.Hint="USUARIO"
                          Style="{StaticResource MaterialDesignFloatingHintTextBox}"
                          FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25" />
                 <PasswordBox x:Name="contraseniaPasswordbox" Margin="0,35" materialDesign:HintAssist.Hint="CONTRASEÑA"
                              Style="{StaticResource MaterialDesignFloatingHintPasswordBox}"
                              FontFamily="Champagne &amp; Limousines" FontSize="16" MaxLength="25" />
-            </StackPanel>
-        </Grid>
-        <Button x:Name="ingresarButton" Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                Margin="0,65" Content="INGRESAR" Background="#FF16A210" BorderBrush="#FF16A210"
+                <Button x:Name="ingresarButton" Width="150" HorizontalAlignment="Center" 
+                Margin="0,10" Content="INGRESAR" Background="#FF16A210" BorderBrush="#FF16A210"
                 Click="OnClickIngresarButton" />
-        <TextBlock Text="¿NO TIENES CUENTA? REGÍSTRATE" HorizontalAlignment="Center" VerticalAlignment="Bottom"
-                   Margin="30" Foreground="Gray" Cursor="Hand" MouseLeftButtonUp="OnClickRegistrar" />
-        <Image HorizontalAlignment="Center" Height="125" Margin="0,15,0,0" VerticalAlignment="Top" Width="125"
-               Source="Resources/EspotifeiMusic.png" />
+            </StackPanel>
+            <TextBlock Text="¿NO TIENES CUENTA? REGÍSTRATE" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                   Margin="0,0,0,-50" Foreground="Gray" Cursor="Hand" MouseLeftButtonUp="OnClickRegistrar" />
+        </Grid>
+        
+        
+        
     </Grid>
 </manejadorDePaginas:UIPage>
